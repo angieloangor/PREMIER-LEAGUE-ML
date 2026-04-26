@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "premierleagueml"
+version = "0.1.0"
+description = "Premier League ML pipeline for data engineering, match modeling, and FastAPI serving."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "Angie"}
+]
+keywords = ["football", "machine-learning", "fastapi", "xg", "premier-league"]
+dependencies = [
+  "pandas>=2.0",
+  "numpy>=1.24",
+  "matplotlib>=3.7",
+  "seaborn>=0.13",
+  "scikit-learn>=1.3",
+  "imbalanced-learn>=0.12",
+  "requests>=2.31",
+  "jupyter>=1.0",
+  "joblib>=1.3",
+  "xgboost>=2.0",
+  "catboost>=1.2",
+  "lightgbm>=4.0",
+  "torch>=2.2",
+  "fastapi>=0.111",
+  "uvicorn>=0.30",
+  "python-multipart>=0.0.9",
+  "pytest>=8.0",
+  "httpx>=0.27",
+  "PyYAML>=6.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "httpx>=0.27",
+  "PyYAML>=6.0"
+]
+
+[project.scripts]
+plml-ingest = "scripts.ingest_data:main"
+plml-preprocess = "scripts.preprocess_data:main"
+plml-train = "scripts.train_custom:main"
+plml-serve-api = "scripts.serve_api:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["src*", "api*", "scripts*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "api/tests"]
+pythonpath = ["."]
+addopts = "-q"

@@ -1,0 +1,186 @@
+[
+  {
+    "referee": "A Taylor",
+    "matches": 22,
+    "avg_yellows": 3.8181818181818183,
+    "avg_fouls": 20.181818181818183,
+    "avg_goals": 3.090909090909091,
+    "home_win_pct": 45.5
+  },
+  {
+    "referee": "P Bankes",
+    "matches": 21,
+    "avg_yellows": 3.9523809523809526,
+    "avg_fouls": 22.761904761904763,
+    "avg_goals": 2.8095238095238093,
+    "home_win_pct": 71.4
+  },
+  {
+    "referee": "M Oliver",
+    "matches": 21,
+    "avg_yellows": 2.8095238095238093,
+    "avg_fouls": 22.38095238095238,
+    "avg_goals": 2.761904761904762,
+    "home_win_pct": 38.1
+  },
+  {
+    "referee": "C Kavanagh",
+    "matches": 21,
+    "avg_yellows": 3.857142857142857,
+    "avg_fouls": 22.714285714285715,
+    "avg_goals": 2.0476190476190474,
+    "home_win_pct": 47.6
+  },
+  {
+    "referee": "S Attwell",
+    "matches": 18,
+    "avg_yellows": 4.555555555555555,
+    "avg_fouls": 21.333333333333332,
+    "avg_goals": 2.888888888888889,
+    "home_win_pct": 33.3
+  },
+  {
+    "referee": "D England",
+    "matches": 18,
+    "avg_yellows": 3.888888888888889,
+    "avg_fouls": 21.72222222222222,
+    "avg_goals": 2.6666666666666665,
+    "home_win_pct": 44.4
+  },
+  {
+    "referee": "T Bramall",
+    "matches": 17,
+    "avg_yellows": 4.0,
+    "avg_fouls": 21.647058823529413,
+    "avg_goals": 2.4705882352941178,
+    "home_win_pct": 47.1
+  },
+  {
+    "referee": "S Barrott",
+    "matches": 17,
+    "avg_yellows": 3.6470588235294117,
+    "avg_fouls": 19.58823529411765,
+    "avg_goals": 2.764705882352941,
+    "home_win_pct": 35.3
+  },
+  {
+    "referee": "J Gillett",
+    "matches": 17,
+    "avg_yellows": 3.764705882352941,
+    "avg_fouls": 20.294117647058822,
+    "avg_goals": 2.8823529411764706,
+    "home_win_pct": 11.8
+  },
+  {
+    "referee": "C Pawson",
+    "matches": 17,
+    "avg_yellows": 2.4705882352941178,
+    "avg_fouls": 21.352941176470587,
+    "avg_goals": 3.0588235294117645,
+    "home_win_pct": 29.4
+  },
+  {
+    "referee": "S Hooper",
+    "matches": 15,
+    "avg_yellows": 4.0,
+    "avg_fouls": 23.333333333333332,
+    "avg_goals": 3.2666666666666666,
+    "home_win_pct": 33.3
+  },
+  {
+    "referee": "R Jones",
+    "matches": 15,
+    "avg_yellows": 4.2,
+    "avg_fouls": 20.666666666666668,
+    "avg_goals": 3.066666666666667,
+    "home_win_pct": 53.3
+  },
+  {
+    "referee": "A Madley",
+    "matches": 15,
+    "avg_yellows": 3.6,
+    "avg_fouls": 22.733333333333334,
+    "avg_goals": 3.0,
+    "home_win_pct": 26.7
+  },
+  {
+    "referee": "T Harrington",
+    "matches": 11,
+    "avg_yellows": 3.0,
+    "avg_fouls": 20.0,
+    "avg_goals": 2.090909090909091,
+    "home_win_pct": 27.3
+  },
+  {
+    "referee": "M Salisbury",
+    "matches": 10,
+    "avg_yellows": 4.5,
+    "avg_fouls": 22.8,
+    "avg_goals": 3.6,
+    "home_win_pct": 50.0
+  },
+  {
+    "referee": "J Brooks",
+    "matches": 10,
+    "avg_yellows": 3.8,
+    "avg_fouls": 20.8,
+    "avg_goals": 2.8,
+    "home_win_pct": 70.0
+  },
+  {
+    "referee": "T Robinson",
+    "matches": 9,
+    "avg_yellows": 4.0,
+    "avg_fouls": 22.88888888888889,
+    "avg_goals": 2.2222222222222223,
+    "home_win_pct": 55.6
+  },
+  {
+    "referee": "P Tierney",
+    "matches": 5,
+    "avg_yellows": 3.8,
+    "avg_fouls": 18.6,
+    "avg_goals": 3.0,
+    "home_win_pct": 60.0
+  },
+  {
+    "referee": "T Kirk",
+    "matches": 3,
+    "avg_yellows": 3.3333333333333335,
+    "avg_fouls": 25.666666666666668,
+    "avg_goals": 1.3333333333333333,
+    "home_win_pct": 33.3
+  },
+  {
+    "referee": "M Donohue",
+    "matches": 3,
+    "avg_yellows": 5.0,
+    "avg_fouls": 26.333333333333332,
+    "avg_goals": 2.0,
+    "home_win_pct": 33.3
+  },
+  {
+    "referee": "A Kitchen",
+    "matches": 3,
+    "avg_yellows": 3.6666666666666665,
+    "avg_fouls": 24.0,
+    "avg_goals": 2.6666666666666665,
+    "home_win_pct": 66.7
+  },
+  {
+    "referee": "F Hallam",
+    "matches": 2,
+    "avg_yellows": 3.5,
+    "avg_fouls": 24.5,
+    "avg_goals": 3.5,
+    "home_win_pct": 50.0
+  },
+  {
+    "referee": "L Smith",
+    "matches": 1,
+    "avg_yellows": 4.0,
+    "avg_fouls": 24.0,
+    "avg_goals": 2.0,
+    "home_win_pct": 0.0
+  }
+]

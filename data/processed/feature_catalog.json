@@ -1,0 +1,267 @@
+{
+  "shots_enriched": [
+    {
+      "name": "distance_to_goal_m",
+      "family": "geometria",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Distancia en metros entre la ubicacion del tiro y el centro de la porteria, tras normalizar la direccion de ataque."
+    },
+    {
+      "name": "goal_frame_angle",
+      "family": "geometria",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Angulo efectivo de remate abierto hacia los dos postes desde la posicion del tiro."
+    },
+    {
+      "name": "centrality_to_goal",
+      "family": "geometria",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Que tan centrado queda el tiro respecto al arco. Toma valores entre 0 y 1."
+    },
+    {
+      "name": "shot_angle_distance_interaction",
+      "family": "geometria",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Interaccion entre angulo y distancia para favorecer tiros cercanos y centrados."
+    },
+    {
+      "name": "is_assisted",
+      "family": "contexto_del_tiro",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Indicador de que el remate fue asistido por un companero segun los qualifiers del evento."
+    },
+    {
+      "name": "is_individual_play",
+      "family": "contexto_del_tiro",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Indicador de remate generado por accion individual del jugador."
+    },
+    {
+      "name": "is_regular_play",
+      "family": "contexto_del_tiro",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Indicador de jugada abierta regular, no asociada a balon parado."
+    },
+    {
+      "name": "is_set_piece",
+      "family": "contexto_del_tiro",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Indicador de remate originado en una accion a balon parado."
+    },
+    {
+      "name": "score_diff_before_shot",
+      "family": "estado_del_partido",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Diferencia de goles del equipo que remata justo antes del tiro."
+    },
+    {
+      "name": "leading_before_shot",
+      "family": "estado_del_partido",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Indicador de que el equipo del tirador ya iba ganando antes del remate."
+    },
+    {
+      "name": "trailing_before_shot",
+      "family": "estado_del_partido",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Indicador de que el equipo del tirador iba perdiendo antes del remate."
+    },
+    {
+      "name": "shot_number_in_match",
+      "family": "secuencia",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Numero secuencial del tiro dentro de la cronologia completa del partido."
+    },
+    {
+      "name": "team_shot_number_in_match",
+      "family": "secuencia",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Numero secuencial del tiro dentro de la cronologia del equipo en ese partido."
+    },
+    {
+      "name": "time_since_prev_team_shot_s",
+      "family": "secuencia",
+      "scope": "tiro",
+      "ex_ante": false,
+      "description": "Segundos transcurridos desde el tiro anterior del mismo equipo en el mismo partido."
+    },
+    {
+      "name": "player_conversion_last20",
+      "family": "historial_rodante",
+      "scope": "tiro",
+      "ex_ante": true,
+      "description": "Tasa de conversion historica del jugador calculada sobre sus 20 tiros anteriores mediante ventana rodante con shift."
+    },
+    {
+      "name": "player_big_chance_rate_last20",
+      "family": "historial_rodante",
+      "scope": "tiro",
+      "ex_ante": true,
+      "description": "Proporcion historica de big chances del jugador sobre sus 20 tiros previos, usando solo informacion pasada."
+    },
+    {
+      "name": "team_conversion_last40",
+      "family": "historial_rodante",
+      "scope": "tiro",
+      "ex_ante": true,
+      "description": "Tasa de conversion del equipo calculada sobre sus 40 tiros anteriores, sin usar el tiro actual."
+    },
+    {
+      "name": "team_big_chance_rate_last40",
+      "family": "historial_rodante",
+      "scope": "tiro",
+      "ex_ante": true,
+      "description": "Proporcion de big chances del equipo en sus 40 tiros previos, construida solo con historial pasado."
+    }
+  ],
+  "event_match_features": [
+    {
+      "name": "progressive_pass_rate",
+      "family": "estilo_de_equipo",
+      "scope": "equipo_partido",
+      "ex_ante": false,
+      "description": "Proporcion de pases del equipo que avanzan al menos 15 unidades hacia adelante en ese partido."
+    },
+    {
+      "name": "shot_accuracy",
+      "family": "ataque_de_equipo",
+      "scope": "equipo_partido",
+      "ex_ante": false,
+      "description": "Relacion entre tiros a puerta y tiros totales del equipo dentro del partido."
+    },
+    {
+      "name": "conversion_rate",
+      "family": "ataque_de_equipo",
+      "scope": "equipo_partido",
+      "ex_ante": false,
+      "description": "Relacion entre goles y tiros del equipo en el partido."
+    },
+    {
+      "name": "big_chance_rate",
+      "family": "ataque_de_equipo",
+      "scope": "equipo_partido",
+      "ex_ante": false,
+      "description": "Proporcion de tiros clasificados como big chance sobre el total de remates del equipo en ese partido."
+    },
+    {
+      "name": "assisted_shot_rate",
+      "family": "ataque_de_equipo",
+      "scope": "equipo_partido",
+      "ex_ante": false,
+      "description": "Proporcion de remates asistidos sobre el total de tiros del equipo en ese partido."
+    },
+    {
+      "name": "touches_per_shot",
+      "family": "ataque_de_equipo",
+      "scope": "equipo_partido",
+      "ex_ante": false,
+      "description": "Numero promedio de toques necesarios para producir un remate en ese partido."
+    },
+    {
+      "name": "avg_score_diff_before_shot",
+      "family": "contexto_de_equipo",
+      "scope": "equipo_partido",
+      "ex_ante": false,
+      "description": "Promedio del estado del marcador desde el que el equipo remato en ese partido."
+    }
+  ],
+  "match_features": [
+    {
+      "name": "points_diff_last5",
+      "family": "forma_prepartido",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Diferencia entre los puntos promedio de local y visitante en sus ultimos 5 partidos, calculada con shift para usar solo historial previo."
+    },
+    {
+      "name": "shot_accuracy_diff_last5",
+      "family": "forma_prepartido",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Diferencia entre la precision de remate historica de local y visitante en los ultimos 5 partidos previos."
+    },
+    {
+      "name": "conversion_rate_diff_last5",
+      "family": "forma_prepartido",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Diferencia entre la tasa de conversion historica de ambos equipos en sus ultimos 5 partidos previos."
+    },
+    {
+      "name": "big_chance_rate_diff_last5",
+      "family": "forma_prepartido",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Diferencia entre la proporcion de big chances de ambos equipos en los ultimos 5 partidos anteriores al encuentro."
+    },
+    {
+      "name": "assisted_shot_rate_diff_last5",
+      "family": "forma_prepartido",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Diferencia entre la proporcion historica de remates asistidos del local y del visitante en sus ultimos 5 partidos."
+    },
+    {
+      "name": "avg_shot_angle_diff_last5",
+      "family": "calidad_de_ocasiones",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Diferencia entre el angulo promedio de tiro que generaron ambos equipos en sus ultimos 5 partidos previos."
+    },
+    {
+      "name": "avg_score_diff_before_shot_diff_last5",
+      "family": "estado_prepartido",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Diferencia entre los estados de marcador desde los que ambos equipos acostumbran rematar, usando solo partidos anteriores."
+    },
+    {
+      "name": "market_favorite_strength",
+      "family": "senal_de_mercado",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Probabilidad implicita normalizada mas alta de Bet365 antes del partido. Resume la fuerza del favorito de mercado."
+    },
+    {
+      "name": "market_entropy_b365",
+      "family": "senal_de_mercado",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Entropia de la distribucion implicita de Bet365 antes del partido. Valores bajos indican favorito mas claro."
+    },
+    {
+      "name": "home_odds_dispersion",
+      "family": "senal_de_mercado",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Dispersion de la cuota local entre casas de apuestas antes del partido."
+    },
+    {
+      "name": "ref_avg_yellows_last10",
+      "family": "contexto_arbitral",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Promedio rodante de tarjetas amarillas mostradas por el arbitro en sus ultimos 10 partidos previos."
+    },
+    {
+      "name": "ref_home_win_rate_last10",
+      "family": "contexto_arbitral",
+      "scope": "partido",
+      "ex_ante": true,
+      "description": "Tasa rodante de victorias locales en los ultimos 10 partidos previos arbitrados por ese juez."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+project:
+  name: PremierLeagueML
+  random_state: 42
+
+data:
+  raw_dir: data
+  processed_dir: data/processed
+  api_cache_dir: data/api_cache
+
+training:
+  holdout_ratio: 0.2
+  cv_splits: 5
+  search_iterations: 8
+  include_stage1_prediction: true
+  smote: true
+  goal_feature_set: goals_default
+  winner_feature_set: winner_default
+  feature_modes:
+    - normal
+    - extra
+    - lasso_selected
+    - poly2_lasso
+
+outputs:
+  model_runs_dir: outputs/model_runs
+  final_dir: outputs/final

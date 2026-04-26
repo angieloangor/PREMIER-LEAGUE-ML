@@ -1,0 +1,37 @@
+experiment:
+  name: basic_match_predictor
+  description: Baseline two-model match predictor with stage1 goal regression and stage2 result classification.
+
+training:
+  advance_modeling: false
+  goal_feature_set: goals_default
+  winner_feature_set: winner_default
+  smote: true
+  feature_modes:
+    - normal
+    - extra
+    - lasso_selected
+    - poly2_lasso
+  search_iterations: 10
+  include_stage1_prediction: true
+
+models:
+  regressors:
+    - linear_regression
+    - knn_regressor
+    - ridge_regressor
+    - elasticnet_regressor
+    - random_forest_regressor
+    - xgboost_regressor
+    - catboost_regressor
+    - lightgbm_regressor
+    - torch_regressor
+  classifiers:
+    - knn_classifier
+    - ridge_classifier
+    - elasticnet_classifier
+    - random_forest_classifier
+    - xgboost_classifier
+    - catboost_classifier
+    - lightgbm_classifier
+    - torch_classifier

@@ -1,0 +1,7 @@
+api:
+  title: PremierLeagueML Match Predictor API
+  version: 1.0.0
+  host: 0.0.0.0
+  port: 8000
+  top_k_models: 3
+  runs_root: outputs/model_runs/advanced_match_predictor/stage2_classifier_runs

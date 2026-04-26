@@ -1,0 +1,4 @@
+dashboard/assets/hero.mp4
+__pycache__/
+.pytest_cache/
+.jupyter_runtime/

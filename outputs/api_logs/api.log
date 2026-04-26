@@ -1,0 +1,233 @@
+2026-04-24 03:04:39,183 INFO api.services.model_loader Loaded 5 model bundles. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:04:39,188 INFO match_predictor_api GET /health status=200 duration_ms=2.33 request_id=cbe3d8df-0181-4958-b6a1-db13df6922ef
+2026-04-24 03:04:39,189 INFO httpx HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2026-04-24 03:04:39,191 INFO match_predictor_api GET /health status=200 duration_ms=1.16 request_id=52b66281-40d5-443d-bc3b-3f589a72ab17
+2026-04-24 03:04:39,192 INFO httpx HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2026-04-24 03:04:39,195 INFO match_predictor_api GET /api/v1/models status=200 duration_ms=2.07 request_id=37cb5589-e23a-456b-b9a6-57bbff344a1f
+2026-04-24 03:04:39,196 INFO httpx HTTP Request: GET http://testserver/api/v1/models "HTTP/1.1 200 OK"
+2026-04-24 03:05:42,400 INFO api.services.model_loader Loaded 5 model bundles. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:05:42,403 INFO api.services.model_loader Loaded 5 model bundles. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:05:42,408 INFO match_predictor_api GET /api/v1/models status=200 duration_ms=2.97 request_id=6e1786e1-12d3-4e6c-9c8b-9fd9ea39cdf5
+2026-04-24 03:05:42,409 INFO httpx HTTP Request: GET http://testserver/api/v1/models "HTTP/1.1 200 OK"
+2026-04-24 03:05:42,473 INFO match_predictor_api POST /api/v1/matches/predict-full status=200 duration_ms=70.80 request_id=4caed3a8-5894-454e-8b39-d84156a7de6b
+2026-04-24 03:05:42,474 INFO httpx HTTP Request: POST http://testserver/api/v1/matches/predict-full "HTTP/1.1 200 OK"
+2026-04-24 03:07:45,120 INFO api.services.model_loader Loaded 5 model bundles. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:08:47,322 INFO match_predictor_api GET /docs status=200 duration_ms=0.77 request_id=c5460d8c-3fc6-456d-a6d0-427b35901e28
+2026-04-24 03:08:47,749 INFO match_predictor_api GET /openapi.json status=200 duration_ms=26.22 request_id=19a2b6e2-1679-47e7-89ca-c1a7b2c17ea3
+2026-04-24 03:21:16,477 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=model_runs__cpu_match_sweep_v3_linear_and_logit__linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:21:33,940 INFO match_predictor_api GET /docs status=200 duration_ms=0.39 request_id=fb9239ad-5a55-42ce-8a59-5fb79d31bb59
+2026-04-24 03:21:34,284 INFO match_predictor_api GET /openapi.json status=200 duration_ms=28.78 request_id=5a559bf8-81f6-46da-a915-75910115e9ca
+2026-04-24 03:21:46,320 INFO match_predictor_api GET /models status=404 duration_ms=0.54 request_id=a6862e1c-c6f3-4d77-bfd2-655f8b90fb7b
+2026-04-24 03:21:46,375 INFO match_predictor_api GET /favicon.ico status=404 duration_ms=0.52 request_id=2718cba5-3cae-4306-8926-eaeb79457eb4
+2026-04-24 03:22:00,884 INFO match_predictor_api GET /v1/models status=404 duration_ms=0.79 request_id=e3fa9918-c295-4eac-a36e-a59adf4a53f9
+2026-04-24 03:22:43,369 INFO match_predictor_api GET /api/v1/models status=200 duration_ms=5.14 request_id=f39d81c5-06a2-4d4a-959e-d64c19a62b24
+2026-04-24 03:26:00,096 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:26:12,020 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:26:19,890 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:27:01,078 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:27:01,082 INFO match_predictor_api GET /ready status=200 duration_ms=2.15 request_id=4b7105f0-544b-4a49-987e-ab4b65e1b797
+2026-04-24 03:27:01,083 INFO httpx HTTP Request: GET http://testserver/ready "HTTP/1.1 200 OK"
+2026-04-24 03:27:01,087 INFO match_predictor_api GET /api/v1/models status=200 duration_ms=2.35 request_id=97b2fab8-ce35-4a7c-8ce2-33902283c9a0
+2026-04-24 03:27:01,088 INFO httpx HTTP Request: GET http://testserver/api/v1/models "HTTP/1.1 200 OK"
+2026-04-24 03:27:01,092 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=1.44 request_id=3cd8b906-f388-4a1c-8485-1d4cbe866cb3
+2026-04-24 03:27:01,092 INFO httpx HTTP Request: GET http://testserver/api/v1/model-info "HTTP/1.1 200 OK"
+2026-04-24 03:27:01,163 INFO match_predictor_api POST /api/v1/matches/predict-full status=200 duration_ms=68.60 request_id=9fe628f6-89f3-465e-8b31-cd89b039e982
+2026-04-24 03:27:01,164 INFO httpx HTTP Request: POST http://testserver/api/v1/matches/predict-full "HTTP/1.1 200 OK"
+2026-04-24 03:27:21,616 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:27:47,928 INFO match_predictor_api GET /docs status=200 duration_ms=0.48 request_id=97de8c0c-e7b8-4894-bffe-00204edfee41
+2026-04-24 03:27:48,157 INFO match_predictor_api GET /openapi.json status=200 duration_ms=26.57 request_id=83baacaa-0844-4a02-84d2-8d9f2bf65b5e
+2026-04-24 03:28:04,379 INFO match_predictor_api GET /api/v1/models status=200 duration_ms=4.13 request_id=7e465b80-f4f9-4132-b01e-b77ce63cfdfb
+2026-04-24 03:36:30,204 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-24 03:40:31,749 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=xgboost_regressor+random_forest_classifier+lasso_selected
+2026-04-24 03:40:42,178 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=xgboost_regressor+random_forest_classifier+lasso_selected
+2026-04-24 03:40:49,603 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=xgboost_regressor+random_forest_classifier+lasso_selected
+2026-04-24 03:45:26,470 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=xgboost_regressor+random_forest_classifier+lasso_selected
+2026-04-24 03:54:56,653 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=xgboost_regressor+random_forest_classifier+lasso_selected
+2026-04-24 03:55:18,695 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=xgboost_regressor+random_forest_classifier+lasso_selected
+2026-04-24 03:59:44,835 INFO api.services.model_loader Loaded 5 model bundles from C:\Users\alejo\OneDrive\Escritorio\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=xgboost_regressor+random_forest_classifier+lasso_selected
+2026-04-25 08:11:43,113 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+random_forest_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:11:43,123 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+catboost_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:11:43,994 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-25 08:11:44,064 INFO match_predictor_api GET /health status=200 duration_ms=3.60 request_id=5a5b2999-e21f-4005-b845-414755e752a3
+2026-04-25 08:11:44,162 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=2.54 request_id=5ae7c92c-355a-42c8-a533-422b72d3a095
+2026-04-25 08:11:44,746 INFO match_predictor_api POST /predict/match status=200 duration_ms=535.73 request_id=178a0ff0-6c04-4259-a192-cee0bff5b19b
+2026-04-25 08:11:44,770 INFO match_predictor_api POST /predict/xg status=200 duration_ms=1.66 request_id=0e674ae4-c73c-46d9-a8ff-5fbb68b587a0
+2026-04-25 08:13:55,848 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+random_forest_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:13:55,861 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+catboost_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:13:56,681 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-25 08:13:57,358 INFO match_predictor_api OPTIONS /predict/match status=200 duration_ms=0.41 request_id=fd6b21ee-a06f-4d2a-8e65-5db8192d2be9
+2026-04-25 08:30:06,032 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+random_forest_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:30:06,066 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+catboost_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:30:08,245 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-25 08:35:48,809 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+random_forest_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:35:48,827 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+catboost_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:35:49,753 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-25 08:35:57,564 INFO match_predictor_api GET /health status=200 duration_ms=3.55 request_id=db6cfb64-4181-4f3f-b7af-548f0542902a
+2026-04-25 08:36:12,253 INFO match_predictor_api GET /health status=200 duration_ms=1.63 request_id=6912574f-a2af-4d20-b839-677648f223b8
+2026-04-25 08:36:19,284 INFO match_predictor_api OPTIONS /health status=200 duration_ms=0.54 request_id=08b8f55f-704b-4c00-ae5e-983d01953b1b
+2026-04-25 08:36:19,352 INFO match_predictor_api GET /health status=200 duration_ms=8.80 request_id=63171437-7a98-41c1-8cb9-bc3d5810f7f5
+2026-04-25 08:36:19,407 INFO match_predictor_api OPTIONS /api/v1/model-info status=200 duration_ms=0.57 request_id=8aeddec9-c0b7-4e33-b6af-a09e5dca4e09
+2026-04-25 08:36:19,425 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=4.66 request_id=d44764b4-f78e-4e33-94ec-c17d1e5fb4e6
+2026-04-25 08:36:46,967 INFO match_predictor_api GET /health status=200 duration_ms=8.35 request_id=8e09fa11-1d06-47af-8269-f80309ff1ba8
+2026-04-25 08:36:51,218 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=3.12 request_id=7389c6d1-d64f-49b9-9948-a1aa15f65bf4
+2026-04-25 08:36:59,936 INFO match_predictor_api OPTIONS /health status=200 duration_ms=0.33 request_id=fb7132ae-9b3a-471b-9d9f-10a20793d45a
+2026-04-25 08:37:00,273 INFO match_predictor_api GET /health status=200 duration_ms=1.91 request_id=d5d65834-8630-40aa-9f71-133de6ef9516
+2026-04-25 08:37:02,043 INFO match_predictor_api OPTIONS / status=200 duration_ms=0.34 request_id=ec84d40b-f4c7-4cc9-aa5a-4cdd06d16784
+2026-04-25 08:37:02,763 INFO match_predictor_api GET / status=200 duration_ms=15.79 request_id=349449a2-ca57-4952-a4e8-075f4b03ce46
+2026-04-25 08:37:04,023 INFO match_predictor_api OPTIONS /api/v1/model-info status=200 duration_ms=1.87 request_id=3c868b04-b145-44d6-8aea-7d9f3c760a0b
+2026-04-25 08:37:04,515 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=9.19 request_id=abb51b95-9d13-4255-a370-b4d847a81a84
+2026-04-25 08:37:38,809 INFO match_predictor_api GET /health status=200 duration_ms=40.32 request_id=22faa7f7-bca5-4cd0-b8fe-2f7733859272
+2026-04-25 08:37:38,921 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=3.16 request_id=334247df-b4df-48c2-80c7-d1d1933b9393
+2026-04-25 08:37:48,567 INFO match_predictor_api GET /health status=200 duration_ms=9.86 request_id=3ece7a18-ec63-4ff2-b552-4dda17cc6c57
+2026-04-25 08:37:48,959 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=6.09 request_id=5a98826a-8fa2-4a14-90ca-d72b3436e6f4
+2026-04-25 08:38:19,099 INFO match_predictor_api GET /health status=200 duration_ms=2.08 request_id=a297d0fc-d28a-4bc7-abbc-6f892b983c91
+2026-04-25 08:38:21,990 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=15.86 request_id=b5266486-f1c7-49db-8c91-edff2277a64c
+2026-04-25 08:38:55,736 INFO match_predictor_api GET /health status=200 duration_ms=2.05 request_id=ed8e3c2e-4caa-4a33-a8ee-31a466e89e84
+2026-04-25 08:44:39,389 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+random_forest_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:44:39,419 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit\xgboost_regressor+catboost_classifier+lasso_selected: No module named 'xgboost'
+2026-04-25 08:44:41,120 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\User\Desktop\TALLERPREMIER\PremierLeagueML\outputs\model_runs\cpu_match_sweep_v3_linear_and_logit. Default=linear_regression+elasticnet_classifier+lasso_selected
+2026-04-25 08:44:45,632 INFO match_predictor_api GET /health status=200 duration_ms=11.40 request_id=161eee19-130c-4480-99b6-b2271a412d27
+2026-04-25 08:44:45,653 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=6.09 request_id=f6c411ac-8122-4ca6-a8f9-fd866b21c35f
+2026-04-25 08:44:45,745 INFO match_predictor_api OPTIONS /predict/match status=200 duration_ms=2.27 request_id=243f2163-25b3-46f1-81a6-9fa6310cf7e2
+2026-04-25 08:44:47,119 INFO match_predictor_api POST /predict/match status=200 duration_ms=1345.53 request_id=fdcc72a0-191b-4679-a75a-0f9228839d40
+2026-04-25 08:44:55,569 INFO match_predictor_api GET /health status=200 duration_ms=2.15 request_id=bf04ff40-fdc3-451f-8129-00ae9b1a8853
+2026-04-25 08:44:55,587 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=2.23 request_id=033ad95c-f5da-46ce-a9fe-dc2ca6dc9294
+2026-04-25 08:44:56,163 INFO match_predictor_api POST /predict/match status=200 duration_ms=540.72 request_id=adbeeb7f-05f6-4942-a173-2bd311599a14
+2026-04-25 08:45:05,570 INFO match_predictor_api GET /health status=200 duration_ms=2.28 request_id=863fb07e-34f1-486f-a808-0927a12c763c
+2026-04-25 08:45:05,599 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=9.49 request_id=de2e7fd2-c655-4f01-a398-35bd00f4ef0c
+2026-04-25 08:45:06,338 INFO match_predictor_api POST /predict/match status=200 duration_ms=675.95 request_id=6e1bcc2e-683b-46da-9628-d274360a2c43
+2026-04-25 08:45:15,569 INFO match_predictor_api GET /health status=200 duration_ms=1.96 request_id=300ff932-c9b5-4abc-abd5-006996143e3e
+2026-04-25 08:45:15,589 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=2.89 request_id=11edb25a-77b4-40c1-b889-e469fcfa821b
+2026-04-25 08:45:16,098 INFO match_predictor_api POST /predict/match status=200 duration_ms=465.79 request_id=6f5f85ec-3cef-4f9e-beab-d4e5d4938bc5
+2026-04-25 08:45:25,570 INFO match_predictor_api GET /health status=200 duration_ms=3.42 request_id=358a95d1-c12c-47ae-9147-ff414ff14446
+2026-04-25 08:45:25,603 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=3.29 request_id=7f5548b5-4c93-42ce-be4d-acbc74b6543b
+2026-04-25 08:45:26,137 INFO match_predictor_api POST /predict/match status=200 duration_ms=472.98 request_id=11b75ff0-af3a-4f35-8fdf-da0469c69aa9
+2026-04-25 08:45:35,567 INFO match_predictor_api GET /health status=200 duration_ms=2.13 request_id=3816b39b-b944-4c2c-9d9c-a36059e454eb
+2026-04-25 08:45:35,586 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=2.53 request_id=deaf81db-3ce1-4129-90dd-f11643030280
+2026-04-25 08:45:36,416 INFO match_predictor_api POST /predict/match status=200 duration_ms=774.49 request_id=00a21721-236e-4990-89e2-5a6d74495d53
+2026-04-25 08:45:45,583 INFO match_predictor_api GET /health status=200 duration_ms=11.69 request_id=fa2c7885-7603-4a7e-b479-15d18ca7a31e
+2026-04-25 08:45:45,618 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=2.57 request_id=98089656-9cce-4d6f-9918-ee23f8dd712a
+2026-04-25 08:45:46,709 INFO match_predictor_api POST /predict/match status=200 duration_ms=1045.17 request_id=362b8f17-1d4e-49ec-8ce1-bad9c642b2bf
+2026-04-25 08:45:55,566 INFO match_predictor_api GET /health status=200 duration_ms=2.05 request_id=46c7cb3b-08e1-4572-8df6-83719cad9dab
+2026-04-25 08:45:55,583 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=1.52 request_id=3b55e4b4-34ca-49bd-b5d2-8e47f8d0c065
+2026-04-25 08:45:56,253 INFO match_predictor_api POST /predict/match status=200 duration_ms=624.79 request_id=7d7f2ec0-ce4a-4dbe-bb09-47277239f10a
+2026-04-25 08:46:05,583 INFO match_predictor_api GET /health status=200 duration_ms=5.43 request_id=5e57a1ab-a0a6-4ccf-bf93-18bf7cbe934a
+2026-04-25 08:46:05,648 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=3.72 request_id=41780813-41ef-4d00-a00a-20ec8d923167
+2026-04-25 08:46:06,637 INFO match_predictor_api POST /predict/match status=200 duration_ms=940.87 request_id=f5968f33-a505-4882-8acb-57e939df566e
+2026-04-25 08:46:15,575 INFO match_predictor_api GET /health status=200 duration_ms=8.07 request_id=daec0168-48ee-4b97-b73b-3f9264f25349
+2026-04-25 08:46:15,608 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=11.81 request_id=4690544a-72ef-4d1f-a860-03a1d6b63392
+2026-04-25 08:46:16,597 INFO match_predictor_api POST /predict/match status=200 duration_ms=915.85 request_id=0d145b85-8fb9-4d4f-b232-0c5654f9a8d7
+2026-04-25 08:46:25,564 INFO match_predictor_api OPTIONS /health status=200 duration_ms=0.35 request_id=fdf4d959-a33d-4af3-8a6b-7e6ed049056c
+2026-04-25 08:46:25,581 INFO match_predictor_api GET /health status=200 duration_ms=1.97 request_id=776c2901-595f-4688-948c-7d7dfc614059
+2026-04-25 08:46:25,597 INFO match_predictor_api OPTIONS /api/v1/model-info status=200 duration_ms=0.32 request_id=2b746e26-e5f4-45c7-9de1-32803e012f5e
+2026-04-25 08:46:25,612 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=6.42 request_id=4634f347-fb5b-4607-8a5b-ada78404a2e1
+2026-04-25 08:46:26,541 INFO match_predictor_api POST /predict/match status=200 duration_ms=881.62 request_id=c6922479-4b4c-4f32-93e0-ad764c4db08c
+2026-04-25 08:46:35,613 INFO match_predictor_api GET /health status=200 duration_ms=4.36 request_id=6d48e5b5-cdf4-4895-928d-8b3c2b2eafde
+2026-04-25 08:46:35,693 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=8.15 request_id=f89cad24-6d04-4829-b723-61320f2b909c
+2026-04-25 08:46:36,635 INFO match_predictor_api POST /predict/match status=200 duration_ms=907.59 request_id=ed98885f-791c-4c45-a544-de33fdc6226b
+2026-04-25 08:46:45,561 INFO match_predictor_api GET /health status=200 duration_ms=1.60 request_id=4b9b12dd-865a-4ea4-8110-a5e569738f55
+2026-04-25 08:46:45,578 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=1.90 request_id=1bd79812-36d4-4d1b-82e8-084532ca0c05
+2026-04-25 08:46:46,453 INFO match_predictor_api POST /predict/match status=200 duration_ms=845.58 request_id=ad86afb6-be63-4e9b-8a50-297d7ae9e86b
+2026-04-25 08:46:55,576 INFO match_predictor_api GET /health status=200 duration_ms=10.23 request_id=6f33bed4-f4e1-4469-ae5f-5bebb3b5fffa
+2026-04-25 08:46:55,606 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=10.01 request_id=50933c33-f388-4ea4-b06e-57700be0da3c
+2026-04-25 08:46:56,653 INFO match_predictor_api POST /predict/match status=200 duration_ms=1008.78 request_id=5f63a357-b814-4c16-9eba-080ddd29f004
+2026-04-25 08:47:05,564 INFO match_predictor_api GET /health status=200 duration_ms=2.83 request_id=2e81fa12-fb1f-4774-95b8-288f750891d4
+2026-04-25 08:47:05,590 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=9.99 request_id=8ab8ee70-653e-437e-ad3e-1c98a40d0c81
+2026-04-25 08:47:06,412 INFO match_predictor_api POST /predict/match status=200 duration_ms=788.27 request_id=f7dcf7b4-adc8-4977-a9a3-2f0d9b2c26ff
+2026-04-25 08:47:15,560 INFO match_predictor_api GET /health status=200 duration_ms=2.24 request_id=0cdfb937-5203-4a4f-9772-5c9ebc923038
+2026-04-25 08:47:15,578 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=2.58 request_id=bb62959a-8996-4b97-9b90-cc77c6475f2e
+2026-04-25 08:47:16,508 INFO match_predictor_api POST /predict/match status=200 duration_ms=864.26 request_id=af1aa680-5c2b-48ea-8d01-221f53cce176
+2026-04-25 08:47:25,576 INFO match_predictor_api GET /health status=200 duration_ms=2.22 request_id=e7735ab0-6a52-4973-84c5-7cdced45a3e6
+2026-04-25 08:47:25,606 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=11.99 request_id=acd73d23-9cc6-44ab-9d96-a91ad1816787
+2026-04-25 08:47:26,560 INFO match_predictor_api POST /predict/match status=200 duration_ms=921.09 request_id=6be46517-ffd2-44e8-ba67-4adddf54867c
+2026-04-25 08:47:35,576 INFO match_predictor_api GET /health status=200 duration_ms=4.50 request_id=1eeecc17-2978-4815-aa9a-bb9259efe0f5
+2026-04-25 08:47:35,601 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=5.23 request_id=dd74a721-2401-41ab-8b41-a7d59e105af5
+2026-04-25 08:47:36,096 INFO match_predictor_api POST /predict/match status=200 duration_ms=454.31 request_id=8ffca45a-ea4b-4bab-8263-5635ba467038
+2026-04-25 08:47:45,564 INFO match_predictor_api GET /health status=200 duration_ms=5.26 request_id=d1ad8c05-a2ba-441b-9e52-913653d185c5
+2026-04-25 08:47:45,592 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=5.21 request_id=149b4c8f-a41a-4846-9cff-68845ae9dacb
+2026-04-25 08:47:46,517 INFO match_predictor_api POST /predict/match status=200 duration_ms=873.46 request_id=9958ac69-e75a-4094-80f8-8592e2ae81ff
+2026-04-25 08:47:55,605 INFO match_predictor_api GET /health status=200 duration_ms=13.63 request_id=5c500bf6-8e97-4e24-a934-9ac2cff78d9f
+2026-04-25 08:47:55,659 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=2.09 request_id=2b68ebf1-b56f-456e-9914-6f251b6ae302
+2026-04-25 08:47:57,407 INFO match_predictor_api POST /predict/match status=200 duration_ms=1639.87 request_id=4867dbb9-3d55-4aad-90d3-57a9f93e4f35
+2026-04-25 08:48:05,657 INFO match_predictor_api OPTIONS /health status=200 duration_ms=2.76 request_id=0a379890-0de8-4a39-bbf0-82fea4842d6c
+2026-04-25 08:48:07,403 INFO match_predictor_api OPTIONS / status=200 duration_ms=63.28 request_id=bdf0ad53-40d7-46f8-a062-63a4a40db40f
+2026-04-25 08:48:11,359 INFO match_predictor_api GET /health status=200 duration_ms=4023.66 request_id=615c65a8-e81e-4901-9464-a9584eed9881
+2026-04-25 08:48:13,289 INFO match_predictor_api OPTIONS /health status=200 duration_ms=33.79 request_id=8e813c37-c3ae-42a2-af91-b31f713ef2d2
+2026-04-25 08:48:14,041 INFO match_predictor_api OPTIONS / status=200 duration_ms=771.30 request_id=eade2553-37a0-4d4f-8110-cd0f363a7cd1
+2026-04-25 08:48:17,905 INFO match_predictor_api OPTIONS /health status=200 duration_ms=168.07 request_id=91894954-aa0f-4e2b-aaf6-0588ab77d009
+2026-04-25 08:48:21,343 INFO match_predictor_api OPTIONS / status=200 duration_ms=3604.01 request_id=7992f6c6-04c9-4235-a1db-2cec1585e64d
+2026-04-25 08:48:24,070 INFO match_predictor_api OPTIONS /health status=200 duration_ms=6157.03 request_id=59f46630-066b-406d-b9e2-c183c0ec7d68
+2026-04-25 08:48:26,292 INFO match_predictor_api OPTIONS / status=200 duration_ms=2608.10 request_id=0d4124e5-712c-41c1-88bd-da55dfad7710
+2026-04-25 08:48:38,421 INFO match_predictor_api OPTIONS / status=200 duration_ms=14734.58 request_id=2eeb46fa-52e4-4a59-84a4-a7952849c912
+2026-04-25 08:48:42,669 INFO match_predictor_api OPTIONS /health status=200 duration_ms=16379.72 request_id=4f5407d2-db40-4a12-ab0f-ad5950e6ca4b
+2026-04-25 08:48:47,571 INFO match_predictor_api OPTIONS /health status=200 duration_ms=21282.21 request_id=d7f3335c-9506-4896-8628-ea281e1beb1c
+2026-04-25 08:48:50,358 INFO match_predictor_api OPTIONS /health status=200 duration_ms=24068.94 request_id=e21ba0e3-2605-4c8a-82c1-3aaa6ef31472
+2026-04-25 08:48:51,429 INFO match_predictor_api OPTIONS / status=200 duration_ms=9558.22 request_id=cb2be6a4-900e-4802-bd00-29243119c1da
+2026-04-25 08:48:52,138 INFO match_predictor_api OPTIONS / status=200 duration_ms=738.85 request_id=5971b278-a6ac-4270-a143-a5366b8a386b
+2026-04-25 08:48:52,786 INFO match_predictor_api OPTIONS /health status=200 duration_ms=1385.10 request_id=0a2532d3-b51e-4042-81e0-7a5c0402f435
+2026-04-25 08:48:54,188 INFO match_predictor_api OPTIONS / status=200 duration_ms=2767.36 request_id=a4fff738-454d-40cc-99b8-8c226ca494ed
+2026-04-25 08:48:54,219 INFO match_predictor_api OPTIONS /health status=200 duration_ms=2795.31 request_id=b8b4b489-12e1-4a35-9ef4-da7aaaee86e7
+2026-04-25 08:48:54,254 INFO match_predictor_api OPTIONS / status=200 duration_ms=2167.91 request_id=cf807772-bf4c-45fa-9d84-31b7b6f2c49b
+2026-04-25 08:48:54,295 INFO match_predictor_api OPTIONS / status=200 duration_ms=51.26 request_id=137c65ed-8888-4d0d-bae0-5589aa6d00e0
+2026-04-25 08:48:54,486 INFO match_predictor_api OPTIONS /health status=200 duration_ms=236.74 request_id=d0ca1440-010d-4176-b0f2-36d45c8ae923
+2026-04-25 08:48:54,719 INFO match_predictor_api GET / status=200 duration_ms=28430.09 request_id=b2802453-6c5d-4613-bb4f-4658db8129b5
+2026-04-25 08:48:54,736 INFO match_predictor_api OPTIONS /health status=200 duration_ms=455.28 request_id=686ede7b-11bc-4dbf-aa2d-3a69fb65262a
+2026-04-25 08:48:54,902 INFO match_predictor_api OPTIONS / status=200 duration_ms=619.48 request_id=63b65c21-8c1f-434f-b5d8-2e730b920df9
+2026-04-25 08:48:54,932 INFO match_predictor_api OPTIONS /health status=200 duration_ms=648.90 request_id=5d9e7d40-0c0f-43d8-8631-f6f14fdc2879
+2026-04-25 08:48:54,955 INFO match_predictor_api OPTIONS / status=200 duration_ms=667.87 request_id=ecc40439-4f71-45e6-b424-e3d826a3999a
+2026-04-25 08:48:55,015 INFO match_predictor_api GET / status=200 duration_ms=3608.57 request_id=573693c0-28e5-4179-977e-0610c63faba6
+2026-04-25 08:48:55,021 INFO match_predictor_api OPTIONS / status=200 duration_ms=69.85 request_id=55715d7f-a154-423f-9228-4d0c5f71ab3a
+2026-04-25 08:48:55,171 INFO match_predictor_api GET /health status=200 duration_ms=16816.02 request_id=22a00976-381e-48fe-a030-7c6ed70fa6f4
+2026-04-25 08:48:55,204 INFO match_predictor_api OPTIONS /health status=200 duration_ms=202.61 request_id=1bebd836-eda4-4dba-afdd-c20b6df784eb
+2026-04-25 08:48:55,237 INFO match_predictor_api GET /health status=200 duration_ms=3831.72 request_id=d77b6f06-a768-468c-aae9-85bedcd01e9b
+2026-04-25 08:48:55,253 INFO match_predictor_api GET / status=200 duration_ms=970.28 request_id=9ef5f2b8-b3e7-40e8-9557-b21ecfe13c57
+2026-04-25 08:48:55,267 INFO match_predictor_api GET /health status=200 duration_ms=3132.32 request_id=bcb9157d-c2c3-45af-b13b-2670ee110386
+2026-04-25 08:48:55,270 INFO match_predictor_api GET / status=200 duration_ms=552.14 request_id=b95d7854-c055-4a40-81a7-8cd1e3e65f0e
+2026-04-25 08:48:55,500 INFO match_predictor_api GET /health status=200 duration_ms=1381.17 request_id=2af5218f-c27d-4595-badc-62f01df0c3fd
+2026-04-25 08:48:55,511 INFO match_predictor_api GET / status=200 duration_ms=507.87 request_id=9da74e46-f9f1-409b-a1a2-72531f0a5b6f
+2026-04-25 08:48:55,516 INFO match_predictor_api GET / status=200 duration_ms=362.02 request_id=d2a7575a-68d2-407c-9e61-6c7dc9660b84
+2026-04-25 08:48:55,519 INFO match_predictor_api GET /health status=200 duration_ms=532.08 request_id=edb5a7e7-c09a-4b83-b6da-bdca35a989bc
+2026-04-25 08:48:55,520 INFO match_predictor_api GET / status=200 duration_ms=284.85 request_id=8ab53ffc-e724-42dc-8b40-326d9c280fce
+2026-04-25 08:48:55,521 INFO match_predictor_api GET /health status=200 duration_ms=368.32 request_id=762c06d1-b42c-4dfb-87c6-98648544ca9d
+2026-04-25 08:48:55,536 INFO match_predictor_api GET /health status=200 duration_ms=366.37 request_id=b6d93cae-d664-4bee-8b53-1d05cf015d70
+2026-04-25 08:48:55,538 INFO match_predictor_api GET /health status=200 duration_ms=285.82 request_id=aeaf9205-5d4b-4728-b5a3-fbda50aabaa2
+2026-04-25 08:48:55,582 INFO match_predictor_api GET /health status=200 duration_ms=25.52 request_id=ed45599b-67fa-4b05-9f85-cd4dbbfa22af
+2026-04-25 08:48:55,631 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=11.06 request_id=b7a54052-1a32-460d-8462-4927c844caea
+2026-04-25 08:48:56,312 INFO match_predictor_api OPTIONS / status=200 duration_ms=8.07 request_id=1673240c-8588-4a36-8ce2-b27f75304e4e
+2026-04-25 08:48:56,971 INFO match_predictor_api GET / status=200 duration_ms=140.41 request_id=ca02c7f6-b5d5-476c-9192-e482592072ce
+2026-04-25 08:48:57,278 INFO match_predictor_api POST /predict/match status=200 duration_ms=1593.95 request_id=a9339d30-2821-4bd0-9f39-f1b2a4896858
+2026-04-25 08:48:58,157 INFO match_predictor_api OPTIONS /api/v1/model-info status=200 duration_ms=0.71 request_id=8bb7ade0-dc06-4208-9284-c6e4ffd1705d
+2026-04-25 08:48:58,190 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=4.40 request_id=76c8d8c3-d69e-4d0f-b6eb-cc9fda067781
+2026-04-25 08:49:01,967 INFO match_predictor_api OPTIONS /health status=200 duration_ms=0.36 request_id=309234b5-0ecb-48f5-8347-6814e7204df6
+2026-04-25 08:49:02,036 INFO match_predictor_api GET /health status=200 duration_ms=2.09 request_id=e01314e9-4667-4c03-a839-be551b18cb36
+2026-04-25 08:49:02,348 INFO match_predictor_api OPTIONS /api/v1/model-info status=200 duration_ms=0.75 request_id=829a87d8-df69-4c2c-a6e0-619682f20909
+2026-04-25 08:49:02,470 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=4.47 request_id=ea444ae5-f546-4f37-a0d4-23e4f74c4c24
+2026-04-25 08:49:05,616 INFO match_predictor_api GET /health status=200 duration_ms=14.05 request_id=fdf45eab-be88-47c0-910b-490ae613c05a
+2026-04-25 08:49:05,647 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=10.85 request_id=809167a6-6438-495d-9ef6-1b9b1c3b97fc
+2026-04-25 08:49:07,402 INFO match_predictor_api POST /predict/match status=200 duration_ms=1618.35 request_id=e6a9fe63-57c6-4aa7-bbea-e21a84f09c6c
+2026-04-25 18:09:27,769 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:10:13,082 INFO match_predictor_api GET /docs status=200 duration_ms=0.90 request_id=835c9d05-9278-4622-80c1-9e49bba38727
+2026-04-25 18:10:13,800 INFO match_predictor_api GET /openapi.json status=200 duration_ms=83.08 request_id=87731241-cdfc-4d5b-99a2-11d81dd0e965
+2026-04-25 18:10:43,446 INFO match_predictor_api GET /api/v1/models status=200 duration_ms=7.04 request_id=c724df4a-eb33-4a9b-9960-d5037e17a532
+2026-04-25 18:10:43,817 INFO match_predictor_api GET /favicon.ico status=404 duration_ms=0.92 request_id=9de645c9-3bca-4061-99f5-7b6f0a1c9ab7
+2026-04-25 18:14:41,258 INFO match_predictor_api GET /docs status=200 duration_ms=0.97 request_id=9e17e55b-c84e-467b-896a-2d78733b2090
+2026-04-25 18:14:41,701 INFO match_predictor_api GET /openapi.json status=200 duration_ms=2.50 request_id=f8ccdcd1-e93f-47b4-90be-7021b79d2ee4
+2026-04-25 18:14:58,160 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:15:08,155 INFO match_predictor_api GET /api/v1/models status=200 duration_ms=3.52 request_id=b4191b80-03d3-408b-bcf5-9412797e9927
+2026-04-25 18:15:08,369 INFO match_predictor_api GET /favicon.ico status=404 duration_ms=1.29 request_id=8078049c-1f87-4371-b1fd-582e94d3d538
+2026-04-25 18:15:42,162 INFO match_predictor_api GET /docas status=404 duration_ms=0.78 request_id=3b5d0370-8e61-4e6f-91ec-eb53a03a8192
+2026-04-25 18:15:45,683 INFO match_predictor_api GET /docs status=200 duration_ms=0.91 request_id=52caf5b3-4015-40be-8d61-f4b73d321e0f
+2026-04-25 18:15:45,931 INFO match_predictor_api GET /openapi.json status=200 duration_ms=105.52 request_id=026f78b3-9fc3-4d08-b1b0-7cfe47c09e1c
+2026-04-25 18:15:58,697 INFO match_predictor_api GET /api/v1/model-info status=200 duration_ms=55.62 request_id=c6d7e54b-39ef-4b1a-9189-7cda3b1cd3af
+2026-04-25 18:18:37,858 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:18:56,765 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:25:35,672 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:25:49,582 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:26:07,419 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:26:20,032 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:26:32,921 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:26:42,839 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:28:13,006 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:29:24,958 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:30:33,741 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-25 18:38:06,611 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra

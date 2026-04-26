@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" role="img" aria-label="Overlay táctico para predictor">
+  <defs>
+    <linearGradient id="pb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4ad4ff" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#39d98d" stop-opacity="0.08"/>
+    </linearGradient>
+    <pattern id="pgrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#d9ecff" stroke-opacity="0.08" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="500" fill="url(#pb)"/>
+  <rect width="1200" height="500" fill="url(#pgrid)" opacity="0.44"/>
+  <g fill="none" stroke="#b8dcff" stroke-opacity="0.26" stroke-width="2">
+    <path d="M58 442H1142V58H58Z"/>
+    <path d="M600 58V442"/>
+    <circle cx="600" cy="250" r="74"/>
+  </g>
+  <path d="M112 362L224 316L344 328L462 246L580 260L706 208L840 226L974 168L1094 132" fill="none" stroke="#4ad4ff" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round"/>
+</svg>

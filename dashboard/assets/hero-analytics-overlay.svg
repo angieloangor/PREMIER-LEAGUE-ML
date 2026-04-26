@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Overlay editorial de analítica deportiva">
+  <defs>
+    <linearGradient id="g0" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4ad4ff" stop-opacity="0.22"/>
+      <stop offset="42%" stop-color="#39d98d" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#4ad4ff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="72%" cy="18%" r="58%">
+      <stop offset="0%" stop-color="#4ad4ff" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#4ad4ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#d9ecff" stroke-opacity="0.10" stroke-width="1"/>
+    </pattern>
+    <filter id="blur10">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g0)"/>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity="0.36"/>
+
+  <g stroke="#b9dcff" stroke-opacity="0.26" fill="none" stroke-width="2">
+    <path d="M80 760H1520V140H80Z"/>
+    <path d="M800 140V760"/>
+    <circle cx="800" cy="450" r="96"/>
+    <rect x="80" y="290" width="215" height="320"/>
+    <rect x="1305" y="290" width="215" height="320"/>
+    <circle cx="280" cy="450" r="7" fill="#d5ebff" fill-opacity="0.50"/>
+    <circle cx="1320" cy="450" r="7" fill="#d5ebff" fill-opacity="0.50"/>
+  </g>
+
+  <g stroke="#4ad4ff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.7">
+    <path d="M260 650L400 582L550 610L710 470L860 498L1000 412L1170 445L1360 300"/>
+    <circle cx="260" cy="650" r="6" fill="#4ad4ff"/>
+    <circle cx="400" cy="582" r="6" fill="#4ad4ff"/>
+    <circle cx="550" cy="610" r="6" fill="#4ad4ff"/>
+    <circle cx="710" cy="470" r="6" fill="#4ad4ff"/>
+    <circle cx="860" cy="498" r="6" fill="#4ad4ff"/>
+    <circle cx="1000" cy="412" r="6" fill="#4ad4ff"/>
+    <circle cx="1170" cy="445" r="6" fill="#4ad4ff"/>
+    <circle cx="1360" cy="300" r="6" fill="#4ad4ff"/>
+  </g>
+
+  <g opacity="0.78">
+    <rect x="1090" y="94" width="418" height="178" rx="18" fill="#081327" fill-opacity="0.76" stroke="#95c5ff" stroke-opacity="0.34"/>
+    <rect x="1116" y="126" width="132" height="14" rx="7" fill="#39d98d" fill-opacity="0.76"/>
+    <rect x="1116" y="152" width="314" height="11" rx="5.5" fill="#d7ebff" fill-opacity="0.50"/>
+    <rect x="1116" y="176" width="278" height="11" rx="5.5" fill="#d7ebff" fill-opacity="0.42"/>
+    <rect x="1116" y="200" width="242" height="11" rx="5.5" fill="#d7ebff" fill-opacity="0.34"/>
+    <path d="M1398 216L1430 184L1464 194L1496 156" stroke="#39d98d" stroke-width="3" fill="none"/>
+  </g>
+
+  <circle cx="1270" cy="110" r="140" fill="#4ad4ff" fill-opacity="0.20" filter="url(#blur10)"/>
+</svg>

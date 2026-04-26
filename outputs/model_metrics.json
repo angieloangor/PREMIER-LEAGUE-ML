@@ -1,0 +1,191 @@
+{
+  "workshop_checklist": {
+    "xg_logistic_regression": 1,
+    "match_linear_regression": 1,
+    "match_logistic_regression": 1,
+    "bet365_benchmark_reproduced": 1,
+    "event_rolling_features": 1,
+    "odds_features": 1,
+    "qualifiers_used": 1,
+    "deployed_dashboard_ready": 1
+  },
+  "xg_metrics": {
+    "accuracy": 0.8389,
+    "precision": 0.3633,
+    "recall": 0.6863,
+    "f1": 0.4751,
+    "auc_roc": 0.8307,
+    "naive_accuracy": 0.8938,
+    "naive_auc_roc": 0.5,
+    "baseline_always_no_goal_accuracy": 0.8938,
+    "baseline": {
+      "always_no_goal": {
+        "accuracy": 0.8938,
+        "auc_roc": 0.5
+      }
+    },
+    "threshold_analysis": {
+      "0.3": {
+        "accuracy": 0.4931,
+        "precision": 0.1626,
+        "recall": 0.9085,
+        "f1": 0.2758
+      },
+      "0.5": {
+        "accuracy": 0.8389,
+        "precision": 0.3633,
+        "recall": 0.6863,
+        "f1": 0.4751
+      },
+      "0.7": {
+        "accuracy": 0.8694,
+        "precision": 0.4146,
+        "recall": 0.5556,
+        "f1": 0.4749
+      }
+    }
+  },
+  "xg_baseline": {
+    "always_no_goal_accuracy": 0.8938,
+    "always_no_goal_auc_roc": 0.5
+  },
+  "xg_threshold_analysis": {
+    "0.3": {
+      "accuracy": 0.4931,
+      "precision": 0.1626,
+      "recall": 0.9085,
+      "f1": 0.2758
+    },
+    "0.5": {
+      "accuracy": 0.8389,
+      "precision": 0.3633,
+      "recall": 0.6863,
+      "f1": 0.4751
+    },
+    "0.7": {
+      "accuracy": 0.8694,
+      "precision": 0.4146,
+      "recall": 0.5556,
+      "f1": 0.4749
+    }
+  },
+  "match_logistic_metrics": {
+    "accuracy": 0.4576,
+    "precision_weighted": 0.5121,
+    "recall_weighted": 0.4576,
+    "f1_weighted": 0.4371,
+    "precision_macro": 0.4774,
+    "recall_macro": 0.431,
+    "f1_macro": 0.4071,
+    "class_metrics": [
+      {
+        "result": "Local",
+        "precision": 0.3846,
+        "recall": 0.75,
+        "f1": 0.5085,
+        "support": 20
+      },
+      {
+        "result": "Empate",
+        "precision": 0.3333,
+        "recall": 0.1429,
+        "f1": 0.2,
+        "support": 14
+      },
+      {
+        "result": "Visitante",
+        "precision": 0.7143,
+        "recall": 0.4,
+        "f1": 0.5128,
+        "support": 25
+      }
+    ],
+    "cv_mean_accuracy": 0.4917,
+    "cv_std_accuracy": 0.064,
+    "cv_precision_mean": 0.5023,
+    "cv_recall_mean": 0.4917,
+    "cv_f1_mean": 0.4549,
+    "bet365_holdout_accuracy": 0.4915,
+    "bet365_cv_accuracy": 0.5083,
+    "odds_only_holdout_accuracy": 0.4915,
+    "historical_only_holdout_accuracy": 0.3729,
+    "combined_holdout_accuracy": 0.4576,
+    "historical_only_cv_accuracy": 0.4042,
+    "odds_only_cv_accuracy": 0.5
+  },
+  "match_linear_metrics": {
+    "mae": 1.368,
+    "rmse": 1.7196,
+    "r2": -0.1362,
+    "cv_mae_mean": 1.4152,
+    "cv_rmse_mean": 1.8412,
+    "cv_r2_mean": -0.4774
+  },
+  "bet365_benchmark": {
+    "holdout_accuracy": 0.4915,
+    "cv_accuracy": 0.5083
+  },
+  "advanced_metrics": {
+    "random_forest_accuracy": 0.3898,
+    "model_comparison": {
+      "bet365_holdout_accuracy": 0.4915,
+      "odds_only_holdout_accuracy": 0.4915,
+      "historical_only_holdout_accuracy": 0.3729,
+      "combined_holdout_accuracy": 0.4576,
+      "odds_only_cv_accuracy": 0.5,
+      "historical_only_cv_accuracy": 0.4042,
+      "combined_cv_accuracy": 0.4917,
+      "delta_vs_odds_only_cv": -0.0083
+    },
+    "ablation": {
+      "odds_only_holdout_accuracy": 0.4915,
+      "odds_plus_form_holdout_accuracy": 0.4576,
+      "odds_only_cv_accuracy": 0.5,
+      "odds_plus_form_cv_accuracy": 0.4917,
+      "delta_cv_accuracy": -0.0083
+    },
+    "xg_random_forest_accuracy": 0.8632,
+    "xg_random_forest_auc": 0.8286,
+    "feature_columns_match": [
+      "b365h",
+      "b365d",
+      "b365a",
+      "home_goals_for_last5",
+      "home_goals_against_last5",
+      "away_goals_for_last5",
+      "away_goals_against_last5",
+      "home_shots_on_target_last5",
+      "away_shots_on_target_last5",
+      "away_big_chances_last5",
+      "points_diff_last5",
+      "pass_accuracy_diff_last5",
+      "conversion_rate_diff_last5",
+      "big_chance_rate_diff_last5",
+      "market_entropy_b365"
+    ],
+    "feature_columns_match_odds_only": [
+      "b365h",
+      "b365d",
+      "b365a"
+    ],
+    "feature_columns_xg": [
+      "distance_to_goal",
+      "angle_to_goal",
+      "is_big_chance",
+      "is_header",
+      "is_right_foot",
+      "is_left_foot",
+      "is_penalty",
+      "is_counter_attack",
+      "from_corner",
+      "is_volley",
+      "first_touch",
+      "zone_small_box",
+      "zone_box_centre",
+      "zone_out_of_box",
+      "centrality_to_goal",
+      "is_regular_play",
+      "player_conversion_last20"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+experiment:
+  name: quick_smoke
+  description: Fast local validation for CI and smoke checks.
+
+training:
+  advance_modeling: false
+  holdout_ratio: 0.2
+  cv_splits: 2
+  search_iterations: 1
+  include_stage1_prediction: true
+  smote: true
+  goal_feature_set: goals_compact
+  winner_feature_set: winner_default
+  feature_modes:
+    - normal
+
+models:
+  regressors:
+    - linear_regression
+  classifiers:
+    - ridge_classifier
+  explicit_pairs:
+    - [linear_regression, ridge_classifier]

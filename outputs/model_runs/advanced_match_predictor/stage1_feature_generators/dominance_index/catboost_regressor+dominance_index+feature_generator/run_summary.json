@@ -1,0 +1,100 @@
+{
+  "run_type": "feature_generator",
+  "run_name": "catboost_regressor+dominance_index+feature_generator",
+  "target_metric": "dominance_index",
+  "feature_mode": "normal",
+  "regressor": {
+    "name": "catboost_regressor",
+    "best_params": {
+      "model__random_strength": 1.0,
+      "model__learning_rate": 0.02,
+      "model__l2_leaf_reg": 7,
+      "model__iterations": 600,
+      "model__depth": 8,
+      "model__bagging_temperature": 0.5
+    },
+    "best_cv_score": 0.13344167312206617,
+    "cv_metrics": {
+      "mean_cv_r2": 0.13344167312206617,
+      "mean_cv_mae": 0.6393224814992593,
+      "mean_cv_rmse": 0.8104330225171805
+    },
+    "feature_columns": [
+      "home_goals_for_last5",
+      "home_goals_against_last5",
+      "home_points_last5",
+      "home_pass_accuracy_last5",
+      "home_progressive_passes_last5",
+      "home_progressive_pass_rate_last5",
+      "home_shots_last5",
+      "home_shots_on_target_last5",
+      "home_shot_accuracy_last5",
+      "home_conversion_rate_last5",
+      "home_big_chances_last5",
+      "home_big_chance_rate_last5",
+      "home_assisted_shot_rate_last5",
+      "home_touches_last5",
+      "home_touches_per_shot_last5",
+      "home_avg_shot_distance_last5",
+      "home_avg_shot_angle_last5",
+      "home_avg_score_diff_before_shot_last5",
+      "away_goals_for_last5",
+      "away_goals_against_last5",
+      "away_points_last5",
+      "away_pass_accuracy_last5",
+      "away_progressive_passes_last5",
+      "away_progressive_pass_rate_last5",
+      "away_shots_last5",
+      "away_shots_on_target_last5",
+      "away_shot_accuracy_last5",
+      "away_conversion_rate_last5",
+      "away_big_chances_last5",
+      "away_big_chance_rate_last5",
+      "away_assisted_shot_rate_last5",
+      "away_touches_last5",
+      "away_touches_per_shot_last5",
+      "away_avg_shot_distance_last5",
+      "away_avg_shot_angle_last5",
+      "away_avg_score_diff_before_shot_last5",
+      "ref_avg_yellows_last10",
+      "ref_avg_fouls_last10",
+      "ref_avg_goals_last10",
+      "ref_home_win_rate_last10",
+      "goals_for_diff_last5",
+      "goals_against_diff_last5",
+      "points_diff_last5",
+      "pass_accuracy_diff_last5",
+      "progressive_pass_rate_diff_last5",
+      "shots_diff_last5",
+      "shots_on_target_diff_last5",
+      "shot_accuracy_diff_last5",
+      "conversion_rate_diff_last5",
+      "big_chances_diff_last5",
+      "big_chance_rate_diff_last5",
+      "assisted_shot_rate_diff_last5",
+      "touches_per_shot_diff_last5",
+      "avg_shot_distance_diff_last5",
+      "avg_shot_angle_diff_last5",
+      "avg_score_diff_before_shot_diff_last5"
+    ],
+    "target_columns": [
+      "dominance_index"
+    ],
+    "artifact_path": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\outputs\\model_runs\\advanced_match_predictor\\stage1_feature_generators\\dominance_index\\catboost_regressor+dominance_index+feature_generator\\regressor.joblib"
+  },
+  "regression_metrics": {
+    "train": {
+      "mae": 0.18257654101633425,
+      "rmse": 0.24158719021903488,
+      "r2": 0.923335649304373
+    },
+    "test": {
+      "mae": 0.6467080747088476,
+      "rmse": 0.7892023234177851,
+      "r2": 0.14361487842206477
+    }
+  },
+  "search_results": {
+    "regression_csv": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\outputs\\model_runs\\advanced_match_predictor\\stage1_feature_generators\\dominance_index\\catboost_regressor+dominance_index+feature_generator\\regression_search_results.csv"
+  }
+}

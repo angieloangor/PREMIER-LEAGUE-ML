@@ -1,0 +1,1580 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PremierLeagueML — Inteligencia deportiva con Machine Learning</title>
+    <meta name="description"
+        content="Modelo de machine learning que supera a Bet365 prediciendo resultados de la Premier League. Pipeline completo con xG, clustering y validación rigurosa.">
+    <meta property="og:title" content="PremierLeagueML — Inteligencia deportiva con ML">
+    <meta property="og:description" content="Un modelo que supera al mercado no es suerte. Es señal.">
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="assets/favicon.svg">
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="vendor/plotly.min.js"></script>
+</head>
+
+<body class="sports-v5">
+
+    <!-- ????????????????????????????????????????????????????
+     NAVBAR
+???????????????????????????????????????????????????? -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#inicio" class="nav-brand">
+                <div class="nav-brand-badge">
+                    <span class="brand-pl">PL</span>
+                    <span class="brand-dot"></span>
+                </div>
+                <span class="nav-brand-name">PremierML</span>
+            </a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#inicio" class="nav-link" data-section="inicio">Inicio</a></li>
+                <li><a href="#eda" class="nav-link" data-section="eda">EDA & Features</a></li>
+                <li><a href="#xg" class="nav-link" data-section="xg">xG</a></li>
+                <li><a href="#modelos" class="nav-link" data-section="modelos">Modelos</a></li>
+                <li><a href="#predictor" class="nav-link" data-section="predictor">Predictor</a></li>
+                <li><a href="#hallazgos" class="nav-link" data-section="hallazgos">Hallazgos</a></li>
+                <li><a href="#conclusiones" class="nav-link" data-section="conclusiones">Conclusiones</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="api-status api-status--checking" id="api-status" title="Verificando API en http://127.0.0.1:8001">
+                    <span class="api-status-dot"></span>
+                    <span id="api-status-label">API verificando</span>
+                </div>
+                <a href="#" class="nav-btn-outline" id="btn-notebook" title="Ver notebook">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    Notebook
+                </a>
+                <a href="#" class="nav-btn-solid" id="btn-github" title="Ver código en GitHub">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    Código
+                </a>
+            </div>
+
+            <button class="nav-burger" id="nav-burger" aria-label="Menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ????????????????????????????????????????????????????
+     INTRO CINEMATOGRÁFICA ? APERTURA PREMIUM
+???????????????????????????????????????????????????? -->
+    <div class="intro-experience" id="inicio">
+
+        <!-- ?€?€ FONDO VISUAL (video + fallback aurora) ?€?€ -->
+        <div class="intro-visual-master" id="intro-visual-master">
+            <div class="cinema-noise"></div>
+            <div class="cinema-grid-lines"></div>
+            <!-- Fallback: aurora animada (siempre visible, el video la cubre) -->
+            <div class="cinema-aurora-fallback" id="cinema-aurora"></div>
+            <!-- VIDEO REAL ? hero.mp4 (239973.mp4) cinemático de fondo -->
+            <video class="cinema-video" id="cinema-video" autoplay muted loop playsinline preload="metadata"
+                poster="assets/hero-poster.svg">
+                <source src="assets/hero.mp4" type="video/mp4">
+            </video>
+            <img class="cinema-overlay-frame" src="assets/hero-analytics-overlay.svg" alt="" loading="eager" decoding="async" aria-hidden="true">
+            <div class="cinema-vignette"></div>
+            <div class="cinema-overlay"></div>
+        </div>
+
+        <!-- SECCION 1: INTRO TITLE "DEL DATO AL GOL" -->
+        <section class="cinema-opening" id="cinema-opening">
+
+            <div class="cinema-intro-title-wrap">
+                <p class="cinema-intro-super" id="cinema-intro-super">Machine Learning &middot; Premier League &middot; 2025-26</p>
+                <h2 class="cinema-intro-title" id="cinema-intro-title">DEL DATO<br>AL GOL</h2>
+                <p class="cinema-intro-sub" id="cinema-intro-sub">Donde la estadística supera a la intuición</p>
+            </div>
+
+            <!-- Indicador de scroll -->
+            <div class="cinema-scroll-hint">
+                <span class="cinema-sh-label">scroll</span>
+                <svg class="cinema-sh-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    width="22" height="22">
+                    <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- SECCION 2: PORTADA PRINCIPAL DEL PROYECTO -->
+        <section class="hero-reveal" id="hero-reveal">
+            <div class="hero-inner hero-stagger">
+
+                <!-- Eyebrow -->
+                <div class="hero-eyebrow">
+                    <span class="eyebrow-pulse"></span>
+                    <span>Informe de inteligencia de partido</span>
+                </div>
+
+                <!-- Título principal -->
+                                <h1 class="hero-title" id="hero-reveal-title">
+                    <span class="word">¿Puede</span>
+                    <span class="word">un</span>
+                    <span class="word">modelo</span>
+                    <span class="word">leer</span>
+                    <span class="word">la</span>
+                    <span class="word">Premier</span>
+                    <span class="word">League</span>
+                    <span class="word">mejor</span>
+                    <span class="word">que</span>
+                    <span class="word">el</span>
+                    <span class="word">mercado?</span>
+                </h1>
+
+                <!-- Tagline -->
+                <p class="hero-tagline">"Del dato táctico a la ventaja competitiva.<br><strong>Analítica futbolística con señal real.</strong>"
+                </p>
+
+                <!-- Subtítulo -->
+                <p class="hero-subtitle">
+                    Un dashboard editorial de performance futbolístico que convierte forma reciente,
+                    odds y geometría del tiro en inteligencia accionable de partido.
+                </p>
+
+                <div class="hero-context-strip" aria-label="Contexto del dashboard">
+                    <span class="hero-context-chip">Analítica de jornada</span>
+                    <span class="hero-context-chip">380 partidos modelados</span>
+                    <span class="hero-context-chip">xG + odds + forma reciente</span>
+                </div>
+
+                <!-- Estadísticas -->
+                <div class="hero-stats">
+                    <div class="metrics-row">
+                        <div class="metric-block hero-stat">
+                            <span class="hstat-value" id="hero-accuracy">?</span>
+                            <span class="hstat-label">Accuracy H/D/A</span>
+                        </div>
+                        <div class="metric-block hero-stat hero-stat--muted">
+                            <span class="hstat-value">49.8%</span>
+                            <span class="hstat-label">Benchmark Bet365</span>
+                        </div>
+                        <div class="metric-block hero-stat hero-stat--accent">
+                            <span class="hstat-value" id="hero-gap">++pp</span>
+                            <span class="hstat-label">Ventaja competitiva</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTAs -->
+                <div class="hero-ctas">
+                    <a href="#match-cards" class="cta-primary">
+                        <span>Ir al Centro de Partido</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                    <a href="#pipeline" class="cta-secondary">Explorar metodología</a>
+                </div>
+
+                <div class="hero-intel-board" aria-label="Resumen editorial de rendimiento">
+                    <div class="hero-intel-head">
+                        <span class="hero-intel-kicker">Panel de rendimiento</span>
+                        <p>Lectura rápida del sistema: señal predictiva, calibración y ventaja frente al mercado.</p>
+                    </div>
+                    <div class="hero-intel-grid">
+                        <article class="hero-intel-card">
+                            <span>Objetivo</span>
+                            <strong>Predecir H/D/A con señal real</strong>
+                        </article>
+                        <article class="hero-intel-card">
+                            <span>Motor</span>
+                            <strong>Odds + forma + xG contextual</strong>
+                        </article>
+                        <article class="hero-intel-card">
+                            <span>Resultado</span>
+                            <strong>Ventaja estable sobre el benchmark</strong>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="hero-radar-strip" aria-label="Radar de cobertura analítica">
+                    <span class="radar-item">Pronóstico de partido</span>
+                    <span class="radar-item">Inteligencia de tiro</span>
+                    <span class="radar-item">Validación del modelo</span>
+                    <span class="radar-item">Hallazgos ejecutivos</span>
+                </div>
+
+                <!-- Créditos académicos -->
+                <div class="hero-credits">
+                    <div class="hero-credits-line"></div>
+                    <div class="hero-credits-grid">
+                        <div class="hero-credit-item">
+                            <span class="hcredit-label">Autores</span>
+                            <span class="hcredit-val">Angie Loango  Jorge Zainea</span>
+                        </div>
+                        <div class="hero-credit-item">
+                            <span class="hcredit-label">Profesor</span>
+                            <span class="hcredit-val">Julián Zuluaga</span>
+                        </div>
+                        <div class="hero-credit-item">
+                            <span class="hcredit-label">Curso</span>
+                            <span class="hcredit-val">Machine Learning I  2026</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- ????????????????????????????????????????????????????
+     VALOR DEL PROYECTO
+???????????????????????????????????????????????????? -->
+    
+
+    <!-- ????????????????????????????????????????????????????
+     EDA ? ANÁLISIS EXPLORATORIO
+???????????????????????????????????????????????????? -->
+    <section class="eda-section" id="eda">
+        <div class="container">
+            <header class="section-header">
+                <p class="section-eyebrow light">Análisis exploratorio de datos</p>
+                <h2 class="section-title light">EDA & Feature Engineering</h2>
+                <p class="section-desc light">El EDA revela los patrones que guiaron el feature engineering. Cada
+                    gráfica conecta una decisión de variables con los modelos xG y Match Predictor.</p>
+            </header>
+
+            <div class="eda-summary-grid" id="eda-summary-cards" data-reveal>
+                <article class="eda-summary-card"><span>Partidos</span><strong>...</strong><small>Cargando EDA</small></article>
+                <article class="eda-summary-card"><span>Eventos</span><strong>...</strong><small>Cargando EDA</small></article>
+                <article class="eda-summary-card"><span>Tiros</span><strong>...</strong><small>Cargando EDA</small></article>
+                <article class="eda-summary-card"><span>Goles</span><strong>...</strong><small>Cargando EDA</small></article>
+                <article class="eda-summary-card"><span>Conversión tiro</span><strong>...</strong><small>Cargando EDA</small></article>
+                <article class="eda-summary-card"><span>Accuracy Bet365</span><strong>...</strong><small>Cargando EDA</small></article>
+            </div>
+
+            <p class="eda-baseline-note" id="eda-xg-baseline-note" data-reveal>
+                Baseline naive xG en carga...
+            </p>
+
+            <div class="eda-dashboard-block" data-reveal>
+                <div class="eda-block-head">
+                    <span class="eda-kicker">Modelo xG</span>
+                    <h3>Patrones de tiro que justifican las features</h3>
+                    <p>Los gráficos resumen desbalance, calidad de ocasión, tipo de remate, distancia y qualifiers sin cargar el CSV grande en el navegador.</p>
+                </div>
+                <div class="eda-card-grid eda-card-grid--three">
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Goles vs no goles</h3>
+                        <div id="eda-goals-vs-no-goals-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">Esta gráfica muestra el fuerte desbalance del dataset: la mayoría de tiros no terminan en gol. Por eso el modelo xG no debe evaluarse solo con accuracy, sino con AUC, precision y recall.</p>
+                    </article>
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Conversión por BigChance</h3>
+                        <div id="eda-conversion-bigchance-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">Los tiros marcados como BigChance tienen una conversión mucho mayor. Esta variable es crítica para explicar la probabilidad de gol y se incluye como feature en el modelo.</p>
+                    </article>
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Conversión por penal</h3>
+                        <div id="eda-conversion-penalty-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">Los penales muestran una conversión muy superior al promedio general. Por eso se codifican como feature específica en el modelo para capturar este patrón diferenciado.</p>
+                    </article>
+                </div>
+                <div class="eda-card-grid">
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Conversión por parte del cuerpo</h3>
+                        <div id="eda-body-part-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">La parte del cuerpo usada en el disparo cambia significativamente la probabilidad de gol. Cabeza vs pie derecho vs pie izquierdo aportan información predictiva clave.</p>
+                    </article>
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Distancia al arco vs conversión</h3>
+                        <div id="eda-distance-bins-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">La probabilidad de gol disminuye inversamente con la distancia al arco. Esta relación justifica incluir shot_distance como feature central del modelo xG.</p>
+                    </article>
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Top qualifiers frecuentes</h3>
+                        <div id="eda-top-qualifiers-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">Los qualifiers describen contexto adicional del evento (defensa, presión, etc.). Analizarlos permite descubrir señales predictivas más allá de coordenadas y distancia.</p>
+                    </article>
+                </div>
+            </div>
+
+            <div class="eda-dashboard-block" data-reveal>
+                <div class="eda-block-head">
+                    <span class="eda-kicker">Match Predictor</span>
+                    <h3>Distribución de partidos y benchmark Bet365</h3>
+                    <p>La regresión lineal de goles y la logística H/D/A se apoyan en distribución de resultados, goles totales y una comparación explícita contra el favorito de mercado.</p>
+                </div>
+                <div class="eda-market-benchmark" id="eda-bet365-benchmark">
+                    <strong>...</strong><span>Accuracy Bet365 como benchmark de mercado</span>
+                </div>
+                <div class="eda-card-grid">
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Resultados H/D/A</h3>
+                        <div id="eda-match-results-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">La distribución de resultados revela qué tan balanceado está el problema de clasificación multiclase. Los empates suelen ser la clase más difícil de predecir correctamente.</p>
+                    </article>
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Goles totales</h3>
+                        <div id="eda-total-goals-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">Esta distribución ayuda a entender la variable objetivo de la regresión lineal: el número de goles por partido. Central para el modelo de predicción de goles totales.</p>
+                    </article>
+                    <article class="eda-chart-card">
+                        <h3 class="chart-header light">Over/Under 2.5</h3>
+                        <div id="eda-over-under-chart" class="chart-canvas eda-mini-chart"></div>
+                        <p class="chart-description">El umbral de 2.5 goles resume si un partido fue de alta o baja anotación. Es util para interpretar patrones ofensivos y defensivos en la liga.</p>
+                    </article>
+                </div>
+                <article class="eda-chart-card eda-chart-card--wide">
+                    <h3 class="chart-header light">Favorito Bet365 vs resultado real</h3>
+                    <div id="eda-bet365-favorite-chart" class="chart-canvas eda-mini-chart"></div>
+                    <p class="chart-description">Esta matriz compara el favorito según Bet365 vs el resultado real. Muestra que tan certero es el mercado y funciona como benchmark clave para evaluar nuestro modelo.</p>
+                </article>
+            </div>
+
+            <div class="eda-dashboard-block" data-reveal>
+                <div class="eda-block-head">
+                    <span class="eda-kicker">Data leakage</span>
+                    <h3>Qué sí entra al predictor y qué queda fuera</h3>
+                    <p class="eda-leakage-callout">Para un predictor real, no usamos estadísticas generadas durante el partido actual como shots, shots on target, corners, fouls o cards. Las rolling features usan shift(1) para usar solo información previa.</p>
+                </div>
+                <div class="eda-leakage-table-wrap">
+                    <table class="eda-leakage-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Tipo</th>
+                                <th>Razón</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eda-leakage-table-body">
+                            <tr><td colspan="3">Cargando clasificación de leakage...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="eda-feature-insight-grid" data-reveal>
+                <article class="eda-feature-panel">
+                    <span class="eda-kicker">Features xG</span>
+                    <h3>Regresión logística gol / no gol</h3>
+                    <div id="eda-xg-features" class="eda-feature-pill-list"></div>
+                </article>
+                <article class="eda-feature-panel">
+                    <span class="eda-kicker">Features Match Predictor</span>
+                    <h3>Rolling pre-partido con shift(1)</h3>
+                    <div id="eda-match-features" class="eda-feature-pill-list"></div>
+                </article>
+            </div>
+
+            <div class="eda-dashboard-block" data-reveal>
+                <div class="eda-block-head">
+                    <span class="eda-kicker">Insights accionables</span>
+                    <h3>Qué decisiones salen del EDA</h3>
+                </div>
+                <div id="eda-insights-list" class="eda-insights-grid"></div>
+            </div>
+
+            <!-- ROW 1: texto izquierda / gráfica derecha -->
+            <div class="eda-row" data-reveal>
+                <div class="eda-text">
+                    <span class="eda-kicker">Variable #1</span>
+                    <h3 class="eda-feat-title">Distribución de resultados en liga</h3>
+                    <p>El desequilibrio entre victorias locales, empates y victorias visitantes es estructural y define
+                        la asimetría de clases que cualquier clasificador debe manejar. La ventaja local sigue siendo
+                        real.</p>
+                </div>
+                <div class="eda-chart-wrap">
+                    <div id="results-distribution-chart" class="chart-canvas eda-ch"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> La victoria local supera al visitante por
+                        ~10pp, lo que introduce sesgo de clase y dificulta la predicción de empates.</p>
+                </div>
+            </div>
+
+            <!-- ROW 2: gráfica izquierda / texto derecha -->
+            <div class="eda-row eda-row--reverse" data-reveal>
+                <div class="eda-chart-wrap">
+                    <div id="distance-goal-chart" class="chart-canvas eda-ch"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Los disparos que terminan en gol ocurren
+                        ~15 unidades más cerca del arco. Esta separación estadística es el fundamento del xG.</p>
+                </div>
+                <div class="eda-text">
+                    <span class="eda-kicker">Variable #2</span>
+                    <h3 class="eda-feat-title">Distancia al arco y conversión</h3>
+                    <p>Los disparos que terminan en gol se generan significativamente más cerca del arco. La separación
+                        de medianas entre gol/no-gol es el fundamento cuantitativo del modelo xG.</p>
+                </div>
+            </div>
+
+            <!-- FULL WIDTH: Shot map global -->
+            <div class="eda-full" data-reveal>
+                <h3 class="chart-header light">Shot map de temporada — Dispersión global de todos los disparos</h3>
+                <div class="shot-explorer-toolbar" aria-label="Explorador global de tiros">
+                    <div class="shot-explorer-tabs" id="global-shot-tabs">
+                        <button type="button" class="shot-tab active" data-global-shot-mode="goals">Goles</button>
+                        <button type="button" class="shot-tab" data-global-shot-mode="misses">Tiros sin gol</button>
+                        <button type="button" class="shot-tab" data-global-shot-mode="highxg">xG alto</button>
+                        <button type="button" class="shot-tab" data-global-shot-mode="all">Todos</button>
+                    </div>
+                    <p class="shot-explorer-helper">Vista guiada para leer dónde sí se convierte, dónde se remata mucho y dónde se desperdicia volumen.</p>
+                </div>
+                <div class="shot-explorer-stats" id="global-shot-stats">
+                    <div class="shot-explorer-stat">
+                        <span class="shot-explorer-label">Muestra</span>
+                        <strong id="global-shot-count">0</strong>
+                    </div>
+                    <div class="shot-explorer-stat">
+                        <span class="shot-explorer-label">Conversión</span>
+                        <strong id="global-shot-conv">0%</strong>
+                    </div>
+                    <div class="shot-explorer-stat">
+                        <span class="shot-explorer-label">xG medio</span>
+                        <strong id="global-shot-xg">0.00</strong>
+                    </div>
+                    <div class="shot-explorer-stat">
+                        <span class="shot-explorer-label">Zona dominante</span>
+                        <strong id="global-shot-zone">-</strong>
+                    </div>
+                </div>
+                <div id="pitch-shot-map" class="chart-canvas shot-global-h"></div>
+                <p class="chart-interp light-interp"><strong>Interpretación:</strong> Esta vista separa el volumen del resultado: primero muestra dónde aparecen los goles, luego dónde se acumulan remates sin premio y finalmente dónde viven las ocasiones de mayor calidad.</p>
+            </div>
+
+            <!-- ROW 3: texto izquierda / gráfica derecha -->
+            <div class="eda-row" data-reveal>
+                <div class="eda-text">
+                    <span class="eda-kicker">Variable #3</span>
+                    <h3 class="eda-feat-title">Efectividad según el ángulo de disparo</h3>
+                    <p>A medida que el ángulo se aleja del centro (0 rad), la tasa de conversión cae abruptamente. Los
+                        disparos desde el perfil lateral tienen probabilidades muy bajas incluso siendo técnicamente
+                        ejecutados.</p>
+                </div>
+                <div class="eda-chart-wrap">
+                    <div id="angle-goal-chart" class="chart-canvas eda-ch"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Los máximos de conversión se dan en ángulos
+                        centrales (cerca de 0). La curva valida el ángulo como feature crítico del xG.</p>
+                </div>
+            </div>
+
+            <!-- ROW 4: gráfica izquierda / texto derecha -->
+            <div class="eda-row eda-row--reverse" data-reveal>
+                <div class="eda-chart-wrap">
+                    <div id="goals-per-match-chart" class="chart-canvas eda-ch"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> El centro de la distribución revela el ritmo
+                        goleador típico de la liga y ayuda a contextualizar el error del modelo lineal.</p>
+                </div>
+                <div class="eda-text">
+                    <span class="eda-kicker">Variable #4</span>
+                    <h3 class="eda-feat-title">Distribución de goles por partido</h3>
+                    <p>Este histograma muestra qué tan frecuentes son los partidos de baja, media y alta anotación.
+                        Entender esta forma es clave para modelar correctamente la variable continua de goles totales.</p>
+                </div>
+            </div>
+
+            <!-- ROW 5: texto izquierda / gráfica derecha -->
+            <div class="eda-row" data-reveal>
+                <div class="eda-text">
+                    <span class="eda-kicker">Variable #5</span>
+                    <h3 class="eda-feat-title">Distribución de probabilidades xG</h3>
+                    <p>La mayoría de tiros tienen xG bajo y solo una fracción pequeña concentra probabilidades altas.
+                        Este patrón valida el desbalance natural de la finalización en fútbol.</p>
+                </div>
+                <div class="eda-chart-wrap">
+                    <div id="xg-probability-distribution-chart" class="chart-canvas eda-ch"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Una cola derecha limitada y alta densidad en
+                        valores bajos confirma que las ocasiones realmente claras son escasas.</p>
+                </div>
+            </div>
+
+            <!-- ROW 6: gráfica izquierda / texto derecha -->
+            <div class="eda-row eda-row--reverse" data-reveal>
+                <div class="eda-chart-wrap">
+                    <div id="xg-calibration-chart" class="chart-canvas eda-ch"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Cuanto más cerca está la curva observada de
+                        la diagonal ideal, mejor calibrada está la probabilidad del modelo xG.</p>
+                </div>
+                <div class="eda-text">
+                    <span class="eda-kicker">Variable #6</span>
+                    <h3 class="eda-feat-title">Calibración del modelo xG</h3>
+                    <p>Comparamos la probabilidad media predicha por bin contra la tasa real de gol. Esto permite evaluar
+                        si el modelo no solo discrimina, sino también asigna probabilidades bien calibradas.</p>
+                </div>
+            </div>
+
+            <!-- ROW 7: texto izquierda / gráfica derecha -->
+            <div class="eda-row" data-reveal>
+                <div class="eda-text">
+                    <span class="eda-kicker">Variable #7</span>
+                    <h3 class="eda-feat-title">Forma reciente por equipo (rolling 5)</h3>
+                    <p>La serie temporal muestra el promedio de goles en los últimos 5 partidos para capturar momentum.
+                        Puedes comparar dos equipos en la misma gráfica y ver el resultado de cada juego con color.</p>
+                </div>
+                <div class="eda-chart-wrap">
+                    <div class="eda-controls">
+                        <label class="eda-control">
+                            <span>Equipo principal</span>
+                            <select id="team-form-primary" class="eda-select"></select>
+                        </label>
+                        <label class="eda-control">
+                            <span>Comparar con</span>
+                            <select id="team-form-compare" class="eda-select"></select>
+                        </label>
+                    </div>
+                    <p id="team-form-indicator" class="team-form-indicator">Forma reciente en construcción...</p>
+                    <div id="team-form-trend-chart" class="chart-canvas eda-ch"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> La línea rolling suaviza el ruido partido a
+                        partido y facilita comparar tendencias recientes entre equipos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="xg-spotlight" id="xg">
+        <div class="xg-header-wrap">
+            <div class="container">
+                <div class="xg-header-grid">
+                    <div class="xg-header-text">
+                        <p class="section-eyebrow light">Inteligencia de tiro  Goles esperados</p>
+                        <h2 class="section-title light">xG Tactical Intelligence</h2>
+                        <p class="xg-desc">Este módulo separa volumen, resultado, calidad y calibración para leer el
+                            partido con lógica de performance. Filtra por equipo, jugador y tipo de tiro para detectar
+                            patrones reales de generación y finalización.</p>
+                        <div class="xg-kpis">
+                            <div class="xkpi">
+                                <strong id="xg-auc-display">?</strong>
+                                <span>AUC-ROC</span>
+                            </div>
+                            <div class="xkpi">
+                                <strong id="xg-precision-display">?</strong>
+                                <span>Precision</span>
+                            </div>
+                            <div class="xkpi">
+                                <strong id="xg-recall-display">?</strong>
+                                <span>Recall</span>
+                            </div>
+                            <div class="xkpi">
+                                <strong id="xg-f1-display">?</strong>
+                                <span>F1-Score</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="xg-summary-card">
+                        <p class="xg-summary-eyebrow">Lectura rápida</p>
+                        <h3 class="xg-summary-title">Dónde se generan los tiros, dónde se convierten y qué tan bien
+                            calibra el modelo.</h3>
+                        <p class="xg-summary-text" id="xg-filter-summary">Explorando todos los tiros de la temporada para
+                            detectar patrones globales de creación y finalización.</p>
+                        <div class="xg-mini-stats">
+                            <div class="xg-mini-stat">
+                                <span>Tiros</span>
+                                <strong id="xg-filter-shots">0</strong>
+                            </div>
+                            <div class="xg-mini-stat">
+                                <span>Goles</span>
+                                <strong id="xg-filter-goals">0</strong>
+                            </div>
+                            <div class="xg-mini-stat">
+                                <span>xG medio</span>
+                                <strong id="xg-filter-avgxg">0.0%</strong>
+                            </div>
+                            <div class="xg-mini-stat">
+                                <span>Conversión</span>
+                                <strong id="xg-filter-conv">0.0%</strong>
+                            </div>
+                        </div>
+                        <div class="xg-legend-list">
+                            <span class="xg-legend-pill xg-legend-pill--goal">Gol</span>
+                            <span class="xg-legend-pill xg-legend-pill--miss">No gol</span>
+                            <span class="xg-legend-pill xg-legend-pill--density">Color = densidad normalizada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="xg-filter-bar">
+                    <label class="shot-control">
+                        <span>Equipo</span>
+                        <select id="xg-team-filter" class="shot-select">
+                            <option value="all">Todos los equipos</option>
+                        </select>
+                    </label>
+                    <label class="shot-control">
+                        <span>Jugador</span>
+                        <select id="xg-player-filter" class="shot-select">
+                            <option value="all">Todos los jugadores</option>
+                        </select>
+                    </label>
+                    <label class="shot-control">
+                        <span>Tipo de tiro</span>
+                        <select id="xg-shot-type-filter" class="shot-select">
+                            <option value="all">Todos los tiros</option>
+                            <option value="foot">Pie</option>
+                            <option value="header">Cabeza</option>
+                            <option value="penalty">Penal</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <section class="premium-video-module" data-reveal aria-label="Video explicativo de xG">
+                <div class="premium-video-copy">
+                    <span class="premium-video-kicker">Mini trailer explicativo</span>
+                    <h3>¿Qué es el xG?</h3>
+                    <p>Una introducción visual a la métrica que estima la probabilidad de gol de cada tiro.</p>
+                </div>
+                <div class="premium-video-player" data-video-card>
+                    <video controls preload="metadata" playsinline class="premium-video video-player"
+                        poster="assets/xg_explainer_poster.jpg">
+                        <source src="assets/xg_explainer.mp4" type="video/mp4">
+                        Tu navegador no soporta video.
+                    </video>
+                    <div class="premium-video-overlay" aria-hidden="true"></div>
+                    <button class="premium-video-play" type="button" aria-label="Reproducir video ¿Qué es el xG?">
+                        <span class="premium-video-play-icon" aria-hidden="true"></span>
+                        <span class="premium-video-play-text">Ver trailer</span>
+                    </button>
+                </div>
+            </section>
+
+            <div class="xg-dashboard-grid">
+                <article class="xg-panel">
+                    <h3 class="chart-header light">Mapa de volumen ofensivo</h3>
+                    <div id="xg-density-chart" class="chart-canvas xg-pitch-chart"></div>
+                    <p class="chart-interp light-interp"><strong>Interpretación:</strong> Este mapa muestra solamente la
+                        concentración de disparos, sin puntos individuales, para identificar zonas de generación de
+                        volumen ofensivo.</p>
+                </article>
+
+                <article class="xg-panel">
+                    <h3 class="chart-header light">Shot map por resultado</h3>
+                    <div id="xg-scatter-chart" class="chart-canvas xg-pitch-chart"></div>
+                    <p class="chart-interp light-interp"><strong>Interpretación:</strong> Cada punto representa un tiro:
+                        verde si terminó en gol, rojo si no. El tamaño crece con el valor xG y el tooltip resume el
+                        contexto del disparo.</p>
+                </article>
+
+                <article class="xg-panel">
+                    <h3 class="chart-header light">Mapa de finalización efectiva</h3>
+                    <div id="xg-goals-heatmap-chart" class="chart-canvas xg-pitch-chart"></div>
+                    <p class="chart-interp light-interp"><strong>Interpretación:</strong> Al aislar solo los goles, la
+                        visualización revela dónde la producción ofensiva se convierte realmente en finalizaciones
+                        exitosas.</p>
+                </article>
+
+                <article class="xg-panel">
+                    <h3 class="chart-header light">Calibración probabilística xG</h3>
+                    <div id="xg-calibration-explorer-chart" class="chart-canvas xg-calibration-chart"></div>
+                    <p class="chart-interp light-interp"><strong>Interpretación:</strong> Cuanto más cerca esté la curva
+                        de la diagonal ideal, mejor alineadas están las probabilidades predichas con la frecuencia real
+                        de gol.</p>
+                </article>
+            </div>
+
+            <div class="xg-bottom-grid">
+                <article class="xg-panel">
+                    <h3 class="chart-header light">xG promedio y tasa de conversión por zona</h3>
+                    <div id="xg-zone-chart" class="chart-canvas xg-zone-chart"></div>
+                    <p class="chart-interp light-interp"><strong>Interpretación:</strong> La comparación por área chica,
+                        área grande y fuera del área ayuda a separar volumen de tiros y verdadera calidad de la ocasión.</p>
+                </article>
+
+                <article class="xg-panel xg-panel--table">
+                    <h3 class="chart-header light">Resumen por zona</h3>
+                    <div class="xg-zone-table-wrap">
+                        <table class="xg-zone-table">
+                            <thead>
+                                <tr>
+                                    <th>Zona</th>
+                                    <th>Tiros</th>
+                                    <th>Goles</th>
+                                    <th>xG medio</th>
+                                    <th>Conversión</th>
+                                </tr>
+                            </thead>
+                            <tbody id="xg-zone-table-body">
+                                <tr>
+                                    <td colspan="5">Cargando métricas por zona...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="chart-interp light-interp"><strong>Interpretación:</strong> Esta tabla resume el rendimiento
+                        ofensivo por zona y facilita comparar eficiencia con una lectura inmediata.</p>
+                </article>
+            </div>
+        </div>
+    </section><section class="value-section" id="value-prop">
+        <div class="value-marquee-wrap">
+            <div class="value-marquee">
+                <span>Machine Learning</span><span class="mx" aria-hidden="true"></span>
+                <span>Premier League</span><span class="mx" aria-hidden="true"></span>
+                <span>53.4% Accuracy</span><span class="mx" aria-hidden="true"></span>
+                <span>AUC &gt; 0.72</span><span class="mx" aria-hidden="true"></span>
+                <span>Anti-leakage</span><span class="mx" aria-hidden="true"></span>
+                <span>Validación cruzada</span><span class="mx" aria-hidden="true"></span>
+                <span>Machine Learning</span><span class="mx" aria-hidden="true"></span>
+                <span>Premier League</span><span class="mx" aria-hidden="true"></span>
+                <span>53.4% Accuracy</span><span class="mx" aria-hidden="true"></span>
+                <span>AUC &gt; 0.72</span><span class="mx" aria-hidden="true"></span>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="value-grid">
+                <div class="value-text">
+                    <p class="value-eyebrow">Por qué importa</p>
+                    <h2 class="value-title">Predecir fútbol<br>es predecir el caos.</h2>
+                    <p class="value-body">
+                        Los mercados de apuestas concentran décadas de señal y liquidez. Superarlos —incluso
+                        marginalmente— requiere rigor metodológico, features bien construidas y modelos que eviten la
+                        fuga de datos.
+                        Este proyecto lo logra de forma sistemática y reproducible.
+                    </p>
+                    <div class="value-stats-row">
+                        <div class="vstat">
+                            <strong id="val-shots" class="vstat-num">7K+</strong>
+                            <span>Disparos analizados</span>
+                        </div>
+                        <div class="vstat">
+                            <strong class="vstat-num">380</strong>
+                            <span>Partidos de liga</span>
+                        </div>
+                        <div class="vstat">
+                            <strong id="val-auc" class="vstat-num">0.72</strong>
+                            <span>AUC-ROC del xG</span>
+                        </div>
+                        <div class="vstat">
+                            <strong class="vstat-num">3</strong>
+                            <span>Modelos evaluados</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="value-visual">
+                    <div class="value-card-stack">
+                        <div class="vcard vcard-1">
+                            <span class="vcard-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <circle cx="12" cy="12" r="7"></circle>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                    <path d="M12 3v2M12 19v2M3 12h2M19 12h2"></path>
+                                </svg>
+                            </span>
+                            <span class="vcard-label">Sin fuga de datos</span>
+                        </div>
+                        <div class="vcard vcard-2">
+                            <span class="vcard-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                                    <path d="M8 8l8 8M16 8l-8 8"></path>
+                                </svg>
+                            </span>
+                            <span class="vcard-label">Features de física del juego</span>
+                        </div>
+                        <div class="vcard vcard-3">
+                            <span class="vcard-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M20 7h-5V2"></path>
+                                    <path d="M4 17h5v5"></path>
+                                    <path d="M6 18a8 8 0 0 1 12-11l2 2"></path>
+                                    <path d="M18 6a8 8 0 0 1-12 11l-2-2"></path>
+                                </svg>
+                            </span>
+                            <span class="vcard-label">Validación cruzada k=5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ????????????????????????????????????????????????????
+     PIPELINE VISUAL
+???????????????????????????????????????????????????? -->
+    <section class="pipeline-section" id="pipeline">
+        <div class="container">
+            <header class="section-header centered">
+                <p class="section-eyebrow">Arquitectura técnica</p>
+                <h2 class="section-title">Cómo funciona el modelo</h2>
+            </header>
+
+            <div class="pipeline-flow">
+                <div class="pipeline-step" data-delay="0">
+                    <div class="pstep-num">01</div>
+                    <div class="pstep-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <ellipse cx="12" cy="5" rx="9" ry="3" />
+                            <path d="M3 5v14a9 3 0 0 0 18 0V5" />
+                            <path d="M3 12a9 3 0 0 0 18 0" />
+                        </svg>
+                    </div>
+                    <h4>Datos</h4>
+                    <p>380 partidos  7K+ disparos  API StatsBomb</p>
+                </div>
+                <div class="pipeline-arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head" aria-hidden="true"></div>
+                </div>
+                <div class="pipeline-step" data-delay="100">
+                    <div class="pstep-num">02</div>
+                    <div class="pstep-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                    </div>
+                    <h4>Feature Engineering</h4>
+                    <p>Distancia  ángulo  xG  EDA exploratorio</p>
+                </div>
+                <div class="pipeline-arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head" aria-hidden="true"></div>
+                </div>
+                <div class="pipeline-step" data-delay="200">
+                    <div class="pstep-num">03</div>
+                    <div class="pstep-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="2" y="3" width="20" height="14" rx="2" />
+                            <path d="M8 21h8M12 17v4" />
+                        </svg>
+                    </div>
+                    <h4>Entrenamiento</h4>
+                    <p>Logística  Random Forest  KMeans</p>
+                </div>
+                <div class="pipeline-arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head" aria-hidden="true"></div>
+                </div>
+                <div class="pipeline-step" data-delay="300">
+                    <div class="pstep-num">04</div>
+                    <div class="pstep-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                    <h4>Predicción</h4>
+                    <p>H/D/A  xG  Probabilidades  Clustering</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIDEO SHOWCASE: LA EMOCION DETRAS DE LOS DATOS -->
+    <section class="video-showcase" id="video-showcase">
+        <div class="video-showcase-inner">
+
+            <!-- CABECERA EDITORIAL -->
+            <div class="vs-header">
+                <div class="container">
+                    <div class="vs-header-grid">
+                        <div>
+                            <p class="section-eyebrow light">La emoción detrás de los datos</p>
+                            <h2 class="section-title light">El fútbol que<br><em class="vs-title-em">analizamos</em>
+                            </h2>
+                        </div>
+                        <p class="vs-intro-text">
+                            Los modelos de machine learning trabajan con números: coordenadas, probabilidades,
+                            distancias. Pero detrás de cada disparo analizado hay un partido real, una jugada
+                            irrepetible, millones de aficionados.
+                            <br><br>
+                            Esta es la Premier League que este proyecto traduce en evidencia cuantitativa.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAYOUT EDITORIAL SIN VIDEOS -->
+            <div class="container">
+                <div class="vs-editorial">
+                    <blockquote class="vs-pullquote">
+                        "Un modelo no reemplaza la intuición táctica. La convierte en señal medible."
+                    </blockquote>
+
+                    <div class="vs-context-stats">
+                        <div class="vs-cstat">
+                            <strong>380</strong>
+                            <span>partidos analizados esta temporada</span>
+                        </div>
+                        <div class="vs-cstat">
+                            <strong>+3.6pp</strong>
+                            <span>sobre el benchmark de mercado</span>
+                        </div>
+                        <div class="vs-cstat">
+                            <strong>7K+</strong>
+                            <span>disparos modelados con xG</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEPARADOR EDITORIAL -->
+                <div class="vs-divider">
+                    <span class="vs-divider-line"></span>
+                    <span class="vs-divider-text">De la emoción a la predicción</span>
+                    <span class="vs-divider-line"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- xG SPOTLIGHT: SECCION ESTRELLA -->
+<section class="section goal-sim-section">
+        <div class="container">
+            <header class="section-header centered">
+                <p class="section-eyebrow">Interacción visual</p>
+                <h2 class="section-title">&#9917; Simulación de Gol</h2>
+                <p class="section-desc centered-desc">Disparo, trayectoria y xG en una micro-experiencia tipo app.
+                </p>
+            </header>
+
+            <div class="goal-sim-layout">
+                <div class="goal-pitch-card">
+                    <div class="pitch-container">
+                        <div class="goal-box"></div>
+                        <div id="ball"></div>
+                    </div>
+                </div>
+
+                <div class="goal-data-card">
+                    <div class="goal-badge">Shot simulator</div>
+                    <h3 id="score">0 - 0</h3>
+                    <p id="xg-value">xG: 0.12</p>
+                    <p id="xg-api-note" class="goal-note">Modo offline: xG calculado con fallback local.</p>
+                    <p id="shot-info" style="color:#9CA3AF;">Esta simulación utiliza una función logistica inspirada en modelos xG reales, donde la probabilidad de gol depende de variables como distancia y angulo del disparo.</p>
+                    <button id="shoot-btn" type="button">Simular Disparo</button>
+                    <p class="goal-note">Cada tiro calcula un xG basado en distancia y ángulo, y decide si el remate termina en gol.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-section">
+        <div class="container">
+            <header class="section-header centered">
+                <p class="section-eyebrow">Feature Engineering</p>
+                <h2 class="section-title">Feature Engineering del Modelo xG</h2>
+                <p class="section-desc centered-desc">El modelo xG utiliza variables geométricas del disparo y transformaciones derivadas para estimar la probabilidad de gol.</p>
+            </header>
+
+            <div class="features-grid">
+                <div class="features-row top-row">
+                    <div class="feature-card">
+                        <h3>Distancia al arco</h3>
+                        <p>Distancia euclidiana entre el punto del disparo y la portería.</p>
+                        <code>distancia = sqrt((x - x_goal)^2 + (y - y_goal)^2)</code>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Angulo de disparo</h3>
+                        <p>Angulo de vision del arco desde la posicion del disparo.</p>
+                        <code>angulo = funcion geometrica basada en los postes</code>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Distancia al cuadrado</h3>
+                        <p>Captura efectos no lineales: disparos lejanos reducen la probabilidad de forma no proporcional.</p>
+                        <code>distancia2 = distancia * distancia</code>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Tipo de tiro central</h3>
+                        <p>Variable binaria que indica si el disparo es desde una posicion central o lateral.</p>
+                        <code>is_central = 1 si angulo &gt; 30°, 0 en otro caso</code>
+                    </div>
+                </div>
+
+                <div class="features-row bottom-row">
+                    <div class="feature-card">
+                        <h3>Interaccion distancia x angulo</h3>
+                        <p>Modela la relacion conjunta entre distancia y apertura del disparo.</p>
+                        <code>interaction = distancia * angulo</code>
+                    </div>
+                </div>
+            </div>
+
+            <p class="feature-note">Ademas de las variables geometricas basicas, se construyeron features derivadas para capturar relaciones no lineales y mejorar la capacidad predictiva del modelo.</p>
+        </div>
+    </section>
+
+    <!-- ????????????????????????????????????????????????????
+     KPIs + MODELOS
+???????????????????????????????????????????????????? -->
+    <section class="section metrics-section" id="modelos">
+        <div class="container">
+            <header class="section-header centered">
+                <p class="section-eyebrow">Performance Benchmarking</p>
+                <h2 class="section-title">Rendimiento del sistema predictivo</h2>
+                <p class="section-desc centered-desc">Se utiliza regresión logística como modelo base para estimar probabilidades tanto en xG (gol/no gol) como en la predicción de resultados H/D/A.</p>
+            </header>
+
+            <section class="premium-video-module premium-video-module--models" data-reveal
+                aria-label="Video explicativo del predictor de partidos">
+                <div class="premium-video-copy">
+                    <span class="premium-video-kicker">Mini trailer explicativo</span>
+                    <h3>¿Cómo se predicen los partidos?</h3>
+                    <p>Un resumen simple de cómo los datos históricos y el mercado ayudan a estimar resultados.</p>
+                </div>
+                <div class="premium-video-player" data-video-card>
+                    <video controls preload="metadata" playsinline class="premium-video video-player"
+                        poster="assets/modelos_explainer_poster.jpg">
+                        <source src="assets/modelos_explainer.mp4" type="video/mp4">
+                        Tu navegador no soporta video.
+                    </video>
+                    <div class="premium-video-overlay" aria-hidden="true"></div>
+                    <button class="premium-video-play" type="button"
+                        aria-label="Reproducir video ¿Cómo se predicen los partidos?">
+                        <span class="premium-video-play-icon" aria-hidden="true"></span>
+                        <span class="premium-video-play-text">Ver trailer</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- MODELO PREDICTOR H/D/A -->
+            <div class="model-block" data-reveal>
+                <div class="model-block-head">
+                    <div class="model-badge model-blue">Predictor H/D/A  Regresión Logística</div>
+                    <p class="model-desc">Modelo multinomial entrenado sobre estadísticas de temporada. Comparado
+                        directamente con las cuotas implícitas de Bet365 como benchmark real de mercado.</p>
+                </div>
+                <div class="kpi-row">
+                    <div class="kpi-card kpi-accent">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-match-accuracy">?</strong>
+                            <span class="kpi-label">Accuracy del modelo</span>
+                            <span class="kpi-note" id="kpi-match-accuracy-note">vs 49.8% mercado</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-bet365-accuracy">?</strong>
+                            <span class="kpi-label">Baseline Bet365</span>
+                            <span class="kpi-note">Benchmark de mercado</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-accent">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-gap">?</strong>
+                            <span class="kpi-label">Ventaja obtenida</span>
+                            <span class="kpi-note">Puntos porcentuales</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-accent">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-match-f1">?</strong>
+                            <span class="kpi-label">F1 ponderado</span>
+                            <span class="kpi-note">Media armónica P/R</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODELO xG -->
+            <div class="model-block" data-reveal>
+                <div class="model-block-head">
+                    <div class="model-badge model-green">Clasificador xG  Logística Binaria</div>
+                    <p class="model-desc">Modelo entrenado para predecir si un disparo termina en gol, usando
+                        coordenadas normalizadas, ángulo y distancia como predictores principales.</p>
+                </div>
+                <div class="kpi-row">
+                    <div class="kpi-card kpi-accent">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-xg-auc">?</strong>
+                            <span class="kpi-label">AUC-ROC</span>
+                            <span class="kpi-note">Discriminación global</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-xg-precision">?</strong>
+                            <span class="kpi-label">Precision</span>
+                            <span class="kpi-note">Tiros predichos &rarr; gol</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-xg-recall">?</strong>
+                            <span class="kpi-label">Recall</span>
+                            <span class="kpi-note">Goles efectivamente detectados</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-inner">
+                            <strong class="kpi-num" id="kpi-xg-f1">?</strong>
+                            <span class="kpi-label">F1-Score</span>
+                            <span class="kpi-note">Equilibrio P/R</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVALUACIONES AVANZADAS -->
+            <div class="eval-grid" data-reveal>
+                <div class="eval-card">
+                    <h3 class="chart-header">Holdout vs Validación Cruzada (k=5)</h3>
+                    <div id="cv-comparison-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> La consistencia entre holdout y CV confirma
+                        que el modelo generaliza sin sobreajuste severo.</p>
+                </div>
+                <div class="eval-card">
+                    <h3 class="chart-header">xG vs Baseline "Siempre no gol"</h3>
+                    <div id="xg-baseline-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> El AUC del modelo xG supera ampliamente al
+                        baseline ingenuo, validando que la geometría del disparo aporta señal real.</p>
+                </div>
+                <div class="eval-card">
+                    <h3 class="chart-header">Curva ROC &middot; Modelo xG</h3>
+                    <div id="xg-roc-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> El área bajo la curva (AUC &gt; 0.72)
+                        confirma que el clasificador discrimina gol/no-gol muy por encima del azar.</p>
+                </div>
+                <div class="eval-card">
+                    <h3 class="chart-header">Logística vs Random Forest</h3>
+                    <div id="rf-comparison-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> La regresión logística compite de tú a tú
+                        con el Random Forest, lo que valida su eficiencia como modelo de referencia.</p>
+                </div>
+                <div class="eval-card">
+                    <h3 class="chart-header">Residuos de regresión lineal</h3>
+                    <div id="linear-residuals-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Un residual centrado en 0 indica bajo sesgo;
+                        la dispersión muestra qué tan difícil es estimar goles totales solo con señales pre-partido.</p>
+                </div>
+                <div class="eval-card">
+                    <h3 class="chart-header">Comparativa global de métricas</h3>
+                    <div id="model-metrics-comparison-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> El modelo xG domina en discriminación binaria;
+                        el predictor de partidos es más exigente al resolver un problema multiclase (H/D/A).</p>
+                </div>
+                <div class="eval-card">
+                    <h3 class="chart-header">Métricas por clase (H/D/A)</h3>
+                    <div id="class-metrics-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Este gráfico deja ver dónde falla más el modelo
+                        (normalmente en empate), algo clave para justificar mejoras de features.</p>
+                </div>
+                <div class="eval-card">
+                    <h3 class="chart-header">Comparativa pre-partido: odds / histórico / combinado / Bet365</h3>
+                    <div id="ablation-comparison-chart" class="chart-canvas eval-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Compara accuracy de odds puras, histórico solo, modelo combinado y benchmark Bet365 en CV y holdout.</p>
+                    <p class="chart-interp"><strong>Qué significa la comparación:</strong> `odds_only` usa solo las cuotas del mercado antes del partido; `historical_only` usa estadísticas previas de forma reciente; `combined` junta ambas señales. Bet365 es el benchmark porque representa la expectativa real del mercado. Si el combinado se acerca o mejora ese benchmark, indica que la historia del equipo aporta valor adicional a las cuotas.</p>
+                    <p class="chart-interp"><strong>Nota:</strong> Bet365 es el baseline fuerte y el modelo combinado agrega valor interpretativo al unir mercado y forma histórica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fixtures-section" id="match-cards">
+        <div class="container">
+            <header class="section-header fixtures-header">
+                <div>
+                    <p class="section-eyebrow">Centro de partido  Panel de pronóstico</p>
+                    <h2 class="section-title">Predicción de partidos Premier League</h2>
+                </div>
+                <p class="section-desc">Una lectura tipo broadcast con probabilidades de local, empate y visitante para
+                    cada cruce del dataset. Las tarjetas siguen el calendario y usan directamente la salida del modelo
+                    exportado.</p>
+            </header>
+
+            <div class="fixtures-grid" id="matches-grid"></div>
+        </div>
+    </section>
+
+    <!-- ????????????????????????????????????????????????????
+     PREDICTOR INTERACTIVO
+???????????????????????????????????????????????????? -->
+    <section class="section predictor-section" id="predictor">
+        <div class="container">
+            <header class="section-header">
+                <p class="section-eyebrow">Herramienta interactiva</p>
+                <h2 class="section-title">Simulador de Partido</h2>
+                <p class="section-desc">Selecciona dos equipos para ver la distribución de probabilidades calculada por
+                    el modelo sobre datos de temporada real.</p>
+            </header>
+
+            <div class="predictor-shell">
+                <!-- SELECTOR -->
+                <div class="predictor-matchup">
+                    <div class="team-slot">
+                        <label class="slot-label">Equipo local</label>
+                        <div class="predictor-team-display team">
+                            <img id="home-logo" class="team-logo" alt="Logo equipo local" onerror="this.onerror=null;this.src='assets/favicon.svg'">
+                            <span id="home-team-name" class="predictor-team-name">Equipo local</span>
+                        </div>
+                        <select id="home-team" class="team-select"></select>
+                    </div>
+                    <div class="matchup-vs">
+                        <div class="vs-circle">VS</div>
+                    </div>
+                    <div class="team-slot">
+                        <label class="slot-label">Equipo visitante</label>
+                        <div class="predictor-team-display team">
+                            <img id="away-logo" class="team-logo" alt="Logo equipo visitante" onerror="this.onerror=null;this.src='assets/favicon.svg'">
+                            <span id="away-team-name" class="predictor-team-name">Equipo visitante</span>
+                        </div>
+                        <select id="away-team" class="team-select"></select>
+                    </div>
+                </div>
+
+                <!-- RESULTADO -->
+                <div class="predictor-result">
+                    <div class="pres-outcome pres-home">
+                        <span class="pres-label">Victoria local</span>
+                        <strong class="pres-pct" id="prob-home">?%</strong>
+                        <div class="pres-bar-bg">
+                            <div class="pres-bar-fill" id="pbar-home"></div>
+                        </div>
+                    </div>
+                    <div class="pres-outcome pres-draw">
+                        <span class="pres-label">Empate</span>
+                        <strong class="pres-pct" id="prob-draw">?%</strong>
+                        <div class="pres-bar-bg">
+                            <div class="pres-bar-fill" id="pbar-draw"></div>
+                        </div>
+                    </div>
+                    <div class="pres-outcome pres-away">
+                        <span class="pres-label">Victoria visitante</span>
+                        <strong class="pres-pct" id="prob-away">?%</strong>
+                        <div class="pres-bar-bg">
+                            <div class="pres-bar-fill" id="pbar-away"></div>
+                        </div>
+                    </div>
+                    <div class="pres-outcome pres-goals">
+                        <span class="pres-label">Goles estimados</span>
+                        <strong class="pres-pct pres-goals-val" id="est-goals">?</strong>
+                        <div class="pres-bar-bg">
+                            <div class="pres-bar-fill pres-bar-goals" style="width:50%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="predictor-api-note" id="predictor-api-note">Modo offline: usando predicciones estáticas del dashboard.</p>
+
+                <!-- CHARTS -->
+                <div class="predictor-charts">
+                    <div class="pchart-card">
+                        <h3 class="chart-header">Distribución de probabilidad</h3>
+                        <div id="match-chart" class="chart-canvas"></div>
+                        <p class="chart-interp"><strong>Interpretación:</strong> El ancho de la diferencia entre barras
+                            indica el nivel de confianza del modelo. Una distribución plana sugiere incertidumbre alta.
+                        </p>
+                    </div>
+                    <div class="pchart-card">
+                        <h3 class="chart-header">Matriz de error &middot; Predictor vs Holdout</h3>
+                        <div id="confusion-chart" class="chart-canvas"></div>
+                        <p class="chart-interp"><strong>Interpretación:</strong> El modelo minimiza los fallos en
+                            victorias locales (clase más frecuente) y raramente comete errores graves entre local y
+                            visitante.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ????????????????????????????????????????????????????
+     SHOT MAPS ? ANÁLISIS TÁCTICO
+???????????????????????????????????????????????????? -->
+    <section class="section shot-section" id="shots">
+        <div class="container">
+            <header class="section-header">
+                <p class="section-eyebrow">Análisis táctico</p>
+                <h2 class="section-title">Shot maps del partido seleccionado</h2>
+                <p class="section-desc">Los mapas se actualizan con el enfrentamiento elegido en el predictor. El tamaño
+                    de cada punto refleja la probabilidad xG del disparo.</p>
+            </header>
+            <div class="shot-controls">
+                <label class="shot-control">
+                    <span>Modo de vista</span>
+                    <select id="shot-view-mode" class="shot-select">
+                        <option value="all">Todos los tiros</option>
+                        <option value="goals">Solo goles</option>
+                        <option value="highxg">Solo xG alto (>= 0.30)</option>
+                    </select>
+                </label>
+                <label class="shot-control shot-control-check">
+                    <input type="checkbox" id="shot-show-zones" checked>
+                    <span>Mostrar zonas del campo</span>
+                </label>
+            </div>
+            <div class="shot-grid">
+                <div class="shot-card">
+                    <h3 class="chart-header">Todos los disparos del partido</h3>
+                    <div id="pitch-match-map" class="chart-canvas pitch-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Los disparos más grandes tienen mayor xG.
+                        Disparos desde lejos y ángulos cerrados aparecen como puntos pequeños.</p>
+                </div>
+                <div class="shot-card">
+                    <h3 class="chart-header">Solo goles anotados</h3>
+                    <div id="pitch-selected-goals-map" class="chart-canvas pitch-h"></div>
+                    <p class="chart-interp"><strong>Interpretación:</strong> Los goles tienden a concentrarse en el área
+                        pequeña y en ángulos centrales, coherente con el modelo xG entrenado.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ????????????????????????????????????????????????????
+     HALLAZGOS CLAVE ? 1 PRINCIPAL + 2 SECUNDARIOS
+???????????????????????????????????????????????????? -->
+    <section class="findings-section" id="hallazgos">
+        <div class="container">
+            <header class="section-header">
+                <p class="section-eyebrow">Informe ejecutivo de partido</p>
+                <h2 class="section-title">Hallazgos de alto impacto</h2>
+            </header>
+
+            <div class="findings-media-band" data-reveal>
+                <figure class="findings-media-figure" role="img" aria-label="Jugador en acción durante partido profesional de fútbol">
+                    <div class="findings-media-overlay">
+                        <span class="media-overlay-kicker">Hallazgo clave</span>
+                        <h3>El mercado sigue siendo el mejor predictor, pero la estructura del juego aún importa.</h3>
+                    </div>
+                    <figcaption>Foto · Pexels / Franco Monsalvo (uso libre)</figcaption>
+                </figure>
+                <div class="findings-media-copy">
+                    <span class="findings-media-kicker">Lectura estratégica de temporada</span>
+                    <h3>Señal consistente, riesgo identificado y ventaja medible</h3>
+                    <p>La lectura combinada de mercado, forma reciente y geometría de tiro ofrece una narrativa
+                        cuantitativa clara: dónde el modelo gana valor y dónde persiste la fricción predictiva.</p>
+                </div>
+            </div>
+
+            <div class="findings-layout">
+                <!-- HALLAZGO PRINCIPAL (dominante) -->
+                <article class="finding-main" data-reveal>
+                    <div class="fmain-bg-text">+3.6</div>
+                    <div class="fmain-inner">
+                        <div class="fmain-tag">
+                            <span class="tag-dot tag-green"></span>
+                            Hallazgo principal
+                        </div>
+                        <div class="fmain-number" id="finding-gap">++pp</div>
+                        <h3 class="fmain-title">El modelo supera<br>sistemáticamente al mercado</h3>
+                        <p class="fmain-desc">
+                            El predictor logístico alcanza un <strong id="finding-accuracy">?</strong> de accuracy
+                            histórico, por encima del benchmark de Bet365 (49.8%). La ventaja es consistente a través de
+                            k=5 folds de validación cruzada, lo que confirma que no es ruido estadístico sino señal real
+                            extraída de los datos pre-partido.
+                        </p>
+                        <div class="fmain-bar-container">
+                            <div id="market-comparison-chart" class="chart-canvas finding-chart"></div>
+                            <p class="finding-chart-note">Comparación directa entre el modelo y el benchmark de Bet365.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- HALLAZGOS SECUNDARIOS -->
+                <div class="findings-secondary">
+                    <article class="finding-sec" data-reveal data-delay="100">
+                        <div class="fsec-num">02</div>
+                        <div class="fsec-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                        </div>
+                        <h3>El empate: la frontera imposible</h3>
+                        <p>El empate concentra la mayor varianza clasificatoria. Con frecuencia estructuralmente baja,
+                            arrastra el recall de todos los modelos y representa el límite técnico del estado del arte.
+                        </p>
+                        <div class="fsec-tag">Análisis de error  Recall del empate</div>
+                    </article>
+
+                    <article class="finding-sec" data-reveal data-delay="200">
+                        <div class="fsec-num">03</div>
+                        <div class="fsec-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                            </svg>
+                        </div>
+                        <h3>La geometría del disparo predice el gol</h3>
+                        <p>ángulo y distancia al arco son los predictores más potentes del Expected Goals. El modelo xG
+                            logra AUC &gt; 0.70, validando que la física del tiro discrimina con rigor estadístico.</p>
+                        <div class="fsec-tag">xG  AUC &gt; 0.70  Geometría</div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ????????????????????????????????????????????????????
+     CLUSTERING ? ANÁLISIS NO SUPERVISADO
+???????????????????????????????????????????????????? -->
+    <section class="section clustering-section" id="clustering">
+        <div class="container">
+            <header class="section-header centered">
+                <p class="section-eyebrow">Análisis no supervisado  Bonus</p>
+                <h2 class="section-title">Clusterización de rendimiento deportivo</h2>
+                <p class="section-desc centered-desc">KMeans agrupa los 20 equipos según su perfil ofensivo-defensivo.
+                    El coeficiente de silueta (<strong id="kpi-sil">?</strong>) confirma la separación estadística de
+                    los grupos hallados.</p>
+            </header>
+            <div class="clustering-wrap" data-reveal>
+                <div class="cluster-summary-grid" id="cluster-summary-grid">
+                    <article class="cluster-summary-card">
+                        <span class="cluster-summary-kicker">Cluster 1</span>
+                        <strong id="cluster-summary-0-title">Perfil en carga...</strong>
+                        <p id="cluster-summary-0-body">Calculando resumen del grupo.</p>
+                    </article>
+                    <article class="cluster-summary-card">
+                        <span class="cluster-summary-kicker">Cluster 2</span>
+                        <strong id="cluster-summary-1-title">Perfil en carga...</strong>
+                        <p id="cluster-summary-1-body">Calculando resumen del grupo.</p>
+                    </article>
+                    <article class="cluster-summary-card">
+                        <span class="cluster-summary-kicker">Cluster 3</span>
+                        <strong id="cluster-summary-2-title">Perfil en carga...</strong>
+                        <p id="cluster-summary-2-body">Calculando resumen del grupo.</p>
+                    </article>
+                </div>
+                <div id="clustering-team-chart" class="chart-canvas cluster-h"></div>
+                <p class="chart-interp centered-interp"><strong>Interpretación:</strong> Cada punto es un equipo. Más a la derecha significa más gol a favor; más abajo significa mejor contención. Los cards resumen traducen cada cluster a un lenguaje más simple antes de entrar al scatter.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ????????????????????????????????????????????????????
+     CONCLUSIONES ? CIERRE EDITORIAL
+???????????????????????????????????????????????????? -->
+    <section class="conclusions-section" id="conclusiones">
+        <div class="conclusions-inner">
+            <div class="container">
+                <div class="conclusions-grid">
+                    <div class="conclusions-main">
+                        <p class="section-eyebrow light">Síntesis ejecutiva</p>
+                        <h2 class="conclusions-title">Cierre analítico</h2>
+                        <p id="metrics-synthesis" class="conclusions-body"></p>
+
+                        <blockquote class="conclusions-quote">
+                            "Este proyecto demuestra capacidad predictiva real en un entorno académico, pero no debe
+                            interpretarse como un sistema de apuestas listo para producción."
+                        </blockquote>
+
+                        <div class="conclusions-ctas">
+                            <a href="#" id="cta-notebook" class="cta-outline">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                </svg>
+                                Ver Jupyter Notebook
+                            </a>
+                            <a href="#" id="cta-github" class="cta-outline">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                                </svg>
+                                Ver código en GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="conclusions-side">
+                        <figure class="conclusions-media-card" role="img" aria-label="Estadio lleno de noche durante un partido de fútbol">
+                            <div class="conclusions-media-overlay">
+                                <span class="media-overlay-kicker">Cierre editorial</span>
+                                <h3>El fútbol seguirá siendo impredecible, pero los datos permiten entender mejor esa incertidumbre.</h3>
+                            </div>
+                            <figcaption>Foto · Pexels / George Zografidis (uso libre)</figcaption>
+                        </figure>
+                        <h3 class="limitations-title">Fricciones técnicas<br>& advertencias</h3>
+                        <ul id="limitations-list" class="limitations-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="container">
+                <div class="site-footer-inner">
+                    <div class="site-footer-brand">
+                        <span class="site-footer-kicker">PremierLeagueML</span>
+                        <strong>Machine Learning I</strong>
+                    </div>
+
+                    <div class="site-footer-credits" aria-label="Creditos academicos">
+                        <span>Angie Loango</span>
+                        <span>Jorge Zainea</span>
+                    </div>
+
+                    <div class="site-footer-year">
+                        <span>2026</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </section>
+
+    <button id="csv-predict-button" class="csv-predict-fab" type="button" aria-label="Predicción por CSV">
+        <span class="csv-predict-fab-icon">📄</span>
+        <span>CSV Predict</span>
+    </button>
+
+    <div class="csv-modal-overlay is-hidden" id="csv-predict-modal" role="dialog" aria-modal="true" aria-labelledby="csv-predict-modal-title">
+        <div class="csv-modal-content" role="document">
+            <div class="csv-predict-modal-header">
+                <div>
+                    <p class="eyebrow">Función Premium</p>
+                    <h2 id="csv-predict-modal-title">Predicción por CSV</h2>
+                </div>
+                <button type="button" class="csv-predict-close" id="csv-predict-close" aria-label="Cerrar modal">×</button>
+            </div>
+            <p class="csv-predict-description">Sube un archivo CSV para obtener predicciones masivas desde la API. Elige tarea, sube el archivo y descarga los resultados con una vista previa rápida.</p>
+            <div class="csv-predict-alert csv-predict-offline is-hidden" id="csv-predict-offline-note">
+                Esta función requiere la API activa. Ejecuta <code>run_all.bat</code> o levanta la API en el puerto 8001.
+            </div>
+            <div class="csv-predict-form-row">
+                <label for="csv-predict-task">Tipo de predicción</label>
+                <select id="csv-predict-task">
+                    <option value="xg">xG por tiro</option>
+                    <option value="match_result">Resultado H/D/A</option>
+                    <option value="match_goals">Goles esperados</option>
+                    <option value="match_full">Predicción completa</option>
+                </select>
+                <p class="csv-predict-help" id="csv-predict-help">CSV mínimo requerido: x,y</p>
+                <p class="csv-predict-example" id="csv-predict-example">Ejemplo mínimo: x,y</p>
+            </div>
+            <div class="csv-predict-form-row">
+                <label for="csv-predict-file">Archivo CSV</label>
+                <input id="csv-predict-file" type="file" accept=".csv,text/csv" />
+            </div>
+            <div class="csv-predict-actions">
+                <button id="csv-predict-submit" type="button" class="csv-predict-btn">Predecir</button>
+                <button id="csv-predict-download" type="button" class="csv-predict-btn csv-predict-btn-secondary is-hidden">Descargar predicciones</button>
+            </div>
+            <p class="csv-predict-status" id="csv-predict-status"></p>
+            <div class="csv-predict-summary is-hidden" id="csv-predict-summary"></div>
+            <div class="csv-predict-preview is-hidden" id="csv-predict-preview"></div>
+        </div>
+    </div>
+
+    <script src="dashboard_data.js"></script>
+    <script src="./dashboard_eda_data_embedded.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
