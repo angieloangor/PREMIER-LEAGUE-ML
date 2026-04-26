@@ -18,7 +18,7 @@ def download_models_if_needed() -> None:
         logger.info("Model bundles already available at %s", TARGET_DIR)
         return
 
-    url = os.getenv("MODEL_BUNDLE_ZIP_URL", MODELS_URL)
+    url = "https://www.dropbox.com/scl/fi/xolz2cyr8bipmgcxumiqq/stage2_classifier_runs.zip?rlkey=cizjov7hvffeg0g931jcaognb&st=s47dvvp0&dl=1"
 
     try:
         BASE_DIR.mkdir(parents=True, exist_ok=True)
