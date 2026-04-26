@@ -1,4 +1,11 @@
 dashboard/assets/hero.mp4
 __pycache__/
+*.pyc
 .pytest_cache/
 .jupyter_runtime/
+.ipynb_checkpoints/
+.venv/
+env/
+outputs/api_logs/
+*.log
+outputs/model_runs/

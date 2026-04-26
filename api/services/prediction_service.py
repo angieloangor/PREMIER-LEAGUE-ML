@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import numpy as np
@@ -9,26 +10,39 @@ from api.config import Settings
 from api.services.feature_service import numeric_frame
 from api.services.match_feature_builder_service import MatchFeatureBuilderService
 from api.services.model_loader import ModelBundle, ModelRegistryService
+from src.features.build_auxiliary_indices import AUXILIARY_INDEX_COLUMNS, build_candidate_indices
+from src.models.ensemble_predictor import EnsembleCandidate, EnsemblePredictor, extract_model_score
 
 RESULT_LABELS = {0: "H", 1: "D", 2: "A", "H": "H", "D": "D", "A": "A"}
 PROBABILITY_KEYS = {0: "home_win", 1: "draw", 2: "away_win", "H": "home_win", "D": "draw", "A": "away_win"}
+
+logger = logging.getLogger(__name__)
 
 
 class PredictionService:
     def __init__(self, registry: ModelRegistryService, settings: Settings) -> None:
         self.registry = registry
         self.feature_builder = MatchFeatureBuilderService(settings)
+        self.ensemble = EnsemblePredictor(
+            settings.runs_root,
+            top_k=settings.ensemble_top_k,
+            min_score=settings.ensemble_min_score,
+        )
+        try:
+            self.ensemble.load(self._load_ensemble_candidate)
+        except Exception as exc:
+            logger.warning("Ensemble initialization failed; API will use model/fallback mode. Error: %s", exc)
 
     def predict_goals(self, model_id: str | None, frame: pd.DataFrame) -> dict[str, Any]:
         bundle = self.registry.get_bundle(model_id)
-        frame = self.prepare_frame(bundle.model_id, frame)
+        frame = self._prepare_frame_for_bundle(bundle, frame)
         stage1_predictions = self._predict_stage1(bundle, frame)
         rows = self._rows_from_stage1_predictions(bundle, stage1_predictions)
         return {"bundle": bundle, "rows": rows}
 
     def predict_winner(self, model_id: str | None, frame: pd.DataFrame) -> dict[str, Any]:
         bundle = self.registry.get_bundle(model_id)
-        frame = self.prepare_frame(bundle.model_id, frame)
+        frame = self._prepare_frame_for_bundle(bundle, frame)
         stage1_predictions = self._predict_stage1(bundle, frame) if bundle.uses_stage1_prediction else None
         classifier_frame = self._build_classifier_frame(bundle, frame, stage1_predictions=stage1_predictions)
         predicted_codes = bundle.classifier.predict(classifier_frame)
@@ -44,27 +58,169 @@ class PredictionService:
 
     def predict_full(self, model_id: str | None, frame: pd.DataFrame) -> dict[str, Any]:
         bundle = self.registry.get_bundle(model_id)
-        frame = self.prepare_frame(bundle.model_id, frame)
+        rows = self._predict_full_with_bundle(bundle, frame)
+        return {"bundle": bundle, "rows": rows}
+
+    def predict_full_ensemble(self, frame: pd.DataFrame) -> dict[str, Any]:
+        result = self.ensemble.predict(frame, self._predict_ensemble_member)
+        best_model_id = result["model_weights"][0]["id"] if result.get("model_weights") else None
+        bundle = self._bundle_by_id(best_model_id) or self.registry.get_bundle(None)
+        return {"bundle": bundle, **result}
+
+    def predict_full_resilient(self, model_id: str | None, frame: pd.DataFrame) -> dict[str, Any]:
+        if model_id is None:
+            try:
+                return self.predict_full_ensemble(frame)
+            except Exception as exc:
+                logger.warning("Ensemble prediction failed; trying single model. Error: %s", exc)
+
+        try:
+            result = self.predict_full(model_id, frame)
+            result.update(
+                {
+                    "mode": "model",
+                    "ensemble_size": 0,
+                    "model_weights": [],
+                    "best_model_score": extract_model_score(result["bundle"].summary),
+                }
+            )
+            return result
+        except Exception as exc:
+            logger.warning("Single model prediction failed; using static fallback. Error: %s", exc)
+            bundle = self._default_bundle_or_none()
+            return {
+                "bundle": bundle,
+                "rows": self._fallback_prediction_rows(frame, f"Model prediction failed: {exc}"),
+                "mode": "fallback",
+                "ensemble_size": 0,
+                "model_weights": [],
+                "best_model_score": None,
+            }
+
+    def ensemble_info(self) -> dict[str, Any]:
+        return self.ensemble.info()
+
+    def _predict_full_with_bundle(self, bundle: ModelBundle, frame: pd.DataFrame) -> list[dict[str, Any]]:
+        frame = self._prepare_frame_for_bundle(bundle, frame)
         stage1_predictions = self._predict_stage1(bundle, frame)
         predicted_goals = self._goal_prediction_vector(bundle, stage1_predictions)
         classifier_frame = self._build_classifier_frame(bundle, frame, stage1_predictions=stage1_predictions)
         predicted_codes = bundle.classifier.predict(classifier_frame)
         probabilities = self._predict_probabilities(bundle.classifier, classifier_frame, predicted_codes)
-        rows = self._rows_from_predictions(
+        return self._rows_from_predictions(
             bundle=bundle,
             predicted_goals=predicted_goals,
             predicted_codes=predicted_codes,
             probabilities=probabilities,
             stage1_predictions=stage1_predictions,
         )
-        return {"bundle": bundle, "rows": rows}
 
     def prepare_frame(self, model_id: str | None, frame: pd.DataFrame) -> pd.DataFrame:
         bundle = self.registry.get_bundle(model_id)
+        return self._prepare_frame_for_bundle(bundle, frame)
+
+    def _prepare_frame_for_bundle(self, bundle: ModelBundle, frame: pd.DataFrame) -> pd.DataFrame:
+        frame = self._with_auxiliary_indices(frame)
         required_features = set(bundle.regressor_features + bundle.classifier_base_features)
         if required_features.issubset(frame.columns):
             return frame.copy()
-        return self.feature_builder.build_feature_frame(frame)
+        built_frame = self.feature_builder.build_feature_frame(frame)
+        return self._with_auxiliary_indices(built_frame)
+
+    def _with_auxiliary_indices(self, frame: pd.DataFrame) -> pd.DataFrame:
+        missing_indices = [column for column in AUXILIARY_INDEX_COLUMNS if column not in frame.columns]
+        if not missing_indices:
+            return frame
+        try:
+            indices = build_candidate_indices(frame)
+        except Exception:
+            return frame
+        enriched = frame.copy()
+        for column in missing_indices:
+            if column in indices.columns:
+                enriched[column] = indices[column].to_numpy()
+        return enriched
+
+    def _load_ensemble_candidate(self, candidate: EnsembleCandidate) -> ModelBundle:
+        existing = self.registry.bundles.get(candidate.model_id)
+        if existing is not None:
+            return existing
+        return self.registry.load_bundle_from_dir(candidate.bundle_dir, is_default=False)
+
+    def _predict_ensemble_member(self, bundle: ModelBundle, frame: pd.DataFrame) -> list[dict[str, Any]]:
+        return self._predict_full_with_bundle(bundle, frame)
+
+    def _bundle_by_id(self, model_id: str | None) -> ModelBundle | None:
+        if not model_id:
+            return None
+        bundle = self.registry.bundles.get(model_id)
+        if bundle is not None:
+            return bundle
+        for member in self.ensemble.members:
+            if member.model_id == model_id:
+                return member.bundle
+        return None
+
+    def _default_bundle_or_none(self) -> ModelBundle | None:
+        try:
+            return self.registry.get_bundle(None)
+        except Exception:
+            return None
+
+    def _fallback_prediction_rows(self, frame: pd.DataFrame, reason: str) -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        for index, (_, row) in enumerate(frame.iterrows()):
+            probabilities = self._market_or_static_probabilities(row)
+            label = max(
+                {"H": probabilities["home_win"], "D": probabilities["draw"], "A": probabilities["away_win"]},
+                key={"H": probabilities["home_win"], "D": probabilities["draw"], "A": probabilities["away_win"]}.get,
+            )
+            rows.append(
+                {
+                    "row_index": index,
+                    "predicted_total_goals": 2.7,
+                    "predicted_result_code": label,
+                    "predicted_result_label": label,
+                    "probabilities": probabilities,
+                    "stage1_predictions": None,
+                    "metadata": {"mode": "fallback", "fallback_reason": reason},
+                }
+            )
+        return rows
+
+    def _market_or_static_probabilities(self, row: pd.Series) -> dict[str, float]:
+        if {"b365h", "b365d", "b365a"}.issubset(set(row.index)):
+            home = self._safe_inverse_odd(row.get("b365h"))
+            draw = self._safe_inverse_odd(row.get("b365d"))
+            away = self._safe_inverse_odd(row.get("b365a"))
+        elif {"implied_prob_h", "implied_prob_d", "implied_prob_a"}.issubset(set(row.index)):
+            home = self._safe_probability(row.get("implied_prob_h"), 0.42)
+            draw = self._safe_probability(row.get("implied_prob_d"), 0.26)
+            away = self._safe_probability(row.get("implied_prob_a"), 0.32)
+        else:
+            home, draw, away = 0.42, 0.26, 0.32
+        total = home + draw + away
+        if total <= 0:
+            home, draw, away, total = 0.42, 0.26, 0.32, 1.0
+        return {"home_win": home / total, "draw": draw / total, "away_win": away / total}
+
+    def _safe_inverse_odd(self, value: Any) -> float:
+        try:
+            odd = float(value)
+        except (TypeError, ValueError):
+            return 0.0
+        if not np.isfinite(odd) or odd <= 0:
+            return 0.0
+        return 1.0 / odd
+
+    def _safe_probability(self, value: Any, default: float) -> float:
+        try:
+            probability = float(value)
+        except (TypeError, ValueError):
+            return default
+        if not np.isfinite(probability) or probability < 0:
+            return default
+        return probability
 
     def _build_classifier_frame(
         self,

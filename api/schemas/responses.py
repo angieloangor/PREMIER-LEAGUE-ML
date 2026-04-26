@@ -90,9 +90,13 @@ class PredictionRow(BaseModel):
 
 
 class PredictionResponse(BaseModel):
-    model: ModelSummary
+    model: ModelSummary | None = None
     rows: int
     predictions: list[PredictionRow]
+    mode: str = "model"
+    ensemble_size: int | None = None
+    best_model_score: float | None = None
+    model_weights: list[dict[str, Any]] | None = None
 
 
 class TeamMatchPredictionResponse(BaseModel):
@@ -104,6 +108,10 @@ class TeamMatchPredictionResponse(BaseModel):
     source: str
     model: str | None = None
     fallback_reason: str | None = None
+    mode: str = "fallback"
+    ensemble_size: int | None = None
+    best_model_score: float | None = None
+    model_weights: list[dict[str, Any]] | None = None
 
 
 class XgPredictionResponse(BaseModel):
@@ -120,3 +128,20 @@ class CsvBatchPredictionResponse(BaseModel):
     columns: list[str]
     preview: list[dict[str, Any]]
     csv_base64: str
+
+
+class EnsembleTopModel(BaseModel):
+    id: str
+    name: str
+    score: float | None = None
+    weight: float
+
+
+class EnsembleInfoResponse(BaseModel):
+    total_models_found: int
+    total_models_loaded: int
+    total_models_used: int
+    min_score: float | None = None
+    max_score: float | None = None
+    avg_score: float | None = None
+    top_models: list[EnsembleTopModel]

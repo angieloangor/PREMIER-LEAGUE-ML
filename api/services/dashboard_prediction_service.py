@@ -12,6 +12,7 @@ import pandas as pd
 from api.config import Settings
 from api.schemas.requests import TeamMatchPredictionRequest, XgPredictionRequest
 from api.services.prediction_service import PredictionService
+from src.models.ensemble_predictor import extract_model_score
 
 
 RESULT_ORDER = ("H", "D", "A")
@@ -38,6 +39,41 @@ def _clip_probability(value: float) -> float:
 def _predicted_result(home: float, draw: float, away: float) -> str:
     values = {"H": home, "D": draw, "A": away}
     return max(values, key=values.get)
+
+
+def _dashboard_output_from_prediction_row(
+    prediction: dict[str, Any],
+    *,
+    source: str,
+    mode: str,
+    model: str | None,
+    fallback_reason: str | None = None,
+    ensemble_size: int | None = None,
+    best_model_score: float | None = None,
+    model_weights: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    probabilities = prediction.get("probabilities") or {}
+    home = _clip_probability(_safe_float(probabilities.get("home_win"), 0.0))
+    draw = _clip_probability(_safe_float(probabilities.get("draw"), 0.0))
+    away = _clip_probability(_safe_float(probabilities.get("away_win"), 0.0))
+    total = home + draw + away
+    home, draw, away = home / total, draw / total, away / total
+    expected_goals = _safe_float(prediction.get("predicted_total_goals"), 2.7)
+
+    return {
+        "home_win_probability": home,
+        "draw_probability": draw,
+        "away_win_probability": away,
+        "expected_goals": max(0.0, expected_goals),
+        "predicted_result": str(prediction.get("predicted_result_label") or _predicted_result(home, draw, away)),
+        "source": source,
+        "model": model,
+        "fallback_reason": fallback_reason,
+        "mode": mode,
+        "ensemble_size": ensemble_size,
+        "best_model_score": best_model_score,
+        "model_weights": model_weights,
+    }
 
 
 @lru_cache(maxsize=1)
@@ -81,6 +117,17 @@ def _matches_features(project_root: str) -> pd.DataFrame:
 
 
 @lru_cache(maxsize=1)
+def _match_model_features(project_root: str) -> pd.DataFrame:
+    path = Path(project_root) / "data" / "processed" / "match_features.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except Exception:
+        return pd.DataFrame()
+
+
+@lru_cache(maxsize=1)
 def _eda_summary(project_root: str) -> dict[str, Any]:
     path = Path(project_root) / "data" / "processed" / "eda_summary.json"
     if not path.exists():
@@ -108,6 +155,15 @@ def _find_team_row(frame: pd.DataFrame, home_team: str, away_team: str) -> pd.Da
     return matched.tail(1)
 
 
+def _model_feature_row(settings: Settings, home_team: str, away_team: str) -> pd.DataFrame:
+    project_root = str(settings.project_root)
+    for frame in (_match_model_features(project_root), _matches_raw(project_root)):
+        row = _find_team_row(frame, home_team, away_team)
+        if not row.empty:
+            return row
+    return pd.DataFrame()
+
+
 def _model_match_prediction(
     settings: Settings,
     prediction_service: PredictionService,
@@ -118,32 +174,47 @@ def _model_match_prediction(
         return None
 
     bundle = registry.get_bundle(payload.model_id)
-    raw_matches = _matches_raw(str(settings.project_root))
-    row = _find_team_row(raw_matches, payload.home_team, payload.away_team)
+    row = _model_feature_row(settings, payload.home_team, payload.away_team)
     if row.empty:
         return None
 
     feature_frame = prediction_service.prepare_frame(bundle.model_id, row)
     result = prediction_service.predict_full(payload.model_id, feature_frame)
     prediction = result["rows"][0]
-    probabilities = prediction.get("probabilities") or {}
-    home = _clip_probability(_safe_float(probabilities.get("home_win"), 0.0))
-    draw = _clip_probability(_safe_float(probabilities.get("draw"), 0.0))
-    away = _clip_probability(_safe_float(probabilities.get("away_win"), 0.0))
-    total = home + draw + away
-    home, draw, away = home / total, draw / total, away / total
-    expected_goals = _safe_float(prediction.get("predicted_total_goals"), 2.7)
+    return _dashboard_output_from_prediction_row(
+        prediction,
+        source="api_model",
+        mode="model",
+        model=bundle.model_id,
+        best_model_score=extract_model_score(bundle.summary),
+        ensemble_size=0,
+        model_weights=[],
+    )
 
-    return {
-        "home_win_probability": home,
-        "draw_probability": draw,
-        "away_win_probability": away,
-        "expected_goals": max(0.0, expected_goals),
-        "predicted_result": str(prediction.get("predicted_result_label") or _predicted_result(home, draw, away)),
-        "source": "api_model",
-        "model": bundle.model_id,
-        "fallback_reason": None,
-    }
+
+def _ensemble_match_prediction(
+    settings: Settings,
+    prediction_service: PredictionService,
+    payload: TeamMatchPredictionRequest,
+) -> dict[str, Any] | None:
+    if not prediction_service.ensemble.is_ready:
+        return None
+
+    row = _model_feature_row(settings, payload.home_team, payload.away_team)
+    if row.empty:
+        return None
+
+    result = prediction_service.predict_full_ensemble(row)
+    bundle = result.get("bundle")
+    return _dashboard_output_from_prediction_row(
+        result["rows"][0],
+        source="api_ensemble",
+        mode="ensemble",
+        model=bundle.model_id if bundle else None,
+        ensemble_size=result.get("ensemble_size"),
+        best_model_score=result.get("best_model_score"),
+        model_weights=result.get("model_weights"),
+    )
 
 
 def _static_dashboard_match_prediction(settings: Settings, home_team: str, away_team: str, reason: str) -> dict[str, Any] | None:
@@ -166,6 +237,10 @@ def _static_dashboard_match_prediction(settings: Settings, home_team: str, away_
             "source": "static_dashboard_fallback",
             "model": None,
             "fallback_reason": reason,
+            "mode": "fallback",
+            "ensemble_size": 0,
+            "best_model_score": None,
+            "model_weights": [],
         }
     return None
 
@@ -201,6 +276,10 @@ def _market_match_prediction(settings: Settings, home_team: str, away_team: str,
         "source": "market_odds_fallback",
         "model": None,
         "fallback_reason": reason,
+        "mode": "fallback",
+        "ensemble_size": 0,
+        "best_model_score": None,
+        "model_weights": [],
     }
 
 
@@ -220,6 +299,10 @@ def _league_average_prediction(settings: Settings, reason: str) -> dict[str, Any
         "source": "league_average_fallback",
         "model": None,
         "fallback_reason": reason,
+        "mode": "fallback",
+        "ensemble_size": 0,
+        "best_model_score": None,
+        "model_weights": [],
     }
 
 
@@ -229,6 +312,14 @@ def predict_team_match(
     payload: TeamMatchPredictionRequest,
 ) -> dict[str, Any]:
     fallback_reason = "API model unavailable; using dashboard/static fallback."
+    try:
+        prediction = _ensemble_match_prediction(settings, prediction_service, payload)
+        if prediction:
+            return prediction
+        fallback_reason = "No ensemble-ready feature row found for the selected fixture."
+    except Exception as exc:
+        fallback_reason = f"API ensemble prediction failed: {exc}"
+
     try:
         prediction = _model_match_prediction(settings, prediction_service, payload)
         if prediction:

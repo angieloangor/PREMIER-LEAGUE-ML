@@ -26,6 +26,51 @@ def _optional_torch_load(path: Path):
         return torch.load(path, map_location="cpu")
 
 
+def _iter_estimator_components(estimator, seen: set[int] | None = None):
+    if seen is None:
+        seen = set()
+    object_id = id(estimator)
+    if object_id in seen:
+        return
+    seen.add(object_id)
+    yield estimator
+
+    for _, step in getattr(estimator, "steps", []) or []:
+        yield from _iter_estimator_components(step, seen)
+
+    for transformer in getattr(estimator, "transformers", []) or []:
+        if len(transformer) >= 2 and not isinstance(transformer[1], str):
+            yield from _iter_estimator_components(transformer[1], seen)
+
+    for child in getattr(estimator, "estimators", []) or []:
+        if child is not None and not isinstance(child, str):
+            yield from _iter_estimator_components(child, seen)
+
+    for attribute in ("estimator", "base_estimator", "final_estimator"):
+        child = getattr(estimator, attribute, None)
+        if child is not None and not isinstance(child, str):
+            yield from _iter_estimator_components(child, seen)
+
+
+def _patch_loaded_estimator_compatibility(estimator):
+    try:
+        from sklearn.impute import SimpleImputer
+    except Exception:
+        return estimator
+
+    for component in _iter_estimator_components(estimator):
+        if isinstance(component, SimpleImputer) and not hasattr(component, "_fill_dtype"):
+            fill_dtype = getattr(component, "_fit_dtype", None)
+            if fill_dtype is None and hasattr(component, "statistics_"):
+                fill_dtype = getattr(component.statistics_, "dtype", None)
+            component._fill_dtype = fill_dtype or float
+        if not hasattr(component, "classes_"):
+            label_binarizer = getattr(component, "_label_binarizer", None)
+            if label_binarizer is not None and hasattr(label_binarizer, "classes_"):
+                component.classes_ = label_binarizer.classes_
+    return estimator
+
+
 def _extract_metric(summary: dict[str, Any], *path: str) -> float | None:
     current: Any = summary
     for key in path:
@@ -146,6 +191,9 @@ class ModelRegistryService:
             available = ", ".join(sorted(self.bundles))
             raise KeyError(f"Unknown model id '{lookup_id}'. Available models: {available}")
         return self.bundles[lookup_id]
+
+    def load_bundle_from_dir(self, bundle_dir: Path, *, is_default: bool = False) -> ModelBundle:
+        return self._load_bundle(bundle_dir, is_default=is_default)
 
     def _discover_bundle_dirs(self) -> list[Path]:
         discovered: list[Path] = []
@@ -282,9 +330,9 @@ class ModelRegistryService:
 
     def _load_estimator(self, artifact_path: Path):
         if artifact_path.suffix == ".joblib":
-            return joblib.load(artifact_path)
+            return _patch_loaded_estimator_compatibility(joblib.load(artifact_path))
         if artifact_path.suffix == ".pt":
-            return _optional_torch_load(artifact_path)
+            return _patch_loaded_estimator_compatibility(_optional_torch_load(artifact_path))
         raise ValueError(f"Unsupported artifact extension: {artifact_path.suffix}")
 
     def _has_model_artifacts(self, bundle_dir: Path) -> bool:

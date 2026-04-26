@@ -183,6 +183,9 @@ def _match_output_for_task(result: dict[str, Any], task_name: str) -> dict[str, 
     if task_name in {"match_goals", "match_full"}:
         output["expected_goals"] = float(result["expected_goals"])
     output["source"] = result.get("source")
+    output["mode"] = result.get("mode", "fallback")
+    output["ensemble_size"] = result.get("ensemble_size")
+    output["best_model_score"] = result.get("best_model_score")
     return output
 
 
@@ -250,13 +253,12 @@ async def predict_batch_csv(
 
     _require_batch_columns(frame, ["home_team", "away_team"], "prediccion de partido")
     predictions = []
-    any_model = False
+    observed_modes: set[str] = set()
     for _, row in frame.iterrows():
         try:
             payload = _build_match_row(row)
             result = predict_team_match(settings, prediction_service, TeamMatchPredictionRequest(**payload))
-            if result.get("source") == "api_model":
-                any_model = True
+            observed_modes.add(str(result.get("mode") or "fallback"))
             predictions.append({
                 **_row_input_values(row, list(frame.columns)),
                 **_match_output_for_task(result, task_name),
@@ -271,7 +273,11 @@ async def predict_batch_csv(
                 "expected_goals": 0.0,
                 "predicted_result": "H",
                 "source": "fallback",
+                "mode": "fallback",
+                "ensemble_size": 0,
+                "best_model_score": None,
             }
+            observed_modes.add("fallback")
             predictions.append({
                 **{col: None for col in frame.columns},
                 **_match_output_for_task(fallback_result, task_name),
@@ -284,7 +290,7 @@ async def predict_batch_csv(
         summary = _summary_for_match_goals(predictions)
     else:
         summary = _summary_for_match_full(predictions)
-    mode = "model" if any_model else "fallback"
+    mode = "ensemble" if "ensemble" in observed_modes else "model" if "model" in observed_modes else "fallback"
     return CsvBatchPredictionResponse(
         task=response_task,
         mode=mode,

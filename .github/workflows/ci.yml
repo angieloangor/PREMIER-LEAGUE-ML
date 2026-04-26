@@ -25,4 +25,4 @@ jobs:
           pip install pytest httpx PyYAML
 
       - name: Run tests
-        run: pytest
+        run: python -m pytest api/tests

@@ -22,6 +22,8 @@ class Settings:
     api_logs_dir: Path
     runs_root: Path
     top_k_models: int
+    ensemble_top_k: int
+    ensemble_min_score: float
     api_title: str
     api_version: str
     api_prefix: str
@@ -47,6 +49,8 @@ def get_settings() -> Settings:
             outputs_dir / "model_runs" / "advanced_match_predictor" / "stage2_classifier_runs",
         ),
         top_k_models=int(os.getenv("MATCH_API_TOP_K_MODELS", "3")),
+        ensemble_top_k=int(os.getenv("MATCH_API_ENSEMBLE_TOP_K", "10")),
+        ensemble_min_score=float(os.getenv("MATCH_API_ENSEMBLE_MIN_SCORE", "0.49")),
         api_title=os.getenv("MATCH_API_TITLE", "PremierLeagueML Match Predictor API"),
         api_version=os.getenv("MATCH_API_VERSION", "1.0.0"),
         api_prefix=os.getenv("MATCH_API_PREFIX", "/api/v1"),

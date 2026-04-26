@@ -14,6 +14,12 @@ from api.dependencies.model_dependencies import get_metadata_service
 router = APIRouter(prefix="/api/v1/matches", tags=["predictions"])
 
 
+def _model_summary(metadata_service: MetadataService, bundle) -> dict | None:
+    if bundle is None:
+        return None
+    return metadata_service.get_model(bundle.model_id)
+
+
 @router.post("/predict-goals", response_model=PredictionResponse)
 def predict_goals(
     payload: MatchPredictionRequest,
@@ -54,12 +60,16 @@ def predict_full(
     metadata_service: MetadataService = Depends(get_metadata_service),
 ) -> PredictionResponse:
     frame = rows_to_frame(payload.records)
-    result = prediction_service.predict_full(payload.model_id, frame)
+    result = prediction_service.predict_full_resilient(payload.model_id, frame)
     bundle = result["bundle"]
     return PredictionResponse(
-        model=metadata_service.get_model(bundle.model_id),
+        model=_model_summary(metadata_service, bundle),
         rows=len(result["rows"]),
         predictions=[PredictionRow(**row) for row in result["rows"]],
+        mode=result.get("mode", "model"),
+        ensemble_size=result.get("ensemble_size"),
+        best_model_score=result.get("best_model_score"),
+        model_weights=result.get("model_weights"),
     )
 
 
@@ -71,10 +81,14 @@ async def predict_full_csv(
     metadata_service: MetadataService = Depends(get_metadata_service),
 ) -> PredictionResponse:
     frame = csv_bytes_to_frame(await file.read())
-    result = prediction_service.predict_full(model_id, frame)
+    result = prediction_service.predict_full_resilient(model_id, frame)
     bundle = result["bundle"]
     return PredictionResponse(
-        model=metadata_service.get_model(bundle.model_id),
+        model=_model_summary(metadata_service, bundle),
         rows=len(result["rows"]),
         predictions=[PredictionRow(**row) for row in result["rows"]],
+        mode=result.get("mode", "model"),
+        ensemble_size=result.get("ensemble_size"),
+        best_model_score=result.get("best_model_score"),
+        model_weights=result.get("model_weights"),
     )

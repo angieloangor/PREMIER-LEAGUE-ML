@@ -28,6 +28,7 @@ let apiState = {
     mode: "checking",
     health: null,
     modelInfo: null,
+    ensembleInfo: null,
     error: null,
     activeBaseUrl: null,
 };
@@ -605,9 +606,11 @@ async function submitCsvPrediction() {
         renderCsvPredictSummary(result.summary);
         renderCsvPredictPreview(result.preview);
         toggleCsvPredictDownload(Boolean(result.csv_base64));
-        const fallbackMessage = result.mode === "fallback"
-            ? " Modo fallback: predicción basada en datos estáticos/reglas simples."
-            : " Modo API: predicción desde endpoint real.";
+        const fallbackMessage = result.mode === "ensemble"
+            ? " Modo API · Ensemble activo."
+            : result.mode === "fallback"
+                ? " Modo fallback: predicción basada en datos estáticos/reglas simples."
+                : " Modo API: predicción desde endpoint real.";
         renderCsvPredictStatus(`Predicción completa: ${result.rows_processed} filas procesadas.${fallbackMessage}`);
     } catch (err) {
         renderCsvPredictStatus(`Error: ${err.message}`, true);
@@ -715,9 +718,16 @@ async function apiFetch(path, options = {}, timeoutMs = API_TIMEOUT_MS) {
 }
 
 function apiPerformanceLabel(modelInfo) {
-    const accuracy = Number(modelInfo?.performance?.test_accuracy);
+    const firstModel = modelInfo?.models?.[0] || modelInfo;
+    const accuracy = Number(firstModel?.performance?.stage2_test_accuracy || firstModel?.performance?.test_accuracy);
     if (!Number.isFinite(accuracy)) return "";
     return ` · acc ${(accuracy * 100).toFixed(1)}%`;
+}
+
+function apiEnsembleLabel(ensembleInfo) {
+    const loaded = Number(ensembleInfo?.total_models_loaded || 0);
+    if (!loaded) return "Modo API";
+    return `Modo API · Ensemble activo (${loaded})`;
 }
 
 async function checkApiStatus() {
@@ -762,6 +772,7 @@ async function checkApiStatus() {
             console.log(`API conectada exitosamente en ${host}`);
 
             let modelInfo = null;
+            let ensembleInfo = null;
             try {
                 const response = await fetch(`${host}/api/v1/model-info`, {
                     method: 'GET',
@@ -774,6 +785,18 @@ async function checkApiStatus() {
             } catch (modelError) {
                 console.warn("Modelo API no disponible:", modelError.message);
             }
+            try {
+                const response = await fetch(`${host}/api/v1/ensemble-info`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    signal: AbortSignal.timeout(2600)
+                });
+                if (response.ok) {
+                    ensembleInfo = await response.json();
+                }
+            } catch (ensembleError) {
+                console.warn("Ensemble API no disponible:", ensembleError.message);
+            }
 
             // Actualizar API_BASE_URL global y estado
             window.API_BASE_URL = host;
@@ -782,13 +805,19 @@ async function checkApiStatus() {
                 mode: "online",
                 health,
                 modelInfo,
+                ensembleInfo,
                 error: null,
                 activeBaseUrl: host,
             };
 
-            const modelLabel = modelInfo?.name ? ` · ${modelInfo.name}` : "";
-            setApiStatus("online", `Modo API${apiPerformanceLabel(modelInfo)}`, `API conectada en ${host}${modelLabel}`);
-            updatePredictorModeNote("Modo API conectado. El predictor intenta la API primero y usa fallback estático si falla.");
+            const firstModel = modelInfo?.models?.[0] || modelInfo;
+            const modelLabel = firstModel?.name ? ` · ${firstModel.name}` : "";
+            const ensembleLabel = apiEnsembleLabel(ensembleInfo);
+            setApiStatus("online", `${ensembleLabel}${apiPerformanceLabel(modelInfo)}`, `API conectada en ${host}${modelLabel}`);
+            const loaded = Number(ensembleInfo?.total_models_loaded || 0);
+            updatePredictorModeNote(loaded
+                ? `Modo API · Ensemble activo con ${loaded} modelos.`
+                : "Modo API conectado. El predictor intenta la API primero y usa fallback estático si falla.");
             if (document.getElementById("home-team")?.value && document.getElementById("away-team")?.value) {
                 renderMatchPrediction();
             }
@@ -806,6 +835,7 @@ async function checkApiStatus() {
         mode: "offline",
         health: null,
         modelInfo: null,
+        ensembleInfo: null,
         error: new Error("No se pudo conectar a ningún host API"),
         activeBaseUrl: null,
     };
@@ -2571,6 +2601,10 @@ function getStaticMatchPrediction(home, away) {
         ],
         source: "static_dashboard",
         fallback_reason: null,
+        mode: "fallback",
+        ensemble_size: 0,
+        best_model_score: null,
+        model_weights: [],
     };
 }
 
@@ -2591,6 +2625,10 @@ function normalizeApiMatchPrediction(response) {
         source: response.source || "api",
         model: response.model || null,
         fallback_reason: response.fallback_reason || null,
+        mode: response.mode || (response.source === "api_ensemble" ? "ensemble" : response.source === "api_model" ? "model" : "fallback"),
+        ensemble_size: Number.isFinite(Number(response.ensemble_size)) ? Number(response.ensemble_size) : 0,
+        best_model_score: Number.isFinite(Number(response.best_model_score)) ? Number(response.best_model_score) : null,
+        model_weights: Array.isArray(response.model_weights) ? response.model_weights : [],
     };
 }
 
@@ -2612,12 +2650,14 @@ function renderMatchPredictionValues(match, home, away) {
     animateBarWidth(document.getElementById("pbar-draw"), match.prob_draw, 150);
     animateBarWidth(document.getElementById("pbar-away"), match.prob_away, 200);
 
-    const sourceLabel = match.source === "api_model"
-        ? `Modo API: ${match.model || "modelo activo"}`
-        : match.source && match.source.includes("fallback")
-            ? `Modo API con fallback: ${match.fallback_reason || "prediccion estatica"}`
-            : "Modo offline: usando predicciones estaticas del dashboard.";
-    updatePredictorModeNote(sourceLabel, Boolean(match.fallback_reason && match.source !== "static_dashboard"));
+    const sourceLabel = match.mode === "ensemble"
+        ? `Modo API · Ensemble activo (${match.ensemble_size || 0} modelos)`
+        : match.mode === "model" || match.source === "api_model"
+            ? `Modo API · Modelo individual: ${match.model || "modelo activo"}`
+            : match.source && match.source.includes("fallback")
+                ? `Modo API con fallback: ${match.fallback_reason || "prediccion estatica"}`
+                : "Modo offline: usando predicciones estaticas del dashboard.";
+    updatePredictorModeNote(sourceLabel, Boolean(match.mode === "fallback" && match.source !== "static_dashboard"));
 
     const chartConfig = {
         labels: ["Local", "Empate", "Visitante"],

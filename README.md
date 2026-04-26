@@ -1,12 +1,42 @@
 # PremierLeagueML
 
-Pipeline reproducible de Machine Learning para futbol con tres capas principales:
+**Integrantes:** Angie Loango, Jorge Zainea
+**Repositorio:** [https://github.com/angieloangor/PREMIER-LEAGUE-ML](https://github.com/angieloangor/PREMIER-LEAGUE-ML)
+**Dashboard desplegado:** (No desplegado, ejecutar localmente siguiendo instrucciones)
+**Dashboard local:** http://localhost:8000/dashboard/
+
+---
+
+Pipeline reproducible de Machine Learning para fútbol con tres capas principales:
 
 - `data/`: datos base, artefactos procesados y documentación DataOps
 - `src/`: feature engineering, entrenamiento y selección de modelos
 - `api/`: backend FastAPI para servir el predictor de partidos
 
 El repositorio está pensado para trabajo académico y de ingeniería aplicada: datos locales reproducibles, barridos controlados de modelos, dashboard estático y serving con bundles versionados.
+
+## Ejecución Local (Desde la raíz)
+
+Para poner en marcha el sistema completo, siga estos pasos desde la raíz del proyecto:
+
+### 1. Iniciar la API
+```bash
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8001
+```
+
+### 2. Iniciar el Dashboard (en otra terminal)
+```bash
+python -m http.server 8000
+```
+Abrir: http://localhost:8000/dashboard/
+
+### 3. Automatización (Windows)
+Se incluye el archivo `run_all.bat` que levanta automáticamente ambos servicios en terminales independientes:
+```cmd
+run_all.bat
+```
+
+---
 
 ## Índice
 
@@ -54,6 +84,47 @@ En otras palabras:
 - `advanced-match-predictor` = la versión Full ML más fuerte, en dos steps con feature generation.
 
 La capa de datos no descarga nada en el flujo estándar. Trabaja con los CSV ya presentes en `data/` y con el cache local de `data/api_cache/`.
+
+## Ensemble de modelos
+
+El predictor de partidos utiliza un **ensemble de múltiples modelos** (provenientes de `stage2_classifier_runs`), combinados mediante **promedio ponderado de probabilidades**.
+
+Esto permite:
+
+- **Mayor estabilidad** en predicciones (reduce variancia de un modelo individual);
+- **Mejor accuracy** que usar un único modelo;
+- **Superar el benchmark** de Bet365 (49.80% en el conjunto de validación).
+
+El sistema ensemble:
+
+- carga múltiples modelos clasificadores (`top_k` configurable en `config/api/default.yaml`);
+- **pondera cada modelo** según su rendimiento (accuracy en validación);
+- aplica **fallback automático** si algún modelo falla durante la predicción;
+- está transparente en la respuesta de predicción: incluye `mode: "ensemble"` y `ensemble_size`.
+
+### Verificación del ensemble
+
+Puedes consultar el estado del ensemble en la API:
+
+```bash
+curl http://localhost:8001/api/v1/ensemble-info
+```
+
+Respuesta esperada:
+
+```json
+{
+  "total_models_loaded": 5,
+  "weights": [0.25, 0.25, 0.20, 0.15, 0.15],
+  "model_ids": ["model_1", "model_2", "model_3", "model_4", "model_5"]
+}
+```
+
+En el dashboard, cuando el ensemble está activo, la sección de estado mostrará:
+
+```
+Modo API · Ensemble activo (5)
+```
 
 ## Estructura del repositorio
 
@@ -714,6 +785,7 @@ Abre:
 http://localhost:8000/dashboard/
 ```
 
+Abre: http://localhost:8000/dashboard/
 El dashboard revisa `http://127.0.0.1:8001/health`. Si la API responde, muestra **Modo API**, consulta `/predict/match` desde el simulador de partido, consulta `/predict/xg` desde el simulador de disparo y lee `/api/v1/model-info` para mostrar el catálogo de modelos cargados. Si la API no esta disponible, sigue funcionando con `dashboard_data.js` y `dashboard_eda_data_embedded.js`.
 
 ## Configuración

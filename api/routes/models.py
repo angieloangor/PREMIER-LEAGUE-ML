@@ -2,9 +2,16 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 
-from api.dependencies.model_dependencies import get_metadata_service
-from api.schemas.responses import ModelListResponse, ModelSummary, ModelVariablesDescriptor, ModelVariablesListResponse
+from api.dependencies.model_dependencies import get_metadata_service, get_prediction_service
+from api.schemas.responses import (
+    EnsembleInfoResponse,
+    ModelListResponse,
+    ModelSummary,
+    ModelVariablesDescriptor,
+    ModelVariablesListResponse,
+)
 from api.services.metadata_service import MetadataService
+from api.services.prediction_service import PredictionService
 
 
 router = APIRouter(prefix="/api/v1", tags=["models"])
@@ -28,6 +35,11 @@ def get_model_info(metadata_service: MetadataService = Depends(get_metadata_serv
         loaded_models=len(models),
         models=models,
     )
+
+
+@router.get("/ensemble-info", response_model=EnsembleInfoResponse)
+def get_ensemble_info(prediction_service: PredictionService = Depends(get_prediction_service)) -> EnsembleInfoResponse:
+    return EnsembleInfoResponse(**prediction_service.ensemble_info())
 
 
 @router.get("/models/{model_id}", response_model=ModelSummary)
