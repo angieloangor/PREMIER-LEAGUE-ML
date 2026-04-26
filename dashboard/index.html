@@ -539,94 +539,8 @@
         </div>
     </section>
 
-    <section class="xg-spotlight" id="xg">
-        <div class="xg-header-wrap">
-            <div class="container">
-                <div class="xg-header-grid">
-                    <div class="xg-header-text">
-                        <p class="section-eyebrow light">Inteligencia de tiro  Goles esperados</p>
-                        <h2 class="section-title light">xG Tactical Intelligence</h2>
-                        <p class="xg-desc">Este módulo separa volumen, resultado, calidad y calibración para leer el
-                            partido con lógica de performance. Filtra por equipo, jugador y tipo de tiro para detectar
-                            patrones reales de generación y finalización.</p>
-                        <div class="xg-kpis">
-                            <div class="xkpi">
-                                <strong id="xg-auc-display">?</strong>
-                                <span>AUC-ROC</span>
-                            </div>
-                            <div class="xkpi">
-                                <strong id="xg-precision-display">?</strong>
-                                <span>Precision</span>
-                            </div>
-                            <div class="xkpi">
-                                <strong id="xg-recall-display">?</strong>
-                                <span>Recall</span>
-                            </div>
-                            <div class="xkpi">
-                                <strong id="xg-f1-display">?</strong>
-                                <span>F1-Score</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="xg-summary-card">
-                        <p class="xg-summary-eyebrow">Lectura rápida</p>
-                        <h3 class="xg-summary-title">Dónde se generan los tiros, dónde se convierten y qué tan bien
-                            calibra el modelo.</h3>
-                        <p class="xg-summary-text" id="xg-filter-summary">Explorando todos los tiros de la temporada para
-                            detectar patrones globales de creación y finalización.</p>
-                        <div class="xg-mini-stats">
-                            <div class="xg-mini-stat">
-                                <span>Tiros</span>
-                                <strong id="xg-filter-shots">0</strong>
-                            </div>
-                            <div class="xg-mini-stat">
-                                <span>Goles</span>
-                                <strong id="xg-filter-goals">0</strong>
-                            </div>
-                            <div class="xg-mini-stat">
-                                <span>xG medio</span>
-                                <strong id="xg-filter-avgxg">0.0%</strong>
-                            </div>
-                            <div class="xg-mini-stat">
-                                <span>Conversión</span>
-                                <strong id="xg-filter-conv">0.0%</strong>
-                            </div>
-                        </div>
-                        <div class="xg-legend-list">
-                            <span class="xg-legend-pill xg-legend-pill--goal">Gol</span>
-                            <span class="xg-legend-pill xg-legend-pill--miss">No gol</span>
-                            <span class="xg-legend-pill xg-legend-pill--density">Color = densidad normalizada</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="xg-filter-bar">
-                    <label class="shot-control">
-                        <span>Equipo</span>
-                        <select id="xg-team-filter" class="shot-select">
-                            <option value="all">Todos los equipos</option>
-                        </select>
-                    </label>
-                    <label class="shot-control">
-                        <span>Jugador</span>
-                        <select id="xg-player-filter" class="shot-select">
-                            <option value="all">Todos los jugadores</option>
-                        </select>
-                    </label>
-                    <label class="shot-control">
-                        <span>Tipo de tiro</span>
-                        <select id="xg-shot-type-filter" class="shot-select">
-                            <option value="all">Todos los tiros</option>
-                            <option value="foot">Pie</option>
-                            <option value="header">Cabeza</option>
-                            <option value="penalty">Penal</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
+    <section class="xg-spotlight xg-tactical-section" id="xg">
+        <div class="xg-video-container">
             <section class="premium-video-module" data-reveal aria-label="Video explicativo de xG">
                 <div class="premium-video-copy">
                     <span class="premium-video-kicker">Mini trailer explicativo</span>
@@ -646,8 +560,99 @@
                     </button>
                 </div>
             </section>
+        </div>
 
-            <div class="xg-dashboard-grid">
+        <div class="xg-controls-container">
+            <div class="xg-filter-bar">
+                <label class="shot-control">
+                    <span>Equipo</span>
+                    <select id="xg-team-filter" class="shot-select">
+                        <option value="all">Todos los equipos</option>
+                    </select>
+                </label>
+                <label class="shot-control">
+                    <span>Jugador</span>
+                    <select id="xg-player-filter" class="shot-select">
+                        <option value="all">Todos los jugadores</option>
+                    </select>
+                </label>
+                <label class="shot-control">
+                    <span>Tipo de tiro</span>
+                    <select id="xg-shot-type-filter" class="shot-select">
+                        <option value="all">Todos los tiros</option>
+                        <option value="foot">Pie</option>
+                        <option value="header">Cabeza</option>
+                        <option value="penalty">Penal</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+        <div class="xg-content">
+            <div class="xg-header-wrap">
+                <div class="container">
+                    <div class="xg-header-grid">
+                        <div class="xg-header-text">
+                            <p class="section-eyebrow light">Inteligencia de tiro  Goles esperados</p>
+                            <h2 class="section-title light">xG Tactical Intelligence</h2>
+                            <p class="xg-desc">Este módulo separa volumen, resultado, calidad y calibración para leer el
+                                partido con lógica de performance. Filtra por equipo, jugador y tipo de tiro para detectar
+                                patrones reales de generación y finalización.</p>
+                            <div class="xg-kpis">
+                                <div class="xkpi">
+                                    <strong id="xg-auc-display">?</strong>
+                                    <span>AUC-ROC</span>
+                                </div>
+                                <div class="xkpi">
+                                    <strong id="xg-precision-display">?</strong>
+                                    <span>Precision</span>
+                                </div>
+                                <div class="xkpi">
+                                    <strong id="xg-recall-display">?</strong>
+                                    <span>Recall</span>
+                                </div>
+                                <div class="xkpi">
+                                    <strong id="xg-f1-display">?</strong>
+                                    <span>F1-Score</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="xg-summary-card">
+                            <p class="xg-summary-eyebrow">Lectura rápida</p>
+                            <h3 class="xg-summary-title">Dónde se generan los tiros, dónde se convierten y qué tan bien
+                                calibra el modelo.</h3>
+                            <p class="xg-summary-text" id="xg-filter-summary">Explorando todos los tiros de la temporada para
+                                detectar patrones globales de creación y finalización.</p>
+                            <div class="xg-mini-stats">
+                                <div class="xg-mini-stat">
+                                    <span>Tiros</span>
+                                    <strong id="xg-filter-shots">0</strong>
+                                </div>
+                                <div class="xg-mini-stat">
+                                    <span>Goles</span>
+                                    <strong id="xg-filter-goals">0</strong>
+                                </div>
+                                <div class="xg-mini-stat">
+                                    <span>xG medio</span>
+                                    <strong id="xg-filter-avgxg">0.0%</strong>
+                                </div>
+                                <div class="xg-mini-stat">
+                                    <span>Conversión</span>
+                                    <strong id="xg-filter-conv">0.0%</strong>
+                                </div>
+                            </div>
+                            <div class="xg-legend-list">
+                                <span class="xg-legend-pill xg-legend-pill--goal">Gol</span>
+                                <span class="xg-legend-pill xg-legend-pill--miss">No gol</span>
+                                <span class="xg-legend-pill xg-legend-pill--density">Color = densidad normalizada</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="xg-dashboard-grid">
                 <article class="xg-panel">
                     <h3 class="chart-header light">Mapa de volumen ofensivo</h3>
                     <div id="xg-density-chart" class="chart-canvas xg-pitch-chart"></div>
@@ -713,6 +718,7 @@
                         ofensivo por zona y facilita comparar eficiencia con una lectura inmediata.</p>
                 </article>
             </div>
+        </div>
         </div>
     </section><section class="value-section" id="value-prop">
         <div class="value-marquee-wrap">
@@ -931,7 +937,7 @@
     </section>
 
     <!-- xG SPOTLIGHT: SECCION ESTRELLA -->
-<section class="section goal-sim-section">
+    <section class="section goal-sim-section" id="goal-sim">
         <div class="container">
             <header class="section-header centered">
                 <p class="section-eyebrow">Interacción visual</p>
@@ -940,23 +946,108 @@
                 </p>
             </header>
 
+            <div class="goal-sim-controls" aria-label="Controles de simulación de gol">
+                <label class="goal-sim-control" for="goal-home-team">
+                    <span>Equipo local</span>
+                    <select id="goal-home-team" class="goal-sim-select"></select>
+                </label>
+                <label class="goal-sim-control" for="goal-away-team">
+                    <span>Equipo visitante</span>
+                    <select id="goal-away-team" class="goal-sim-select"></select>
+                </label>
+                <button id="goal-reset-btn" class="goal-reset-btn" type="button">Reiniciar marcador</button>
+            </div>
+
             <div class="goal-sim-layout">
                 <div class="goal-pitch-card">
-                    <div class="pitch-container">
-                        <div class="goal-box"></div>
-                        <div id="ball"></div>
+                    <div class="goal-pitch-card-head">
+                        <div>
+                            <span>Vista táctica</span>
+                            <strong id="goal-pitch-matchup">Ataque vs defensa</strong>
+                        </div>
+                        <span class="goal-direction">Dirección del ataque</span>
+                    </div>
+                    <div class="pitch-container goal-pitch" id="goal-pitch">
+                        <div class="goal-frame" aria-hidden="true">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="goal-team-label goal-team-label--defense" id="goal-pitch-defense-label">Defensa</div>
+                        <div class="goal-team-label goal-team-label--attack" id="goal-pitch-attack-label">Ataque</div>
+                        <div class="pitch-mark pitch-mark--center" aria-hidden="true"></div>
+                        <div class="pitch-mark pitch-mark--penalty" aria-hidden="true"></div>
+                        <div class="goal-player goal-player--attacker goal-player--a1" aria-hidden="true"></div>
+                        <div class="goal-player goal-player--attacker goal-player--a2" aria-hidden="true"></div>
+                        <div class="goal-player goal-player--attacker goal-player--a3" aria-hidden="true"></div>
+                        <div class="goal-player goal-player--defender goal-player--d1" aria-hidden="true"></div>
+                        <div class="goal-player goal-player--defender goal-player--d2" aria-hidden="true"></div>
+                        <div class="goal-player goal-player--defender goal-player--d3" aria-hidden="true"></div>
+                        <div class="goal-player goal-player--keeper" aria-hidden="true"></div>
+                        <div class="shot-trail" id="shot-trail" aria-hidden="true"></div>
+                        <div id="ball" class="goal-ball" aria-hidden="true"></div>
+                    </div>
+                    <div class="goal-legend" aria-label="Leyenda de la simulación">
+                        <span><i class="legend-dot legend-dot--attack"></i>Equipo atacante</span>
+                        <span><i class="legend-dot legend-dot--defense"></i>Equipo defensor</span>
+                        <span><i class="legend-dot legend-dot--ball"></i>Balón / tiro</span>
                     </div>
                 </div>
 
-                <div class="goal-data-card">
-                    <div class="goal-badge">Shot simulator</div>
-                    <h3 id="score">0 - 0</h3>
-                    <p id="xg-value">xG: 0.12</p>
+                <aside class="goal-data-card goal-sim-panel" aria-live="polite">
+                    <div class="goal-panel-header">
+                        <div>
+                            <span class="goal-badge">Estado</span>
+                            <h3>Shot Simulator</h3>
+                        </div>
+                        <span id="goal-play-state" class="goal-play-state">Esperando ataque</span>
+                    </div>
+
+                    <div class="goal-score-card">
+                        <span id="goal-home-label">Local</span>
+                        <strong id="score">0 - 0</strong>
+                        <span id="goal-away-label">Visitante</span>
+                    </div>
+
+                    <div class="goal-stat-grid">
+                        <div class="goal-stat-card goal-stat-card--xg">
+                            <span>xG actual</span>
+                            <strong id="xg-value">0.00</strong>
+                        </div>
+                        <div class="goal-stat-card">
+                            <span>Equipo atacante</span>
+                            <strong id="goal-attacking-team">-</strong>
+                        </div>
+                        <div class="goal-stat-card">
+                            <span>Equipo defensor</span>
+                            <strong id="goal-defending-team">-</strong>
+                        </div>
+                        <div class="goal-stat-card">
+                            <span>Zona del disparo</span>
+                            <strong id="shot-zone">Sin disparo</strong>
+                        </div>
+                    </div>
+
+                    <div class="goal-result-card">
+                        <span>Resultado de la jugada</span>
+                        <strong id="shot-result">Esperando ataque</strong>
+                    </div>
+
+                    <div class="goal-pressure-card">
+                        <div class="goal-pressure-head">
+                            <span>Presión ofensiva</span>
+                            <strong id="goal-pressure-value">0%</strong>
+                        </div>
+                        <div class="goal-pressure-bar">
+                            <span id="goal-pressure-fill"></span>
+                        </div>
+                    </div>
+
+                    <p id="goal-alert" class="goal-sim-alert" hidden>Selecciona dos equipos diferentes.</p>
+                    <button id="shoot-btn" class="goal-shoot-btn" type="button">Simular ataque</button>
                     <p id="xg-api-note" class="goal-note">Modo offline: xG calculado con fallback local.</p>
-                    <p id="shot-info" style="color:#9CA3AF;">Esta simulación utiliza una función logistica inspirada en modelos xG reales, donde la probabilidad de gol depende de variables como distancia y angulo del disparo.</p>
-                    <button id="shoot-btn" type="button">Simular Disparo</button>
-                    <p class="goal-note">Cada tiro calcula un xG basado en distancia y ángulo, y decide si el remate termina en gol.</p>
-                </div>
+                    <p id="shot-info" class="goal-shot-details">Esperando ataque.</p>
+                </aside>
             </div>
         </div>
     </section>
@@ -1423,7 +1514,7 @@
                     El coeficiente de silueta (<strong id="kpi-sil">?</strong>) confirma la separación estadística de
                     los grupos hallados.</p>
             </header>
-            <div class="clustering-wrap" data-reveal>
+            <div class="clustering-wrap performance-cluster-card" data-reveal>
                 <div class="cluster-summary-grid" id="cluster-summary-grid">
                     <article class="cluster-summary-card">
                         <span class="cluster-summary-kicker">Cluster 1</span>
@@ -1441,8 +1532,8 @@
                         <p id="cluster-summary-2-body">Calculando resumen del grupo.</p>
                     </article>
                 </div>
-                <div id="clustering-team-chart" class="chart-canvas cluster-h"></div>
-                <p class="chart-interp centered-interp"><strong>Interpretación:</strong> Cada punto es un equipo. Más a la derecha significa más gol a favor; más abajo significa mejor contención. Los cards resumen traducen cada cluster a un lenguaje más simple antes de entrar al scatter.</p>
+                <div id="clustering-team-chart" class="chart-canvas cluster-h performance-cluster-chart"></div>
+                <p class="chart-interp centered-interp"><strong>Interpretación:</strong> Esta visualización agrupa equipos/jugadores con patrones similares de rendimiento. Los clusters ayudan a identificar perfiles ofensivos, defensivos o balanceados.</p>
             </div>
         </div>
     </section>

@@ -1029,7 +1029,11 @@ class MatchPredictorAutoML:
     def _advanced_stage2_slug(self, plan: dict[str, Any]) -> str:
         if plan["plan_type"] == "include_all":
             return f"include_all__{plan['classifier_name']}+{plan['feature_mode']}"
-        return f"{plan['target_metric']}__{plan['generator_run_name']}__{plan['classifier_name']}+{plan['feature_mode']}"
+        # Truncate generator_run_name to avoid Windows MAX_PATH issues (260 char limit)
+        gen_name = plan['generator_run_name']
+        if len(gen_name) > 40:
+            gen_name = gen_name[:37] + "..."
+        return f"{plan['target_metric']}__{gen_name}__{plan['classifier_name']}+{plan['feature_mode']}"
 
     def _select_best_generator_per_metric(self, selected_generators: list[dict[str, Any]]) -> list[dict[str, Any]]:
         best_by_metric: dict[str, dict[str, Any]] = {}

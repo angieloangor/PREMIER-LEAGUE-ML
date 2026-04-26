@@ -231,3 +231,107 @@
 2026-04-25 18:29:24,958 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
 2026-04-25 18:30:33,741 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
 2026-04-25 18:38:06,611 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\alejo\OneDrive\Escritorio\Pablo\Profesional\PremierLeagueML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-26 00:09:15,933 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs\dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra: No module named 'imblearn'
+2026-04-26 00:09:15,944 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs\dominance_index__elasticnet_regressor+dominance_index+feature_generator__ridge_classifier+extra: No module named 'imblearn'
+2026-04-26 00:09:15,952 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs\dominance_index__ridge_regressor+dominance_index+feature_generator__ridge_classifier+extra: No module named 'imblearn'
+2026-04-26 00:09:15,953 INFO api.services.model_loader Loaded 0 model bundles from C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=None
+2026-04-26 00:09:15,977 INFO match_predictor_api POST /api/v1/matches/predict-full status=404 duration_ms=9.41 request_id=8f5c808e-24d2-4a94-ba97-01f41117a3ea
+2026-04-26 00:09:15,977 INFO httpx HTTP Request: POST http://testserver/api/v1/matches/predict-full "HTTP/1.1 404 Not Found"
+2026-04-26 00:10:07,178 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs\dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra: No module named 'imblearn'
+2026-04-26 00:10:07,189 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs\dominance_index__elasticnet_regressor+dominance_index+feature_generator__ridge_classifier+extra: No module named 'imblearn'
+2026-04-26 00:10:07,197 WARNING api.services.model_loader Skipping model bundle C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs\dominance_index__ridge_regressor+dominance_index+feature_generator__ridge_classifier+extra: No module named 'imblearn'
+2026-04-26 00:10:07,198 INFO api.services.model_loader Loaded 0 model bundles from C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=None
+2026-04-26 00:10:07,203 INFO match_predictor_api POST /predict/xg status=200 duration_ms=3.08 request_id=d3bc0193-bec6-4dc0-ad8a-f6f03c33cbee
+2026-04-26 00:10:07,205 INFO httpx HTTP Request: POST http://testserver/predict/xg "HTTP/1.1 200 OK"
+2026-04-26 00:10:07,468 INFO match_predictor_api POST /predict/match status=200 duration_ms=261.15 request_id=b23a5c98-8eb6-489a-bbc1-02a25380e226
+2026-04-26 00:10:07,469 INFO httpx HTTP Request: POST http://testserver/predict/match "HTTP/1.1 200 OK"
+2026-04-26 00:19:25,384 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-26 00:19:25,749 INFO match_predictor_api POST /api/v1/matches/predict-full status=422 duration_ms=356.67 request_id=261f32a5-2139-4dd4-a716-7edd00e48cae
+2026-04-26 00:19:25,749 INFO httpx HTTP Request: POST http://testserver/api/v1/matches/predict-full "HTTP/1.1 422 Unprocessable Entity"
+2026-04-26 00:23:46,102 INFO api.services.model_loader Loaded 3 model bundles from C:\Users\User\Desktop\PREMIER-LEAGUE-ML\outputs\model_runs\advanced_match_predictor\stage2_classifier_runs. Default=dominance_index__random_forest_regressor+dominance_index+feature_generator__ridge_classifier+extra
+2026-04-26 00:23:46,545 ERROR match_predictor_api Unhandled error while serving request.
+Traceback (most recent call last):
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\middleware\base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\Desktop\PREMIER-LEAGUE-ML\api\middleware\logging.py", line 18, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\fastapi\routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\anyio\_backends\_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "c:\Users\User\Desktop\PREMIER-LEAGUE-ML\api\routes\predictions.py", line 57, in predict_full
+    result = prediction_service.predict_full(payload.model_id, frame)
+  File "c:\Users\User\Desktop\PREMIER-LEAGUE-ML\api\services\prediction_service.py", line 48, in predict_full
+    stage1_predictions = self._predict_stage1(bundle, frame)
+  File "c:\Users\User\Desktop\PREMIER-LEAGUE-ML\api\services\prediction_service.py", line 87, in _predict_stage1
+    raw_predictions = np.asarray(bundle.regressor.predict(stage1_frame))
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\sklearn\pipeline.py", line 745, in predict
+    Xt = transform.transform(Xt)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\sklearn\utils\_set_output.py", line 316, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "c:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\sklearn\impute\_base.py", line 632, in transform
+    self._fill_dtype, copy=False
+    ^^^^^^^^^^^^^^^^
+AttributeError: 'SimpleImputer' object has no attribute '_fill_dtype'. Did you mean: '_fit_dtype'?

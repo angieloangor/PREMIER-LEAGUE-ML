@@ -25,6 +25,7 @@ def test_match_automl_smoke_run_creates_report(tmp_path):
         feature_modes=["normal"],
         search_iterations=1,
         include_stage1_prediction=True,
+        smote=False,
         session_name="smoke",
     )
 

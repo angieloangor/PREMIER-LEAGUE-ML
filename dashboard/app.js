@@ -1083,10 +1083,79 @@ function calculateXG(distance, angle) {
 }
 
 // Generar variables realistas
+const GOAL_SHOT_ZONES = [
+    {
+        name: "Área chica",
+        distance: [4, 9],
+        angle: [48, 78],
+        pressure: [76, 94],
+        startLeft: [44, 56],
+        startTop: [67, 74],
+        targetLeft: [43, 57],
+        targetTop: [8, 14],
+    },
+    {
+        name: "Punto penal",
+        distance: [9, 13],
+        angle: [34, 58],
+        pressure: [62, 86],
+        startLeft: [42, 58],
+        startTop: [73, 81],
+        targetLeft: [38, 62],
+        targetTop: [9, 17],
+    },
+    {
+        name: "Media luna",
+        distance: [15, 22],
+        angle: [22, 46],
+        pressure: [44, 70],
+        startLeft: [36, 64],
+        startTop: [79, 88],
+        targetLeft: [35, 65],
+        targetTop: [9, 20],
+    },
+    {
+        name: "Costado izquierdo",
+        distance: [12, 25],
+        angle: [10, 30],
+        pressure: [36, 62],
+        startLeft: [18, 34],
+        startTop: [61, 76],
+        targetLeft: [41, 59],
+        targetTop: [10, 20],
+    },
+    {
+        name: "Costado derecho",
+        distance: [12, 25],
+        angle: [10, 30],
+        pressure: [36, 62],
+        startLeft: [66, 82],
+        startTop: [61, 76],
+        targetLeft: [41, 59],
+        targetTop: [10, 20],
+    },
+];
+
+function randomBetween(min, max) {
+    return min + Math.random() * (max - min);
+}
+
+function sampleRange(range) {
+    return randomBetween(Number(range[0]), Number(range[1]));
+}
+
 function generateShot() {
-    const distance = Math.random() * 30; // metros
-    const angle = Math.random() * 90;    // grados
-    return { distance, angle };
+    const zone = GOAL_SHOT_ZONES[Math.floor(Math.random() * GOAL_SHOT_ZONES.length)] || GOAL_SHOT_ZONES[0];
+    return {
+        zone: zone.name,
+        distance: sampleRange(zone.distance),
+        angle: sampleRange(zone.angle),
+        pressure: Math.round(sampleRange(zone.pressure)),
+        startLeft: sampleRange(zone.startLeft),
+        startTop: sampleRange(zone.startTop),
+        targetLeft: sampleRange(zone.targetLeft),
+        targetTop: sampleRange(zone.targetTop),
+    };
 }
 
 function buildXgApiPayload(shot) {
@@ -1142,25 +1211,117 @@ async function predictXgWithApiOrFallback(shot) {
 
 function setupGoalSimulation() {
     const shootBtn = document.getElementById("shoot-btn");
+    const resetBtn = document.getElementById("goal-reset-btn");
+    const homeSelect = document.getElementById("goal-home-team");
+    const awaySelect = document.getElementById("goal-away-team");
     const scoreEl = document.getElementById("score");
     const xgEl = document.getElementById("xg-value");
     const shotInfoEl = document.getElementById("shot-info");
+    const shotZoneEl = document.getElementById("shot-zone");
+    const shotResultEl = document.getElementById("shot-result");
+    const goalPlayStateEl = document.getElementById("goal-play-state");
+    const attackingTeamEl = document.getElementById("goal-attacking-team");
+    const defendingTeamEl = document.getElementById("goal-defending-team");
+    const homeLabelEl = document.getElementById("goal-home-label");
+    const awayLabelEl = document.getElementById("goal-away-label");
+    const matchupEl = document.getElementById("goal-pitch-matchup");
+    const attackPitchLabelEl = document.getElementById("goal-pitch-attack-label");
+    const defensePitchLabelEl = document.getElementById("goal-pitch-defense-label");
+    const pressureValueEl = document.getElementById("goal-pressure-value");
+    const pressureFillEl = document.getElementById("goal-pressure-fill");
+    const alertEl = document.getElementById("goal-alert");
+    const resultCard = document.querySelector(".goal-result-card");
+    const shotTrail = document.getElementById("shot-trail");
     const ball = document.getElementById("ball");
     const pitch = document.querySelector(".pitch-container");
 
-    if (!shootBtn || !scoreEl || !xgEl || !ball || !pitch) return;
+    if (!shootBtn || !homeSelect || !awaySelect || !scoreEl || !xgEl || !ball || !pitch) return;
 
-    let home = 0;
+    const score = { home: 0, away: 0 };
     let busy = false;
 
-    const resetBall = () => {
+    const getGoalTeams = () => ({
+        home: homeSelect.value || "Local",
+        away: awaySelect.value || "Visitante",
+    });
+
+    const displayTeam = team => normalizeTeamName(team) || team || "-";
+
+    const setGoalAlert = message => {
+        if (!alertEl) return;
+        alertEl.textContent = message || "";
+        alertEl.hidden = !message;
+    };
+
+    const updateScoreDisplay = () => {
+        scoreEl.textContent = `${score.home} - ${score.away}`;
+    };
+
+    const updateTeamLabels = () => {
+        const teams = getGoalTeams();
+        const homeName = displayTeam(teams.home);
+        const awayName = displayTeam(teams.away);
+        setText("goal-home-label", homeName);
+        setText("goal-away-label", awayName);
+        if (matchupEl) matchupEl.textContent = `${homeName} vs ${awayName}`;
+        if (attackingTeamEl && attackingTeamEl.textContent === "-") attackingTeamEl.textContent = homeName;
+        if (defendingTeamEl && defendingTeamEl.textContent === "-") defendingTeamEl.textContent = awayName;
+        if (attackPitchLabelEl) attackPitchLabelEl.textContent = homeName;
+        if (defensePitchLabelEl) defensePitchLabelEl.textContent = awayName;
+    };
+
+    const getAvailableGoalTeams = () => {
+        const predictionTeams = (dashboardData?.predictions || [])
+            .flatMap(match => [match.home, match.away]);
+        const shotTeams = (dashboardData?.match_shot_options || [])
+            .flatMap(match => [match.home_team, match.away_team]);
+        const teams = [...new Set([...predictionTeams, ...shotTeams].filter(Boolean))]
+            .sort((a, b) => displayTeam(a).localeCompare(displayTeam(b)));
+        return teams.length ? teams : ["Arsenal", "Chelsea", "Liverpool", "Man City", "Man United", "Tottenham"];
+    };
+
+    const fillGoalSelect = (select, teams, preferred) => {
+        select.innerHTML = "";
+        teams.forEach(team => select.add(new Option(displayTeam(team), team)));
+        if (preferred && teams.includes(preferred)) select.value = preferred;
+    };
+
+    const initializeGoalTeamControls = () => {
+        const teams = getAvailableGoalTeams();
+        const latest = (dashboardData?.predictions || [])[0] || (dashboardData?.match_shot_options || [])[0] || {};
+        const preferredHome = latest.home || latest.home_team || teams[0];
+        const preferredAway = latest.away || latest.away_team || teams.find(team => team !== preferredHome) || teams[1] || teams[0];
+        fillGoalSelect(homeSelect, teams, preferredHome);
+        fillGoalSelect(awaySelect, teams, preferredAway);
+        if (homeSelect.value === awaySelect.value) {
+            const alternativeAway = teams.find(team => team !== homeSelect.value);
+            if (alternativeAway) awaySelect.value = alternativeAway;
+        }
+        updateTeamLabels();
+    };
+
+    const setBallPosition = (left, top, scale = 1) => {
+        ball.style.bottom = "auto";
+        ball.style.left = `${left}%`;
+        ball.style.top = `${top}%`;
+        ball.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    };
+
+    const resetShotTrail = () => {
+        if (!shotTrail) return;
+        shotTrail.className = "shot-trail";
+        shotTrail.style.opacity = "0";
+        shotTrail.style.width = "0";
+    };
+
+    const resetBall = (shot = null) => {
+        const startLeft = shot?.startLeft || 50;
+        const startTop = shot?.startTop || 78;
         ball.style.transition = "none";
-        ball.style.top = "";
-        ball.style.bottom = "22px";
-        ball.style.left = "50%";
-        ball.style.transform = "translateX(-50%) scale(1)";
+        setBallPosition(startLeft, startTop, 1);
+        resetShotTrail();
         void ball.offsetHeight;
-        ball.style.transition = "top .7s ease,left .7s ease,bottom .7s ease,transform .7s ease";
+        ball.style.transition = "left .72s cubic-bezier(.2,.8,.2,1),top .72s cubic-bezier(.2,.8,.2,1),transform .72s cubic-bezier(.2,.8,.2,1)";
     };
 
     const flashPitch = () => {
@@ -1168,39 +1329,168 @@ function setupGoalSimulation() {
         window.setTimeout(() => pitch.classList.remove("pitch-goal-flash"), 750);
     };
 
+    const resetResultTone = () => {
+        if (!resultCard) return;
+        resultCard.classList.remove("is-goal", "is-save", "is-miss", "is-block");
+    };
+
+    const setResultTone = tone => {
+        resetResultTone();
+        if (resultCard && tone) resultCard.classList.add(`is-${tone}`);
+    };
+
+    const updatePressure = pressure => {
+        const safePressure = clampValue(Number(pressure) || 0, 0, 100);
+        if (pressureValueEl) pressureValueEl.textContent = `${Math.round(safePressure)}%`;
+        if (pressureFillEl) pressureFillEl.style.width = `${safePressure}%`;
+    };
+
+    const resetSimulationState = () => {
+        score.home = 0;
+        score.away = 0;
+        updateScoreDisplay();
+        xgEl.textContent = "0.00";
+        if (shotZoneEl) shotZoneEl.textContent = "Sin disparo";
+        if (shotResultEl) shotResultEl.textContent = "Esperando ataque";
+        if (goalPlayStateEl) goalPlayStateEl.textContent = "Esperando ataque";
+        if (shotInfoEl) shotInfoEl.textContent = "Esperando ataque.";
+        if (attackingTeamEl) attackingTeamEl.textContent = "-";
+        if (defendingTeamEl) defendingTeamEl.textContent = "-";
+        updatePressure(0);
+        resetResultTone();
+        setGoalAlert("");
+        updateTeamLabels();
+        resetBall();
+    };
+
+    const resolveShotOutcome = (xg, attackingTeam) => {
+        if (Math.random() < xg) {
+            return { type: "goal", tone: "goal", label: `Gol de ${displayTeam(attackingTeam)}`, scores: true };
+        }
+        const missRoll = Math.random();
+        if (missRoll < 0.34) return { type: "save", tone: "save", label: "Atajada" };
+        if (missRoll < 0.68) return { type: "miss", tone: "miss", label: "Remate desviado" };
+        return { type: "block", tone: "block", label: "Bloqueado por la defensa" };
+    };
+
+    const getShotEnd = (shot, outcome) => {
+        if (outcome.type === "goal") {
+            return { left: shot.targetLeft, top: shot.targetTop };
+        }
+        if (outcome.type === "save") {
+            return {
+                left: clampValue(shot.targetLeft + randomBetween(-7, 7), 31, 69),
+                top: clampValue(shot.targetTop + randomBetween(5, 11), 13, 28),
+            };
+        }
+        if (outcome.type === "miss") {
+            const side = Math.random() < 0.5 ? -1 : 1;
+            return {
+                left: clampValue(shot.targetLeft + side * randomBetween(18, 28), 5, 95),
+                top: clampValue(shot.targetTop + randomBetween(-3, 7), 5, 26),
+            };
+        }
+        return {
+            left: shot.startLeft + ((shot.targetLeft - shot.startLeft) * randomBetween(0.44, 0.62)),
+            top: shot.startTop + ((shot.targetTop - shot.startTop) * randomBetween(0.44, 0.62)),
+        };
+    };
+
+    const showShotTrail = (shot, end, outcome) => {
+        if (!shotTrail) return;
+        const dx = end.left - shot.startLeft;
+        const dy = end.top - shot.startTop;
+        const length = Math.max(10, Math.hypot(dx, dy));
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        shotTrail.className = `shot-trail shot-trail--${outcome.type}`;
+        shotTrail.style.left = `${shot.startLeft}%`;
+        shotTrail.style.top = `${shot.startTop}%`;
+        shotTrail.style.width = `${length}%`;
+        shotTrail.style.transform = `rotate(${angle}deg)`;
+        shotTrail.style.opacity = "1";
+    };
+
+    const validateGoalTeams = () => {
+        const teams = getGoalTeams();
+        if (teams.home === teams.away) {
+            setGoalAlert("Selecciona dos equipos diferentes.");
+            if (goalPlayStateEl) goalPlayStateEl.textContent = "Selección pendiente";
+            if (shotResultEl) shotResultEl.textContent = "Selecciona dos equipos diferentes.";
+            return false;
+        }
+        setGoalAlert("");
+        return true;
+    };
+
+    const handleTeamChange = () => {
+        resetSimulationState();
+        validateGoalTeams();
+    };
+
+    initializeGoalTeamControls();
+    resetSimulationState();
+
+    homeSelect.addEventListener("change", handleTeamChange);
+    awaySelect.addEventListener("change", handleTeamChange);
+    resetBtn?.addEventListener("click", resetSimulationState);
+
     shootBtn.addEventListener("click", async () => {
         if (busy) return;
+        if (!validateGoalTeams()) return;
         busy = true;
+        shootBtn.disabled = true;
+        pitch.classList.add("is-shooting");
 
-        const { distance, angle } = generateShot();
-        xgEl.textContent = "xG: ...";
-        const xg = await predictXgWithApiOrFallback({ distance, angle });
-        xgEl.textContent = `xG: ${xg.toFixed(2)}`;
+        const teams = getGoalTeams();
+        const attackingSide = Math.random() < 0.54 ? "home" : "away";
+        const defendingSide = attackingSide === "home" ? "away" : "home";
+        const attackingTeam = teams[attackingSide];
+        const defendingTeam = teams[defendingSide];
+        const shot = generateShot();
+
+        if (goalPlayStateEl) goalPlayStateEl.textContent = "Ataque en curso";
+        if (shotResultEl) shotResultEl.textContent = "Calculando xG...";
+        if (shotZoneEl) shotZoneEl.textContent = shot.zone;
+        if (attackingTeamEl) attackingTeamEl.textContent = displayTeam(attackingTeam);
+        if (defendingTeamEl) defendingTeamEl.textContent = displayTeam(defendingTeam);
+        if (attackPitchLabelEl) attackPitchLabelEl.textContent = displayTeam(attackingTeam);
+        if (defensePitchLabelEl) defensePitchLabelEl.textContent = displayTeam(defendingTeam);
+        updatePressure(shot.pressure);
+        setResultTone("");
+        resetBall(shot);
+        xgEl.textContent = "...";
+
+        const xg = await predictXgWithApiOrFallback({ distance: shot.distance, angle: shot.angle });
+        const outcome = resolveShotOutcome(xg, attackingTeam);
+        const end = getShotEnd(shot, outcome);
+
+        xgEl.textContent = xg.toFixed(2);
         if (shotInfoEl) {
-            const isCentral = angle > 30 ? 1 : 0;
-            const interaction = distance * angle;
-            shotInfoEl.innerHTML =
-                `Distancia: ${distance.toFixed(1)}m | Ángulo: ${angle.toFixed(1)}°<br>` +
-                `Tipo de tiro: ${isCentral ? "Central" : "Lateral"} | Interacción: ${interaction.toFixed(1)}`;
+            const lane = shot.angle > 34 ? "Central" : "Lateral";
+            shotInfoEl.textContent = `Distancia ${shot.distance.toFixed(1)}m · Ángulo ${shot.angle.toFixed(1)}° · Tiro ${lane.toLowerCase()}.`;
         }
-        const targetLeft = clampValue(12 + (angle / 90) * 76, 12, 88);
-        const targetTop = clampValue(12 + (distance / 30) * 12, 12, 24);
-
-        ball.style.bottom = "auto";
-        ball.style.top = `${targetTop}%`;
-        ball.style.left = `${targetLeft}%`;
-        ball.style.transform = "translate(-50%, -50%) scale(1.18)";
+        showShotTrail(shot, end, outcome);
+        window.requestAnimationFrame(() => {
+            setBallPosition(end.left, end.top, outcome.type === "goal" ? 1.18 : 0.92);
+        });
 
         window.setTimeout(() => {
-            if (Math.random() < xg) {
-                home += 1;
-                scoreEl.textContent = `${home} - 0`;
+            if (outcome.scores) {
+                score[attackingSide] += 1;
+                updateScoreDisplay();
                 flashPitch();
             }
+            setResultTone(outcome.tone);
+            if (shotResultEl) shotResultEl.textContent = outcome.label;
+            if (goalPlayStateEl) goalPlayStateEl.textContent = outcome.label;
+        }, 720);
 
+        window.setTimeout(() => {
             resetBall();
+            pitch.classList.remove("is-shooting");
+            shootBtn.disabled = false;
             busy = false;
-        }, 700);
+        }, 1250);
     });
 }
 
@@ -4145,7 +4435,19 @@ function renderClustering() {
     if (!document.getElementById("clustering-team-chart")) return;
     const pts = dashboardData.clustering_metrics.points || [];
     if (!pts.length) return;
-    const COLORS = ["#10b981","#6366f1","#f59e0b"];
+    const COLORS = ["#2dd4bf", "#60a5fa", "#f59e0b"];
+    const clusterIds = [0, 1, 2].filter(clusterId => pts.some(point => point.cluster === clusterId));
+    const isMobileClusterView = typeof window.matchMedia === "function"
+        ? window.matchMedia("(max-width: 800px)").matches
+        : window.innerWidth <= 800;
+    const attackValues = pts.map(point => Number(point.goals_scored_avg || 0));
+    const defenseValues = pts.map(point => Number(point.goals_conceded_avg || 0));
+    const attackMin = Math.min(...attackValues);
+    const attackMax = Math.max(...attackValues);
+    const defenseMin = Math.min(...defenseValues);
+    const defenseMax = Math.max(...defenseValues);
+    const attackPad = Math.max((attackMax - attackMin) * 0.12, 0.08);
+    const defensePad = Math.max((defenseMax - defenseMin) * 0.12, 0.08);
     const attackMean = pts.reduce((acc, point) => acc + Number(point.goals_scored_avg || 0), 0) / pts.length;
     const defenseMean = pts.reduce((acc, point) => acc + Number(point.goals_conceded_avg || 0), 0) / pts.length;
 
@@ -4156,7 +4458,7 @@ function renderClustering() {
         return "Perfil reactivo";
     };
 
-    [0,1,2].forEach(clusterId => {
+    [0, 1, 2].forEach(clusterId => {
         const group = pts.filter(point => point.cluster === clusterId);
         if (!group.length) return;
         const attack = group.reduce((acc, point) => acc + Number(point.goals_scored_avg || 0), 0) / group.length;
@@ -4175,20 +4477,34 @@ function renderClustering() {
         );
     });
 
-    const traces = [0,1,2].map(c => {
+    const traces = clusterIds.map(c => {
         const g = pts.filter(p => p.cluster === c);
         const centroidX = g.reduce((acc, point) => acc + Number(point.goals_scored_avg || 0), 0) / g.length;
         const centroidY = g.reduce((acc, point) => acc + Number(point.goals_conceded_avg || 0), 0) / g.length;
+        const labeledTeams = new Set(
+            g.slice()
+                .sort((a, b) => Number(b.goals_scored_avg || 0) - Number(a.goals_scored_avg || 0))
+                .slice(0, isMobileClusterView ? 0 : 1)
+                .map(point => point.team)
+        );
         return {
-            x: g.map(p=>p.goals_scored_avg), y: g.map(p=>p.goals_conceded_avg),
-            text: g.map(p=>p.team), mode:"markers+text", textposition:"top center",
+            x: g.map(p => p.goals_scored_avg),
+            y: g.map(p => p.goals_conceded_avg),
+            text: g.map(p => labeledTeams.has(p.team) ? p.team : ""),
+            mode: "markers+text",
+            textposition: "top center",
             name:`Cluster ${c+1}`,
-            marker: { size:16, color:COLORS[c], opacity:.92, line:{color:"#fff",width:1.5} },
-            textfont: { size:10, color: PLOTLY_READABLE_TEXT },
-            customdata: g.map(() => [centroidX, centroidY, profileTitle(centroidX, centroidY)]),
-            hovertemplate:"<b>%{text}</b><br>GF/partido: %{x:.2f}<br>GC/partido: %{y:.2f}<br>Perfil: %{customdata[2]}<extra></extra>",
+            marker: {
+                size: isMobileClusterView ? 14 : 18,
+                color: COLORS[c],
+                opacity: .78,
+                line: { color: "rgba(248,250,252,.92)", width: 1.5 },
+            },
+            textfont: { size: 11, color: PLOTLY_READABLE_TEXT },
+            customdata: g.map(p => [p.team, centroidX, centroidY, profileTitle(centroidX, centroidY)]),
+            hovertemplate: "<b>%{customdata[0]}</b><br>GF/partido: %{x:.2f}<br>GC/partido: %{y:.2f}<br>Perfil: %{customdata[3]}<extra></extra>",
         };
-    }).concat([0,1,2].map(c => {
+    }).concat(clusterIds.map(c => {
         const g = pts.filter(p => p.cluster === c);
         const centroidX = g.reduce((acc, point) => acc + Number(point.goals_scored_avg || 0), 0) / g.length;
         const centroidY = g.reduce((acc, point) => acc + Number(point.goals_conceded_avg || 0), 0) / g.length;
@@ -4199,10 +4515,11 @@ function renderClustering() {
             name: `Centro cluster ${c+1}`,
             showlegend: false,
             marker: {
-                size: 24,
+                size: isMobileClusterView ? 18 : 24,
                 color: COLORS[c],
                 symbol: "diamond",
-                line: { color: "rgba(15,23,42,.85)", width: 2.5 },
+                opacity: .95,
+                line: { color: "rgba(15,23,42,.95)", width: 2.5 },
             },
             hovertemplate: `<b>Centro Cluster ${c+1}</b><br>GF: %{x:.2f}<br>GC: %{y:.2f}<extra></extra>`,
         };
@@ -4210,9 +4527,45 @@ function renderClustering() {
 
     Plotly.newPlot("clustering-team-chart", traces, {
         ...baseLayout("Goles recibidos/partido", {
-            height: 520,
-            xaxis:{title:{text:"Goles anotados/partido"}},
-            legend:{orientation:"h",y:-0.18},
+            autosize: true,
+            height: isMobileClusterView ? 320 : 380,
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            font: { color: PLOTLY_READABLE_TEXT, family: "Inter, sans-serif", size: 13 },
+            hovermode: "closest",
+            margin: { l: 50, r: 25, t: 42, b: 54, pad: 6 },
+            xaxis: {
+                title: { text: "Goles anotados/partido" },
+                range: [attackMin - attackPad, attackMax + attackPad],
+                automargin: true,
+                tickfont: { size: 12, color: PLOTLY_READABLE_TEXT },
+                gridcolor: "rgba(226,232,240,.12)",
+                linecolor: "rgba(226,232,240,.32)",
+            },
+            yaxis: {
+                title: { text: "Goles recibidos/partido" },
+                range: [defenseMin - defensePad, defenseMax + defensePad],
+                automargin: true,
+                tickfont: { size: 12, color: PLOTLY_READABLE_TEXT },
+                gridcolor: "rgba(226,232,240,.12)",
+                linecolor: "rgba(226,232,240,.32)",
+            },
+            legend: {
+                orientation: "h",
+                x: 0,
+                y: 1.12,
+                xanchor: "left",
+                yanchor: "bottom",
+                bgcolor: "rgba(7,15,28,.72)",
+                bordercolor: "rgba(129,174,252,.22)",
+                borderwidth: 1,
+                font: { size: 11, color: PLOTLY_READABLE_TEXT },
+            },
+            hoverlabel: {
+                bgcolor: "#0f172a",
+                bordercolor: "rgba(129,174,252,.35)",
+                font: { color: "#fff", family: "Inter, sans-serif", size: 13 },
+            },
             shapes: [
                 {
                     type: "line",

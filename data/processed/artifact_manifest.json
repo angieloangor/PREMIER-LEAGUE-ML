@@ -1,15 +1,15 @@
 {
-  "generated_at_utc": "2026-04-25T00:56:36.305471+00:00",
+  "generated_at_utc": "2026-04-26T05:08:05.856247+00:00",
   "orchestrator": "python data_pipeline.py",
   "raw_inputs": {
-    "players": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\players.csv",
-    "matches": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\matches.csv",
-    "events": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\events.csv",
-    "shot_cache": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\api_cache\\shot_events_with_qualifiers.json"
+    "players": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\players.csv",
+    "matches": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\matches.csv",
+    "events": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\events.csv",
+    "shot_cache": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\api_cache\\shot_events_with_qualifiers.json"
   },
   "artifacts": {
     "matches_prepared": {
-      "path": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\processed\\matches_prepared.csv",
+      "path": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\processed\\matches_prepared.csv",
       "rows": 291,
       "columns": [
         "id",
@@ -58,7 +58,7 @@
       ]
     },
     "shots_enriched": {
-      "path": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\processed\\shots_enriched.csv",
+      "path": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\processed\\shots_enriched.csv",
       "rows": 7198,
       "columns": [
         "id",
@@ -156,7 +156,7 @@
       ]
     },
     "event_match_features": {
-      "path": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\processed\\event_match_features.csv",
+      "path": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\processed\\event_match_features.csv",
       "rows": 582,
       "columns": [
         "match_id",
@@ -190,7 +190,7 @@
       ]
     },
     "match_features": {
-      "path": "C:\\Users\\alejo\\OneDrive\\Escritorio\\PremierLeagueML\\data\\processed\\match_features.csv",
+      "path": "C:\\Users\\User\\Desktop\\PREMIER-LEAGUE-ML\\data\\processed\\match_features.csv",
       "rows": 291,
       "columns": [
         "id",

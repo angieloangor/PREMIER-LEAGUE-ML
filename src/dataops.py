@@ -97,8 +97,8 @@ def _write_feature_catalog_docs(catalog: dict[str, object]) -> dict[str, Path]:
         "",
         "1. `data/events.csv`, `data/matches.csv`, `data/players.csv` are treated as the raw layer.",
         "2. `data/api_cache/shot_events_with_qualifiers.json` enriches shot events with qualifier context.",
-        "3. `python data_pipeline.py` builds the processed layer in `data/processed/`.",
-        "4. `python pipeline.py` reuses the same processed feature logic before training models and refreshing dashboard outputs.",
+        "3. `python -m scripts.preprocess_data` builds the processed layer in `data/processed/`.",
+        "4. `python -m scripts.train_custom --workflow legacy` reuses the same processed feature logic before training models.",
         "",
         "Processed artifacts are deterministic and are regenerated from local files only. No data download is required for the standard workflow.",
         "",
@@ -143,7 +143,7 @@ def build_data_artifacts() -> dict[str, object]:
 
     manifest = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "orchestrator": "python data_pipeline.py",
+        "orchestrator": "python -m scripts.preprocess_data",
         "raw_inputs": {
             "players": str(artifact_paths["players_raw"]),
             "matches": str(artifact_paths["matches_raw"]),

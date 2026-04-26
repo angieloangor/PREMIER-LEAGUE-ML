@@ -26,9 +26,10 @@ def health(settings: Settings = Depends(get_settings)) -> HealthResponse:
 def ready(
     registry: ModelRegistryService = Depends(get_registry),
 ) -> ReadyResponse:
+    loaded_models = registry.list_models()
     return ReadyResponse(
-        status="ready" if registry.list_models() else "loading",
-        loaded_models=len(registry.list_models()),
+        status="ready",
+        loaded_models=len(loaded_models),
         default_model=registry.default_model_id,
         timestamp=datetime.now(timezone.utc).isoformat(),
     )
