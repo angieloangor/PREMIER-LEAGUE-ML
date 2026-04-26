@@ -1256,10 +1256,64 @@ section[id]{scroll-margin-top:var(--nav-h)}
 .pitch-canvas-legend{position:absolute;left:18px;bottom:16px;display:flex;gap:.5rem;flex-wrap:wrap;z-index:2;pointer-events:none}
 .pitch-canvas-chip{display:inline-flex;align-items:center;gap:.4rem;padding:6px 10px;border-radius:999px;background:rgba(5,16,12,.72);border:1px solid rgba(255,255,255,.08);font-size:.68rem;color:rgba(248,250,252,.9);backdrop-filter:blur(8px)}
 .pitch-canvas-chip::before{content:'';width:8px;height:8px;border-radius:999px;background:currentColor;box-shadow:0 0 12px currentColor}
-.pitch-tooltip{position:absolute;min-width:136px;max-width:220px;padding:10px 12px;border-radius:14px;background:rgba(3,10,8,.94);border:1px solid rgba(255,255,255,.14);color:#f8fafc;font-size:.73rem;line-height:1.45;box-shadow:0 18px 35px rgba(0,0,0,.36);pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .16s ease,transform .16s ease;z-index:3}
-.pitch-tooltip.visible{opacity:1;transform:translateY(0)}
-.pitch-tooltip strong{display:block;font-size:.76rem;color:#86efac;margin-bottom:2px}
-.pitch-tooltip .muted{color:rgba(226,232,240,.72)}
+
+/* Tooltips de Shot Map */
+.pitch-tooltip, .shot-tooltip {
+    position: absolute;
+    min-width: 140px;
+    max-width: 220px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(4, 10, 15, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #f8fafc;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 10000;
+    backdrop-filter: blur(8px);
+}
+
+.pitch-tooltip.visible, .shot-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pitch-tooltip strong, .shot-tooltip strong {
+    display: block;
+    font-size: 0.8rem;
+    color: #34d399;
+    margin-bottom: 3px;
+}
+
+.pitch-tooltip .muted, .shot-tooltip .muted {
+    color: rgba(226, 232, 240, 0.65);
+}
+
+/* Corrección visual de canchas */
+.shot-card {
+    min-height: auto !important;
+}
+
+#pitch-match-map,
+#pitch-selected-goals-map {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 105 / 68;
+    max-height: 520px;
+    overflow: hidden;
+}
+
+#pitch-match-map canvas,
+#pitch-selected-goals-map canvas {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+}
 
 /* ── METRICS SECTION ─────────────────────────────── */
 .metrics-section{background:var(--surface)}

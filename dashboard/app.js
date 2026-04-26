@@ -1,4 +1,4 @@
-﻿﻿/* ═══════════════════════════════════════════════════════
+﻿﻿﻿﻿/* ═══════════════════════════════════════════════════════
 ﻿/* ═══════════════════════════════════════════════════════
    PREMIERLEAGUEML — app.js v3
    Motor de datos + interacción visual premium
@@ -2924,7 +2924,7 @@ function getOrCreatePitchCanvas(containerId) {
     legendEl.className = "pitch-canvas-legend";
 
     const tooltip = document.createElement("div");
-    tooltip.className = "pitch-tooltip";
+    tooltip.className = "pitch-tooltip shot-tooltip";
 
     shell.append(canvas, meta, legendEl, tooltip);
     host.appendChild(shell);
@@ -2956,6 +2956,7 @@ function getOrCreatePitchCanvas(containerId) {
 
     canvas.addEventListener("mousemove", event => handlePitchPointer(instance, event));
     canvas.addEventListener("mouseleave", () => hidePitchTooltip(instance));
+    canvas.addEventListener("click", event => handlePitchPointer(instance, event));
 
     resizePitchCanvas(instance);
     PITCH_CANVAS_INSTANCES.set(containerId, instance);
@@ -2963,14 +2964,21 @@ function getOrCreatePitchCanvas(containerId) {
 }
 
 function resizePitchCanvas(instance) {
-    const rect = instance.host.getBoundingClientRect();
-    const width = Math.max(320, Math.round(rect.width || instance.host.clientWidth || 320));
-    const height = Math.max(280, Math.round(rect.height || instance.host.clientHeight || 320));
+    // Dimensiones lógicas fijas para evitar deformaciones
+    const logicalWidth = 1000;
+    const logicalHeight = 650;
     const dpr = window.devicePixelRatio || 1;
-    instance.width = width;
-    instance.height = height;
-    instance.canvas.width = Math.round(width * dpr);
-    instance.canvas.height = Math.round(height * dpr);
+
+    instance.width = logicalWidth;
+    instance.height = logicalHeight;
+
+    // Ajustar el buffer interno del canvas
+    instance.canvas.width = Math.round(logicalWidth * dpr);
+    instance.canvas.height = Math.round(logicalHeight * dpr);
+    instance.canvas.style.width = "100%";
+    instance.canvas.style.height = "auto";
+
+    // Escalar el contexto para que 1 unidad de dibujo = 1 unidad lógica
     instance.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (instance.config) drawCanvasPitch(instance, false);
 }
@@ -3014,19 +3022,17 @@ function drawPitchSurface(ctx, width, height) {
     if (PITCH_TEXTURE.complete && PITCH_TEXTURE.naturalWidth) {
         ctx.drawImage(PITCH_TEXTURE, 0, 0, width, height);
     } else {
-        const gradient = ctx.createLinearGradient(0, 0, 0, height);
-        gradient.addColorStop(0, "#1d7b35");
-        gradient.addColorStop(1, "#0d4720");
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = "#0f4f33"; // Verde sólido base
         ctx.fillRect(0, 0, width, height);
     }
 
     ctx.fillStyle = "rgba(0,0,0,0.22)";
     ctx.fillRect(0, 0, width, height);
 
+    // Franjas horizontales realistas
     const stripeHeight = height / 8;
     for (let index = 0; index < 8; index += 1) {
-        ctx.fillStyle = index % 2 === 0 ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.02)";
+        ctx.fillStyle = index % 2 === 0 ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.01)";
         ctx.fillRect(0, index * stripeHeight, width, stripeHeight);
     }
 }
@@ -3158,30 +3164,54 @@ function handlePitchPointer(instance, event) {
     const rect = instance.canvas.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
+    
+    // Escalar coordenadas del mouse (espacio CSS) al espacio lógico del canvas (1000x650)
+    const logicalX = (mouseX / rect.width) * instance.width;
+    const logicalY = (mouseY / rect.height) * instance.height;
 
     let hit = null;
-    for (const shot of shots) {
-        const shotX = scalePitchX(Number(shot.x || 0), instance.width);
-        const shotY = scalePitchY(Number(shot.y || 0), instance.height);
-        const radius = 8 + (Number(shot.xg_probability || 0) * 12);
-        if (Math.hypot(mouseX - shotX, mouseY - shotY) <= radius) {
-            hit = shot;
+    // Iterar en reversa para detectar el punto superior primero
+    for (let index = shots.length - 1; index >= 0; index -= 1) {
+        const item = shots[index];
+        const shotX = scalePitchX(Number(item.x || 0), instance.width);
+        const shotY = scalePitchY(Number(item.y || 0), instance.height);
+        
+        const xg = Number(item.xg_probability || 0);
+        const radius = 4 + (xg * 12);
+        const buffer = 10; // Margen de proximidad para facilitar el hover y touch
+        
+        if (Math.hypot(logicalX - shotX, logicalY - shotY) <= (radius + buffer)) {
+            hit = item;
             break;
         }
     }
 
     if (!hit) {
-        hidePitchTooltip(instance);
+        if (event.type !== "click" || shots.length > 0) hidePitchTooltip(instance);
         return;
     }
 
+    const isGoal = Number(hit.is_goal) === 1;
+    const minuteLabel = hit.minute ? `<div>Minuto: ${hit.minute}'</div>` : "";
+    const typeLabel = hit.shot_type || hit.zone_name || "";
+
     instance.tooltip.innerHTML = `
-        <strong>${Number(hit.is_goal) === 1 ? "Gol" : "No gol"}</strong>
-        <div>xG: ${(Number(hit.xg_probability || 0)).toFixed(2)}</div>
-        <div class="muted">${describeShotType(hit)} · Distancia ${(Number(hit.distance_to_goal || 0)).toFixed(1)}</div>
+        <strong>${hit.player_name || "Jugador N/D"}</strong>
+        <div class="muted">${hit.team_name || "Equipo N/D"}</div>
+        ${minuteLabel}
+        <div style="margin-top:4px; color:${isGoal ? "#86efac" : "#ffd54a"}">Resultado: ${isGoal ? "Gol" : "Tiro"}</div>
+        <div>xG: ${(Number(hit.xg_probability || 0)).toFixed(3)}</div>
+        <div class="muted" style="font-size:0.65rem">Coords: ${Number(hit.x).toFixed(1)}, ${Number(hit.y).toFixed(1)}</div>
+        ${typeLabel ? `<div class="muted" style="font-size:0.65rem">${typeLabel}</div>` : ""}
     `;
-    instance.tooltip.style.left = `${Math.min(instance.width - 150, mouseX + 16)}px`;
-    instance.tooltip.style.top = `${Math.max(14, mouseY - 12)}px`;
+
+    // Posicionamiento basado en coordenadas CSS del shell
+    const tooltipWidth = 160;
+    const posX = mouseX + 15 > rect.width - tooltipWidth ? mouseX - tooltipWidth - 10 : mouseX + 15;
+    const posY = mouseY - 20;
+
+    instance.tooltip.style.left = `${posX}px`;
+    instance.tooltip.style.top = `${posY}px`;
     instance.tooltip.classList.add("visible");
 }
 
