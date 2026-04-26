@@ -9,3 +9,5 @@ env/
 outputs/api_logs/
 *.log
 outputs/model_runs/
+!model_artifacts/
+!model_artifacts/stage2_classifier_runs.zip
