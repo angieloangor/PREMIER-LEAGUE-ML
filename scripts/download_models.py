@@ -7,7 +7,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-MODELS_URL = "https://drive.google.com/uc?export=download&id=18FZqa6kKu-HSn_pXmTuYezWfMgnzpJt7"
+MODELS_URL = "https://www.dropbox.com/scl/fi/xolz2cyr8bipmgcxumiqq/stage2_classifier_runs.zip?rlkey=cizjov7hvffeg0g931jcaognb&st=s47dvvp0&dl=1"
 BASE_DIR = Path("outputs/model_runs/advanced_match_predictor")
 TARGET_DIR = BASE_DIR / "stage2_classifier_runs"
 ZIP_PATH = Path("models.zip")
