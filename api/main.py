@@ -16,6 +16,7 @@ from api.routes.predictions import router as predictions_router
 from api.services.metadata_service import MetadataService
 from api.services.model_loader import ModelRegistryService
 from api.services.prediction_service import PredictionService
+from scripts.download_models import download_models_if_needed
 
 
 def _configure_logging() -> None:
@@ -36,6 +37,10 @@ def _configure_logging() -> None:
 async def lifespan(app: FastAPI):
     settings = get_settings()
     _configure_logging()
+
+    logging.info("Checking model bundles...")
+    download_models_if_needed()
+    logging.info("Model bundles ready")
 
     registry = ModelRegistryService(settings)
     registry.load()
