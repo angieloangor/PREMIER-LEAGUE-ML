@@ -40,7 +40,7 @@ async def lifespan(app: FastAPI):
 
     logging.info("Checking model bundles...")
     download_models_if_needed()
-    logging.info("Model bundles ready")
+    logging.info("Model bundle check finished")
 
     registry = ModelRegistryService(settings)
     registry.load()

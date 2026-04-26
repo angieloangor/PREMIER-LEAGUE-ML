@@ -1,51 +1,54 @@
-import os
-import requests
-import zipfile
 import logging
+import os
+import zipfile
+from pathlib import Path
 
-logging.basicConfig(level=logging.INFO)
+import requests
+
 logger = logging.getLogger(__name__)
 
-def download_models_if_needed():
-    """
-    Descarga y descomprime los modelos desde Google Drive en el directorio de outputs
-    si no se detecta la carpeta de stage2 (necesario para Render).
-    """
-    base_dir = "outputs/model_runs/advanced_match_predictor/"
-    check_dir = os.path.join(base_dir, "stage2_classifier_runs")
-    url = "https://drive.google.com/uc?export=download&id=18FZqa6kKu-HSn_pXmTuYezWfMgnzpJt7"
-    zip_path = "models.zip"
+MODELS_URL = "https://drive.google.com/uc?export=download&id=18FZqa6kKu-HSn_pXmTuYezWfMgnzpJt7"
+BASE_DIR = Path("outputs/model_runs/advanced_match_predictor")
+TARGET_DIR = BASE_DIR / "stage2_classifier_runs"
+ZIP_PATH = Path("models.zip")
 
-    if os.path.exists(check_dir):
-        logger.info(f"✓ Modelos detectados en {check_dir}. Omitiendo descarga.")
+
+def download_models_if_needed() -> None:
+    if TARGET_DIR.exists() and any(TARGET_DIR.iterdir()):
+        logger.info("Model bundles already available at %s", TARGET_DIR)
         return
 
-    logger.info("! Carpeta de modelos no encontrada en 'outputs/'. Iniciando descarga desde Google Drive...")
-    
+    url = os.getenv("MODEL_BUNDLE_ZIP_URL", MODELS_URL)
+
     try:
-        # Crear la estructura de carpetas si no existe
-        os.makedirs(base_dir, exist_ok=True)
-        
-        # Descarga del archivo ZIP usando stream
+        BASE_DIR.mkdir(parents=True, exist_ok=True)
+        logger.info("Downloading model bundles from %s", url)
+
         response = requests.get(url, stream=True, timeout=300)
         response.raise_for_status()
 
-        with open(zip_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
-        
-        logger.info("Descarga completa. Descomprimiendo archivos...")
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(base_dir)
-        
-        # Limpieza del archivo temporal
-        os.remove(zip_path)
-        logger.info("✓ Modelos instalados correctamente en el entorno.")
-        
-    except Exception as e:
-        logger.warning(f"⚠ No se pudieron descargar los modelos automáticamente: {e}")
-        logger.warning("La API intentará iniciar, pero fallará si no se cargan modelos de forma manual.")
+        content_type = response.headers.get("content-type", "")
+        if "text/html" in content_type.lower():
+            logger.error(
+                "Model download returned HTML instead of ZIP. Google Drive requires public access."
+            )
+            return
 
-if __name__ == "__main__":
-    download_models_if_needed()
+        with ZIP_PATH.open("wb") as file:
+            for chunk in response.iter_content(chunk_size=1024 * 1024):
+                if chunk:
+                    file.write(chunk)
+
+        logger.info("Extracting ZIP...")
+        with zipfile.ZipFile(ZIP_PATH, "r") as zip_ref:
+            zip_ref.extractall(BASE_DIR)
+
+        ZIP_PATH.unlink(missing_ok=True)
+        logger.info("Model bundles ready at %s", TARGET_DIR)
+
+    except Exception as exc:
+        logger.exception("Could not download or extract model bundles: %s", exc)
+        try:
+            ZIP_PATH.unlink(missing_ok=True)
+        except Exception:
+            pass
