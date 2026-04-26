@@ -1,5 +1,4 @@
 ﻿﻿﻿﻿/* ═══════════════════════════════════════════════════════
-﻿﻿﻿﻿/* ═══════════════════════════════════════════════════════
 ﻿/* ═══════════════════════════════════════════════════════
    PREMIERLEAGUEML — app.js v3
    Motor de datos + interacción visual premium
@@ -20,13 +19,6 @@ const EDA_DATA_CANDIDATES = [
 ];
 
 const API_BASE_URL = window.PREMIER_API_BASE_URL || "http://127.0.0.1:8001";
-const API_CANDIDATES = [
-    "https://premier-league-ml.onrender.com",
-    "http://127.0.0.1:8001",
-    "http://localhost:8001"
-];
-
-const API_BASE_URL = window.PREMIER_API_BASE_URL || API_CANDIDATES[0];
 const API_TIMEOUT_MS = 3500;
 
 let dashboardData = null;
@@ -740,7 +732,6 @@ function apiEnsembleLabel(ensembleInfo) {
 
 async function checkApiStatus() {
     const apiHosts = ["http://127.0.0.1:8001", "http://localhost:8001"];
-    const apiHosts = API_CANDIDATES;
 
     for (const host of apiHosts) {
         try {
